@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e5a7693c9e13294d9417d62fcf20060, type: 3}
+  m_Name: Dorothy
+  m_EditorClassIdentifier: Assembly-CSharp::OperatorData
+  operatorName: "\uB3C4\uB85C\uC2DC \uD504\uB7AD\uD06C\uC2A4"
+  info: "\uCEEC\uB7FC\uBE44\uC544\uC5D0 \uB77C\uC778\uB7A9 \uC624\uB9AC\uC9C0\uB284
+    \uC544\uCE20 \uC751\uC6A9\uACFC \uC8FC\uC784\uC774\uC790\n\uC774\uC0C1\uC8FC\uC758\uC790\uC600\uB358,
+    \uD558\uC9C0\uB9CC \uD604\uC2E4\uC5D0 \uC758\uD574 \uB04C\uC5B4\uB0B4\uB824\uC9C4\n\uCD94\uB77D\uD55C
+    \uC120\uC9C0\uC790 \uC911 \uD558\uB098\uC785\uB2C8\uB2E4. "
+  maxHP: 1502
+  attack: 581
+  defense: 172
+  artsResistance: 0
+  attackSpeed: 30

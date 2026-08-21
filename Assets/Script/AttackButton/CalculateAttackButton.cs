@@ -1,13 +1,16 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CalculateAttackButton : MonoBehaviour, IPointerClickHandler
+public class CalculateAttackButton :
+    MonoBehaviour,
+    IPointerClickHandler
 {
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerClick(
+        PointerEventData eventData)
     {
-        if (MiddleCardSelectionManager.Instance == null)
+        if (BattleExecuteManager.Instance == null)
             return;
 
-        MiddleCardSelectionManager.Instance.CalculateAttack();
+        BattleExecuteManager.Instance.ExecuteBattle();
     }
 }

@@ -399,13 +399,15 @@ public class MiddleCardSelectionManager : CardSelectionManagerBase
         UpdateCalculateAttackButton();
     }
 
-    public void CalculateAttack()
+    public int CalculateAttack()
     {
         if (attackCalculator == null)
-            return;
+            return 0;
 
-        if (attributeCard == null || secondCard == null || thirdCard == null)
-            return;
+        if (attributeCard == null ||
+            secondCard == null ||
+            thirdCard == null)
+            return 0;
 
         int result = attackCalculator.Calculate(
             selectedAttribute,
@@ -414,7 +416,7 @@ public class MiddleCardSelectionManager : CardSelectionManagerBase
             secondNumber,
             thirdNumber);
 
-        Debug.Log("Attack Result: " + result);
+        return result;
     }
 
     private void UpdateCalculateAttackButton()

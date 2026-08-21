@@ -123,6 +123,12 @@ public class OperatorFocusManager : MonoBehaviour
 
         Time.timeScale = focusTimeScale;
 
+        Operator op =
+        handler.GetComponent<Operator>();
+
+        EnemyTargetingManager.Instance
+            .BeginTargeting(op);
+
         if (changeOperator)
             infoUI.ChangeOperator(handler);
         else
@@ -158,7 +164,12 @@ public class OperatorFocusManager : MonoBehaviour
 
         targetRotation = originalRotation;
 
-        infoUI.Hide();
+        if (infoUI != null)
+        {
+            infoUI.Hide();
+        }
+
+        EnemyTargetingManager.Instance.EndTargeting();
     }
 
     private Transform GetFocusPoint(OperatorPosition position)

@@ -1,13 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public enum OperatorPosition
-{
-    Front,
-    Middle,
-    Back
-}
-
 public class OperatorClickHandler : MonoBehaviour
 {
     [SerializeField] private Collider2D targetCollider;

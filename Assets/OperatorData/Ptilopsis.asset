@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e5a7693c9e13294d9417d62fcf20060, type: 3}
+  m_Name: Ptilopsis
+  m_EditorClassIdentifier: Assembly-CSharp::OperatorData
+  operatorName: "\uC870\uC774\uC2A4 \uBB34\uC5B4"
+  info: "\uB77C\uC778\uB7A9\uC758 \uB370\uC774\uD130 \uAD00\uB9AC\uC790\uB85C\uC11C
+    \uB9E4\uC6B0 \uD6CC\uB96D\uD55C \uB300\uCC98 \uB2A5\uB825\uACFC\n\uB192\uC740
+    \uC218\uC900\uC758 \uCE58\uB8CC \uC544\uCE20 \uB2A5\uB960\uC744 \uAC00\uC9C0\uACE0
+    \uC788\uC2B5\uB2C8\uB2E4.\n\uC77C\uAC01\uC5D0\uC11C\uB294 \uC774\uAC83\uC774
+    \uBB38\uBA85\uC758 \uC874\uC18D \uC5F4\uD654\uD310\uC774 \uC544\uB2CC\u3131\n\n\uBB58
+    \uD558\uB294\uAC74\uAC00 \uBC15\uC0AC? \uB4DC\uB514\uC5B4 \uCF67\uAD6C\uBA4D\uC5D0
+    \uB77C\uBA74\uC744 \uCC98\uBC15\uC740\uAC90\uAC00?"
+  maxHP: 1610
+  attack: 335
+  defense: 150
+  artsResistance: 0
+  attackSpeed: 10

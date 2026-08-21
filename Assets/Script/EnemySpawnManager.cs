@@ -5,7 +5,7 @@ public class EnemySpawnManager : MonoBehaviour
     public static EnemySpawnManager Instance { get; private set; }
 
     [Header("Spawn Points")]
-    [SerializeField] private Transform[] spawnPoints;
+    [SerializeField] private EnemySpawnPoint[] spawnPoints;
 
     [Header("Enemy Prefab")]
     [SerializeField] private Enemy enemyPrefab;
@@ -25,13 +25,28 @@ public class EnemySpawnManager : MonoBehaviour
 
     public Enemy SpawnEnemy(int spawnIndex)
     {
-        if (spawnIndex < 0 || spawnIndex >= spawnPoints.Length)
+        if (spawnIndex < 0 ||
+            spawnIndex >= spawnPoints.Length)
+        {
             return null;
+        }
+
+        EnemySpawnPoint spawnPoint =
+            spawnPoints[spawnIndex];
 
         Enemy enemy = Instantiate(
             enemyPrefab,
-            spawnPoints[spawnIndex].position,
+            spawnPoint.transform.position,
             Quaternion.identity);
+
+        EnemyTargetable targetable =
+            enemy.GetComponent<EnemyTargetable>();
+
+        if (targetable != null)
+        {
+            targetable.SetPosition(
+                spawnPoint.Position);
+        }
 
         return enemy;
     }

@@ -117,12 +117,23 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (CardPositionManager.Instance.CurrentSelectionManager != null)
+        CardSelectionManagerBase currentManager =
+            CardPositionManager.Instance.CurrentSelectionManager;
+
+        if (currentManager == null)
+            return;
+
+        // --------------------------------------------------
+        // 다른 선택창에서 이미 선택된 카드라면 무시
+        // --------------------------------------------------
+
+        if (ownerManager != null &&
+            ownerManager != currentManager)
         {
-            CardPositionManager.Instance
-                .CurrentSelectionManager
-                .SelectCard(this);
+            return;
         }
+
+        currentManager.SelectCard(this);
     }
 
     private void HoverTo(Vector3 target)
