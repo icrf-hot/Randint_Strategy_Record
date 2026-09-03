@@ -1,10 +1,21 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class MapNodeFocusObject : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private MapOrbitCamera orbitCamera;
+
+    /*
+     * 반드시 MapOrbitCamera의 자식으로 둡니다.
+     *
+     * 예:
+     *
+     * Map3DCamera
+     *     └─ MapUIRoot
+     */
+    [SerializeField] private Transform uiRoot;
 
     [Header("Focus Objects")]
     [SerializeField] private Transform[] choiceObjects;
@@ -12,16 +23,23 @@ public class MapNodeFocusObject : MonoBehaviour
     [Header("Screen Position")]
     [SerializeField] private float uiDistance = 5f;
 
-    [Tooltip("노드를 기준으로 선택지 전체가 이동하는 화면 기준 오프셋")]
-    [SerializeField] private Vector2 screenOffset = new Vector2(-2f, 0f);
+    [Tooltip("Node를 기준으로 한 화면상의 위치")]
+    [SerializeField]
+    private Vector2 screenOffset =
+        new Vector2(-2f, 0f);
 
     [Tooltip("선택지 사이의 세로 간격")]
-    [SerializeField] private float spacing = 1.5f;
+    [SerializeField]
+    private float spacing = 1.5f;
 
     [Header("Animation")]
     [SerializeField] private float duration = 0.4f;
+
     [SerializeField] private float exitDuration = 0.15f;
+
+    [Tooltip("화면 오른쪽에서 들어오는 거리")]
     [SerializeField] private float startOffset = 8f;
+
 
     private Camera mapCamera;
 
@@ -29,12 +47,13 @@ public class MapNodeFocusObject : MonoBehaviour
 
     private Coroutine animationCoroutine;
 
-    // 현재 선택지가 화면에 표시되고 있는가
     private bool isVisible;
-
-    // 현재 오른쪽으로 사라지는 중인가
     private bool isClosing;
 
+
+    // =========================================================
+    // Awake
+    // =========================================================
 
     private void Awake()
     {
@@ -53,6 +72,10 @@ public class MapNodeFocusObject : MonoBehaviour
     }
 
 
+    // =========================================================
+    // Start
+    // =========================================================
+
     private void Start()
     {
         if (orbitCamera == null)
@@ -66,8 +89,10 @@ public class MapNodeFocusObject : MonoBehaviour
             return;
         }
 
+
         mapCamera =
             orbitCamera.GetComponent<Camera>();
+
 
         if (mapCamera == null)
         {
@@ -80,11 +105,25 @@ public class MapNodeFocusObject : MonoBehaviour
             return;
         }
 
+
+        if (uiRoot == null)
+        {
+            Debug.LogError(
+                "MapNodeFocusObject: " +
+                "UI Root가 지정되지 않았습니다."
+            );
+
+            enabled = false;
+            return;
+        }
+
+
         /*
-         * Focus 취소 이벤트 등록
+         * Focus 취소 이벤트
          */
         orbitCamera.OnFocusCanceled +=
             HandleFocusCanceled;
+
 
         HideImmediately();
     }
@@ -92,9 +131,6 @@ public class MapNodeFocusObject : MonoBehaviour
 
     private void OnDestroy()
     {
-        /*
-         * 반드시 이벤트를 해제합니다.
-         */
         if (orbitCamera != null)
         {
             orbitCamera.OnFocusCanceled -=
@@ -103,43 +139,39 @@ public class MapNodeFocusObject : MonoBehaviour
     }
 
 
+    // =========================================================
+    // Update
+    // =========================================================
+
     private void Update()
     {
         if (orbitCamera == null)
             return;
 
-        /*
-         * 이 Node가 현재 Focus되었는지 확인
-         */
+
         bool isThisNodeFocused =
             orbitCamera.FocusedNode == node;
 
 
-        /*
-         * =====================================================
-         * Focus된 경우
-         * =====================================================
-         */
+        // =====================================================
+        // Focus 상태
+        // =====================================================
 
         if (isThisNodeFocused)
         {
-            /*
-             * 닫히는 중이 아니고
-             * 아직 표시되지 않았다면 등장
-             */
             if (!isVisible &&
                 !isClosing &&
                 animationCoroutine == null)
             {
                 ShowObjects();
-
                 return;
             }
 
 
             /*
-             * 등장/퇴장 애니메이션이 끝난 후
-             * Node를 계속 따라갑니다.
+             * 등장 애니메이션이 끝난 이후
+             *
+             * Node의 화면 위치를 계속 추적합니다.
              */
             if (isVisible &&
                 !isClosing &&
@@ -152,58 +184,29 @@ public class MapNodeFocusObject : MonoBehaviour
         }
 
 
-        /*
-         * =====================================================
-         * Focus되지 않은 경우
-         * =====================================================
-         */
+        // =====================================================
+        // Focus 해제
+        // =====================================================
 
-        /*
-         * 정상적으로 Focus가 풀렸다면
-         * 선택지를 즉시 숨깁니다.
-         *
-         * 실제 CancelFocus의 경우에는
-         * OnFocusCanceled가 먼저 처리하므로
-         * 여기로 들어오지 않습니다.
-         */
-        if (!isThisNodeFocused)
+        if (isVisible &&
+            !isClosing)
         {
-            /*
-             * 실제로 Focus가 해제된 시점
-             */
-            if (isClosing)
-            {
-                isClosing = false;
-            }
-
-
-            if (isVisible)
-            {
-                HideImmediately();
-            }
-
-            return;
+            HideImmediately();
         }
     }
 
 
     // =========================================================
-    // Focus 취소 이벤트
+    // Focus Cancel
     // =========================================================
 
     private void HandleFocusCanceled(
         MapNode canceledNode)
     {
-        /*
-         * 다른 Node의 취소 이벤트는 무시
-         */
         if (canceledNode != node)
             return;
 
 
-        /*
-         * 현재 선택지가 없다면 할 일이 없음
-         */
         if (!isVisible &&
             animationCoroutine == null)
         {
@@ -211,14 +214,6 @@ public class MapNodeFocusObject : MonoBehaviour
         }
 
 
-        /*
-         * 닫히는 중이라는 것을 표시
-         *
-         * 이 값이 중요합니다.
-         *
-         * MapOrbitCamera는 카메라가 완전히 돌아갈 때까지
-         * FocusedNode를 유지하기 때문입니다.
-         */
         isClosing = true;
 
 
@@ -250,9 +245,10 @@ public class MapNodeFocusObject : MonoBehaviour
             );
         }
 
-
         isClosing = false;
 
+        // 현재 MapNode의 선택지 텍스트를 적용
+        SetChoiceTexts();
 
         animationCoroutine =
             StartCoroutine(
@@ -262,7 +258,7 @@ public class MapNodeFocusObject : MonoBehaviour
 
 
     // =========================================================
-    // 즉시 숨김
+    // Hide
     // =========================================================
 
     private void HideImmediately()
@@ -296,26 +292,30 @@ public class MapNodeFocusObject : MonoBehaviour
 
 
     // =========================================================
-    // 목표 위치 계산
+    // Node 화면 위치 → Camera Local 좌표
     // =========================================================
 
     private bool CalculateTargetPositions(
-    Vector3[] targetPositions)
+        Vector3[] targetPositions)
     {
-        if (node == null)
+        if (node == null ||
+            mapCamera == null ||
+            uiRoot == null)
+        {
             return false;
+        }
 
-        if (mapCamera == null)
-            return false;
 
         if (choiceObjects == null ||
             choiceObjects.Length == 0)
+        {
             return false;
+        }
 
 
         /*
          * =====================================================
-         * 1. Node의 화면 위치
+         * 1. Node를 Screen 좌표로 변환
          * =====================================================
          */
 
@@ -331,7 +331,7 @@ public class MapNodeFocusObject : MonoBehaviour
 
         /*
          * =====================================================
-         * 2. Screen → Viewport
+         * 2. Viewport 좌표
          * =====================================================
          */
 
@@ -343,67 +343,61 @@ public class MapNodeFocusObject : MonoBehaviour
 
         /*
          * =====================================================
-         * 3. Node와 동일한 화면 위치에 있는
-         *    카메라 앞의 기준점
-         * =====================================================
-         */
-
-        Vector3 centerPosition =
-            mapCamera.ViewportToWorldPoint(
-                new Vector3(
-                    viewport.x,
-                    viewport.y,
-                    uiDistance
-                )
-            );
-
-
-        /*
-         * =====================================================
-         * 4. 카메라의 화면 방향
-         * =====================================================
-         */
-
-        Vector3 cameraRight =
-            mapCamera.transform.right;
-
-        Vector3 cameraUp =
-            mapCamera.transform.up;
-
-
-        /*
-         * =====================================================
-         * 5. Inspector에서 지정한 화면 오프셋 적용
+         * 3. Camera Local 좌표 계산
          * =====================================================
          *
-         * screenOffset.x
-         *     화면 오른쪽 / 왼쪽
-         *
-         * screenOffset.y
-         *     화면 위 / 아래
+         * uiDistance 거리의 카메라 평면에서
+         * Node와 동일한 화면 위치를 계산합니다.
          */
 
-        centerPosition +=
-            cameraRight * screenOffset.x;
+        float halfHeight =
+            Mathf.Tan(
+                mapCamera.fieldOfView *
+                0.5f *
+                Mathf.Deg2Rad
+            ) *
+            uiDistance;
 
-        centerPosition +=
-            cameraUp * screenOffset.y;
+
+        float halfWidth =
+            halfHeight *
+            mapCamera.aspect;
+
+
+        float localX =
+            (viewport.x - 0.5f) *
+            halfWidth *
+            2f;
+
+
+        float localY =
+            (viewport.y - 0.5f) *
+            halfHeight *
+            2f;
+
+
+        /*
+         * Inspector Offset
+         */
+        localX +=
+            screenOffset.x;
+
+        localY +=
+            screenOffset.y;
 
 
         /*
          * =====================================================
-         * 6. 선택지 세로 정렬
+         * 4. 선택지 세로 정렬
          * =====================================================
          *
          * 예:
          *
-         *       [0]
+         *      [0]
          *
-         *       [1]
+         *      [1]
          *
-         *       [2]
-         *
-         * 전체가 centerPosition을 중심으로 정렬됩니다.
+         *      [2]
          */
 
         int count =
@@ -418,13 +412,26 @@ public class MapNodeFocusObject : MonoBehaviour
              i < count;
              i++)
         {
-            float verticalOffset =
-                (i - centerOffset) * spacing;
+            float y =
+                localY +
+                (i - centerOffset) *
+                spacing;
 
+
+            /*
+             * UI Root가 Camera의 자식이므로
+             *
+             * X = 화면 좌우
+             * Y = 화면 상하
+             * Z = 카메라와의 거리
+             */
 
             targetPositions[i] =
-                centerPosition +
-                cameraUp * verticalOffset;
+                new Vector3(
+                    localX,
+                    y,
+                    uiDistance
+                );
         }
 
 
@@ -433,14 +440,16 @@ public class MapNodeFocusObject : MonoBehaviour
 
 
     // =========================================================
-    // 현재 위치 갱신
+    // 위치 갱신
     // =========================================================
 
     private void UpdateObjectPositions()
     {
         if (choiceObjects == null ||
             choiceObjects.Length == 0)
+        {
             return;
+        }
 
 
         Vector3[] targetPositions =
@@ -468,25 +477,29 @@ public class MapNodeFocusObject : MonoBehaviour
 
 
             /*
-             * 기본 위치를 먼저 지정
+             * 중요:
+             *
+             * World Position이 아닙니다.
+             *
+             * Camera UI Root 기준 Local Position입니다.
              */
-            obj.position =
+            obj.localPosition =
                 targetPositions[i];
 
 
             /*
-             * Hover Effect가 있다면
-             * 기본 위치를 알려줍니다.
+             * Hover Effect에
+             * 기본 위치 전달
              */
-            MapChoiceHoverEffect hoverEffect =
+            MapChoiceHoverEffect hover =
                 obj.GetComponent<
                     MapChoiceHoverEffect
                 >();
 
 
-            if (hoverEffect != null)
+            if (hover != null)
             {
-                hoverEffect.SetBasePosition(
+                hover.SetBaseLocalPosition(
                     targetPositions[i]
                 );
             }
@@ -495,7 +508,7 @@ public class MapNodeFocusObject : MonoBehaviour
 
 
     // =========================================================
-    // 등장 애니메이션
+    // 등장
     // =========================================================
 
     private IEnumerator AnimateObjectsIn()
@@ -509,9 +522,6 @@ public class MapNodeFocusObject : MonoBehaviour
         }
 
 
-        /*
-         * Sprite 활성화
-         */
         foreach (Transform obj in choiceObjects)
         {
             if (obj != null)
@@ -526,7 +536,8 @@ public class MapNodeFocusObject : MonoBehaviour
 
         while (timer < duration)
         {
-            timer += Time.deltaTime;
+            timer +=
+                Time.deltaTime;
 
 
             float t =
@@ -543,9 +554,6 @@ public class MapNodeFocusObject : MonoBehaviour
                 (3f - 2f * t);
 
 
-            /*
-             * 현재 Node의 목표 위치를 계산
-             */
             Vector3[] targetPositions =
                 new Vector3[
                     choiceObjects.Length
@@ -560,25 +568,17 @@ public class MapNodeFocusObject : MonoBehaviour
 
 
             /*
-             * 카메라의 현재 오른쪽
-             */
-            Vector3 cameraRight =
-                mapCamera.transform.right;
-
-
-            /*
-             * 8 → 0
+             * =================================================
+             * 핵심
+             * =================================================
              *
-             * 오른쪽에서 들어오면서
-             * 점점 Node 위치로 접근
+             * 월드 X축이 아닙니다.
+             *
+             * Camera Local X축입니다.
+             *
+             * 따라서 카메라가 어느 방향을 바라보든
+             * "화면 오른쪽"에서 들어옵니다.
              */
-            float offset =
-                Mathf.Lerp(
-                    startOffset,
-                    0f,
-                    t
-                );
-
 
             for (int i = 0;
                  i < choiceObjects.Length;
@@ -591,17 +591,26 @@ public class MapNodeFocusObject : MonoBehaviour
                     continue;
 
 
+                Vector3 start =
+                    targetPositions[i];
+
+
                 /*
-                 * 목표 위치에서
-                 * 화면 오른쪽으로 offset
+                 * 화면 오른쪽
                  */
-                Vector3 position =
-                    targetPositions[i] +
-                    cameraRight * offset;
+                start.x +=
+                    startOffset;
 
 
-                obj.position =
-                    position;
+                /*
+                 * 화면 오른쪽 → 목표 위치
+                 */
+                obj.localPosition =
+                    Vector3.Lerp(
+                        start,
+                        targetPositions[i],
+                        t
+                    );
             }
 
 
@@ -609,10 +618,6 @@ public class MapNodeFocusObject : MonoBehaviour
         }
 
 
-        /*
-         * 마지막 프레임은 정확하게
-         * 목표 위치에 맞춥니다.
-         */
         UpdateObjectPositions();
 
 
@@ -622,7 +627,7 @@ public class MapNodeFocusObject : MonoBehaviour
 
 
     // =========================================================
-    // 퇴장 애니메이션
+    // 퇴장
     // =========================================================
 
     private IEnumerator AnimateObjectsOut()
@@ -640,7 +645,8 @@ public class MapNodeFocusObject : MonoBehaviour
 
         while (timer < exitDuration)
         {
-            timer += Time.deltaTime;
+            timer +=
+                Time.deltaTime;
 
 
             float t =
@@ -654,10 +660,6 @@ public class MapNodeFocusObject : MonoBehaviour
                 (3f - 2f * t);
 
 
-            /*
-             * 현재 위치를 기준으로 하지 않고
-             * 현재 화면상의 목표 위치를 기준으로 합니다.
-             */
             Vector3[] targetPositions =
                 new Vector3[
                     choiceObjects.Length
@@ -671,21 +673,6 @@ public class MapNodeFocusObject : MonoBehaviour
             }
 
 
-            Vector3 cameraRight =
-                mapCamera.transform.right;
-
-
-            /*
-             * 0 → startOffset
-             */
-            float offset =
-                Mathf.Lerp(
-                    0f,
-                    startOffset,
-                    t
-                );
-
-
             for (int i = 0;
                  i < choiceObjects.Length;
                  i++)
@@ -697,9 +684,26 @@ public class MapNodeFocusObject : MonoBehaviour
                     continue;
 
 
-                obj.position =
-                    targetPositions[i] +
-                    cameraRight * offset;
+                Vector3 end =
+                    targetPositions[i];
+
+
+                /*
+                 * 화면 오른쪽
+                 */
+                end.x +=
+                    startOffset;
+
+
+                /*
+                 * 목표 위치 → 오른쪽
+                 */
+                obj.localPosition =
+                    Vector3.Lerp(
+                        targetPositions[i],
+                        end,
+                        t
+                    );
             }
 
 
@@ -717,6 +721,47 @@ public class MapNodeFocusObject : MonoBehaviour
 
 
         isVisible = false;
+        isClosing = false;
         animationCoroutine = null;
+    }
+
+    private void SetChoiceTexts()
+    {
+        if (node == null)
+            return;
+
+        if (choiceObjects == null)
+            return;
+
+        MapNodeChoice[] choices =
+            node.Choices;
+
+        for (int i = 0;
+             i < choiceObjects.Length;
+             i++)
+        {
+            Transform obj =
+                choiceObjects[i];
+
+            if (obj == null)
+                continue;
+
+            TMP_Text text =
+                obj.GetComponentInChildren<TMP_Text>();
+
+            if (text == null)
+                continue;
+
+            if (choices != null &&
+                i < choices.Length)
+            {
+                text.text =
+                    choices[i].text;
+            }
+            else
+            {
+                text.text = "";
+            }
+        }
     }
 }

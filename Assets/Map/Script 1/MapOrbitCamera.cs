@@ -36,6 +36,9 @@ public class MapOrbitCamera : MonoBehaviour
 
     public event System.Action<MapNode> OnFocusCanceled;
 
+
+    public event System.Action<float> OnHorizontalDrag;
+
     private Vector2 mouseDownPosition;
     private bool mousePressed;
 
@@ -243,6 +246,8 @@ public class MapOrbitCamera : MonoBehaviour
         if (invertY)
             vertical = -vertical;
 
+        OnHorizontalDrag?.Invoke(horizontal);
+
         targetYaw +=
             horizontal * sensitivity;
 
@@ -405,8 +410,8 @@ public class MapOrbitCamera : MonoBehaviour
 
             if (returningFromFocus)
             {
-                focusedNode = null;
                 returningFromFocus = false;
+                focusedNode = null;
             }
         }
     }
@@ -448,6 +453,14 @@ public class MapOrbitCamera : MonoBehaviour
         get
         {
             return focusedNode != null;
+        }
+    }
+
+    public bool IsReturningFromFocus
+    {
+        get
+        {
+            return returningFromFocus;
         }
     }
 

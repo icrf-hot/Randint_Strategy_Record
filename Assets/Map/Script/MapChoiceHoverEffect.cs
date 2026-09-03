@@ -8,28 +8,44 @@ public class MapChoiceHoverEffect : MonoBehaviour
     [SerializeField] private Camera mapCamera;
 
     [Header("Color")]
-    [SerializeField] private Color normalColor = Color.white;
-    [SerializeField] private Color hoverColor = Color.gray;
+    [SerializeField]
+    private Color normalColor =
+        Color.white;
+
+    [SerializeField]
+    private Color hoverColor =
+        Color.gray;
 
     [Header("Movement")]
-    [SerializeField] private float moveDistance = 0.3f;
+    [SerializeField]
+    private float moveDistance =
+        0.3f;
 
     [Header("Animation")]
-    [SerializeField] private float fadeDuration = 0.15f;
-    [SerializeField] private float moveDuration = 0.15f;
+    [SerializeField]
+    private float fadeDuration =
+        0.15f;
+
+    [SerializeField]
+    private float moveDuration =
+        0.15f;
+
 
     private bool isHovering;
 
-    // MapNodeFocusObject가 지정하는 원래 위치
-    private Vector3 basePosition;
 
-    // 이동 애니메이션
-    private Vector3 startPosition;
-    private Vector3 targetPosition;
+    // 기본 Local Position
+    private Vector3 baseLocalPosition;
+
+
+    // 이동
+    private Vector3 startLocalPosition;
+    private Vector3 targetLocalPosition;
 
     private float moveTimer;
 
-    // 색상 애니메이션
+
+    // 색상
     private Color startColor;
     private Color targetColor;
 
@@ -43,13 +59,6 @@ public class MapChoiceHoverEffect : MonoBehaviour
             spriteRenderer =
                 GetComponent<SpriteRenderer>();
         }
-
-        if (mapCamera == null)
-        {
-            Debug.LogError(
-                "MapChoiceHoverEffect: Map Camera가 지정되지 않았습니다."
-            );
-        }
     }
 
 
@@ -57,16 +66,17 @@ public class MapChoiceHoverEffect : MonoBehaviour
     {
         isHovering = false;
 
-        basePosition =
-            transform.position;
+        baseLocalPosition =
+            transform.localPosition;
 
-        startPosition =
-            basePosition;
+        startLocalPosition =
+            baseLocalPosition;
 
-        targetPosition =
-            basePosition;
+        targetLocalPosition =
+            baseLocalPosition;
 
         moveTimer = 0f;
+
 
         startColor =
             normalColor;
@@ -75,6 +85,7 @@ public class MapChoiceHoverEffect : MonoBehaviour
             normalColor;
 
         colorTimer = 0f;
+
 
         if (spriteRenderer != null)
         {
@@ -89,17 +100,12 @@ public class MapChoiceHoverEffect : MonoBehaviour
         CheckHover();
 
         UpdateColor();
-    }
-
-
-    private void LateUpdate()
-    {
         UpdateMovement();
     }
 
 
     // =========================================================
-    // Hover 검출
+    // Hover Detection
     // =========================================================
 
     private void CheckHover()
@@ -107,8 +113,7 @@ public class MapChoiceHoverEffect : MonoBehaviour
         if (mapCamera == null)
             return;
 
-        Mouse mouse =
-            Mouse.current;
+        Mouse mouse = Mouse.current;
 
         if (mouse == null)
             return;
@@ -116,23 +121,48 @@ public class MapChoiceHoverEffect : MonoBehaviour
         Vector2 mousePosition =
             mouse.position.ReadValue();
 
+        /*
+         * =====================================================
+         * 마우스의 Screen 좌표를
+         * 이 Sprite가 존재하는 월드 깊이로 변환
+         * =====================================================
+         */
 
-        Ray ray =
-            mapCamera.ScreenPointToRay(
-                mousePosition
+        Vector3 spriteScreenPosition =
+            mapCamera.WorldToScreenPoint(
+                transform.position
+            );
+
+        Vector3 mouseWorldPosition =
+            mapCamera.ScreenToWorldPoint(
+                new Vector3(
+                    mousePosition.x,
+                    mousePosition.y,
+                    spriteScreenPosition.z
+                )
             );
 
 
-        RaycastHit2D hit =
-            Physics2D.GetRayIntersection(
-                ray
+        /*
+         * =====================================================
+         * 해당 월드 위치에 있는 2D Collider 검색
+         * =====================================================
+         */
+
+        Collider2D hit =
+            Physics2D.OverlapPoint(
+                mouseWorldPosition
             );
 
 
         bool hoveringNow =
-            hit.collider != null &&
-            hit.collider.transform == transform;
+            hit != null &&
+            hit.transform == transform;
 
+
+        /*
+         * 상태가 변하지 않았다면 아무것도 하지 않음
+         */
 
         if (hoveringNow == isHovering)
             return;
@@ -150,7 +180,7 @@ public class MapChoiceHoverEffect : MonoBehaviour
 
 
     // =========================================================
-    // Hover 시작
+    // Begin Hover
     // =========================================================
 
     private void BeginHover()
@@ -158,9 +188,9 @@ public class MapChoiceHoverEffect : MonoBehaviour
         isHovering = true;
 
 
-        // -----------------------------
+        // -------------------------
         // Color
-        // -----------------------------
+        // -------------------------
 
         startColor =
             spriteRenderer.color;
@@ -171,32 +201,26 @@ public class MapChoiceHoverEffect : MonoBehaviour
         colorTimer = 0f;
 
 
-        // -----------------------------
+        // -------------------------
         // Position
-        // -----------------------------
+        // -------------------------
 
-        startPosition =
-            transform.position;
+        startLocalPosition =
+            transform.localPosition;
+
+
+        targetLocalPosition =
+            baseLocalPosition;
 
 
         /*
-         * 카메라의 오른쪽 방향을 가져옵니다.
+         * 화면 왼쪽으로 이동
          *
-         * 화면에서:
-         *
-         *        오른쪽 →
-         *
-         * camera.transform.right
-         *
-         * 따라서 왼쪽은 반대 방향입니다.
+         * Camera Local X축이
+         * 화면의 오른쪽입니다.
          */
-        Vector3 screenLeft =
-            -mapCamera.transform.right;
-
-
-        targetPosition =
-            basePosition +
-            screenLeft * moveDistance;
+        targetLocalPosition.x -=
+            moveDistance;
 
 
         moveTimer = 0f;
@@ -204,7 +228,7 @@ public class MapChoiceHoverEffect : MonoBehaviour
 
 
     // =========================================================
-    // Hover 종료
+    // End Hover
     // =========================================================
 
     private void EndHover()
@@ -212,9 +236,9 @@ public class MapChoiceHoverEffect : MonoBehaviour
         isHovering = false;
 
 
-        // -----------------------------
+        // -------------------------
         // Color
-        // -----------------------------
+        // -------------------------
 
         startColor =
             spriteRenderer.color;
@@ -225,15 +249,15 @@ public class MapChoiceHoverEffect : MonoBehaviour
         colorTimer = 0f;
 
 
-        // -----------------------------
+        // -------------------------
         // Position
-        // -----------------------------
+        // -------------------------
 
-        startPosition =
-            transform.position;
+        startLocalPosition =
+            transform.localPosition;
 
-        targetPosition =
-            basePosition;
+        targetLocalPosition =
+            baseLocalPosition;
 
         moveTimer = 0f;
     }
@@ -247,8 +271,8 @@ public class MapChoiceHoverEffect : MonoBehaviour
     {
         if (moveDuration <= 0f)
         {
-            transform.position =
-                targetPosition;
+            transform.localPosition =
+                targetLocalPosition;
 
             return;
         }
@@ -265,16 +289,15 @@ public class MapChoiceHoverEffect : MonoBehaviour
             );
 
 
-        // SmoothStep
         t =
             t * t *
             (3f - 2f * t);
 
 
-        transform.position =
+        transform.localPosition =
             Vector3.Lerp(
-                startPosition,
-                targetPosition,
+                startLocalPosition,
+                targetLocalPosition,
                 t
             );
     }
@@ -288,6 +311,7 @@ public class MapChoiceHoverEffect : MonoBehaviour
     {
         if (spriteRenderer == null)
             return;
+
 
         if (fadeDuration <= 0f)
         {
@@ -324,33 +348,33 @@ public class MapChoiceHoverEffect : MonoBehaviour
 
 
     // =========================================================
-    // MapNodeFocusObject에서 호출
+    // MapNodeFocusObject
     // =========================================================
 
-    public void SetBasePosition(
+    public void SetBaseLocalPosition(
         Vector3 position)
     {
-        basePosition =
+        baseLocalPosition =
             position;
 
 
         /*
-         * Hover 중이 아닐 때만
-         * 실제 위치를 갱신합니다.
+         * Hover 중이면 건드리지 않습니다.
          *
-         * Hover 중에는 Hover 애니메이션이
-         * 위치를 관리합니다.
+         * Hover 애니메이션은
+         * 이 스크립트가 책임집니다.
          */
-        if (!isHovering)
-        {
-            startPosition =
-                position;
+        if (isHovering)
+            return;
 
-            targetPosition =
-                position;
 
-            transform.position =
-                position;
-        }
+        startLocalPosition =
+            position;
+
+        targetLocalPosition =
+            position;
+
+        transform.localPosition =
+            position;
     }
 }
