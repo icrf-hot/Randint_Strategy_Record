@@ -60,6 +60,8 @@ public class MapNodeClickHandler : MonoBehaviour
 
     private void TryClickNode(Vector2 mousePosition)
     {
+        //Debug.Log("TryClickNode ½ÇÇà");
+
         Camera mapCamera =
             orbitCamera.GetComponent<Camera>();
 

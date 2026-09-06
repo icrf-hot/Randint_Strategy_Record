@@ -1,234 +1,122 @@
 using System.Collections;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class MapNodeFocusObject : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private MapOrbitCamera orbitCamera;
 
-    /*
-     * 반드시 MapOrbitCamera의 자식으로 둡니다.
-     *
-     * 예:
-     *
-     * Map3DCamera
-     *     └─ MapUIRoot
-     */
-    [SerializeField] private Transform uiRoot;
 
-    [Header("Focus Objects")]
-    [SerializeField] private Transform[] choiceObjects;
+    [Header("Objects")]
+    [SerializeField] private Transform descriptionObject;
+    [SerializeField] private Transform choicesObject;
 
-    [Header("Screen Position")]
-    [SerializeField] private float uiDistance = 5f;
 
-    [Tooltip("Node를 기준으로 한 화면상의 위치")]
-    [SerializeField]
-    private Vector2 screenOffset =
-        new Vector2(-2f, 0f);
+    [Header("Description")]
+    [SerializeField] private TMP_Text descriptionText;
 
-    [Tooltip("선택지 사이의 세로 간격")]
-    [SerializeField]
-    private float spacing = 1.5f;
+
+    [Header("Choice Buttons")]
+    [SerializeField] private GameObject[] choiceButtons;
+
+    [SerializeField] private TMP_Text[] choiceTexts;
+
+
+    [Header("Movement")]
+    [SerializeField] private float descriptionOffset = 10f;
+    [SerializeField] private float choicesOffset = 10f;
+
 
     [Header("Animation")]
-    [SerializeField] private float duration = 0.4f;
-
-    [SerializeField] private float exitDuration = 0.15f;
-
-    [Tooltip("화면 오른쪽에서 들어오는 거리")]
-    [SerializeField] private float startOffset = 8f;
+    [SerializeField] private float descriptionMoveDuration = 0.15f;
+    [SerializeField] private float choicesMoveDuration = 0.15f;
 
 
-    private Camera mapCamera;
+    private Vector3 descriptionBasePosition;
+    private Vector3 choicesBasePosition;
 
-    private MapNode node;
+
+    private Vector3 descriptionStartPosition;
+    private Vector3 descriptionTargetPosition;
+
+    private Vector3 choicesStartPosition;
+    private Vector3 choicesTargetPosition;
+
+
+    private float descriptionMoveTimer;
+    private float choicesMoveTimer;
+
 
     private Coroutine animationCoroutine;
 
-    private bool isVisible;
-    private bool isClosing;
+    private bool previousFocusState;
 
-
-    // =========================================================
-    // Awake
-    // =========================================================
 
     private void Awake()
     {
-        node =
-            GetComponent<MapNode>();
+        descriptionBasePosition =
+            descriptionObject.localPosition;
 
-        if (node == null)
-        {
-            Debug.LogError(
-                "MapNodeFocusObject: " +
-                "같은 GameObject에 MapNode이 필요합니다."
-            );
-
-            enabled = false;
-        }
+        choicesBasePosition =
+            choicesObject.localPosition;
     }
 
-
-    // =========================================================
-    // Start
-    // =========================================================
 
     private void Start()
     {
-        if (orbitCamera == null)
-        {
-            Debug.LogError(
-                "MapNodeFocusObject: " +
-                "Orbit Camera가 지정되지 않았습니다."
-            );
+        descriptionObject.gameObject.SetActive(false);
+        choicesObject.gameObject.SetActive(false);
 
-            enabled = false;
-            return;
-        }
-
-
-        mapCamera =
-            orbitCamera.GetComponent<Camera>();
-
-
-        if (mapCamera == null)
-        {
-            Debug.LogError(
-                "MapNodeFocusObject: " +
-                "MapOrbitCamera에 Camera가 없습니다."
-            );
-
-            enabled = false;
-            return;
-        }
-
-
-        if (uiRoot == null)
-        {
-            Debug.LogError(
-                "MapNodeFocusObject: " +
-                "UI Root가 지정되지 않았습니다."
-            );
-
-            enabled = false;
-            return;
-        }
-
-
-        /*
-         * Focus 취소 이벤트
-         */
-        orbitCamera.OnFocusCanceled +=
-            HandleFocusCanceled;
-
-
-        HideImmediately();
+        previousFocusState =
+            orbitCamera.IsFocused;
     }
 
 
-    private void OnDestroy()
+    private void OnEnable()
     {
         if (orbitCamera != null)
         {
-            orbitCamera.OnFocusCanceled -=
-                HandleFocusCanceled;
+            orbitCamera.OnFocusCanceled += OnFocusCanceled;
         }
     }
 
 
-    // =========================================================
-    // Update
-    // =========================================================
+    private void OnDisable()
+    {
+        if (orbitCamera != null)
+        {
+            orbitCamera.OnFocusCanceled -= OnFocusCanceled;
+        }
+    }
+
 
     private void Update()
     {
-        if (orbitCamera == null)
-            return;
+        bool currentFocusState =
+            orbitCamera.IsFocused;
 
 
-        bool isThisNodeFocused =
-            orbitCamera.FocusedNode == node;
-
-
-        // =====================================================
-        // Focus 상태
-        // =====================================================
-
-        if (isThisNodeFocused)
+        // Focus 시작
+        if (!previousFocusState &&
+            currentFocusState)
         {
-            if (!isVisible &&
-                !isClosing &&
-                animationCoroutine == null)
-            {
-                ShowObjects();
-                return;
-            }
-
-
-            /*
-             * 등장 애니메이션이 끝난 이후
-             *
-             * Node의 화면 위치를 계속 추적합니다.
-             */
-            if (isVisible &&
-                !isClosing &&
-                animationCoroutine == null)
-            {
-                UpdateObjectPositions();
-            }
-
-            return;
+            ShowObjects();
         }
 
 
-        // =====================================================
-        // Focus 해제
-        // =====================================================
-
-        if (isVisible &&
-            !isClosing)
-        {
-            HideImmediately();
-        }
+        previousFocusState =
+            currentFocusState;
     }
 
 
     // =========================================================
-    // Focus Cancel
+    // Focus 취소
     // =========================================================
 
-    private void HandleFocusCanceled(
-        MapNode canceledNode)
+    private void OnFocusCanceled(MapNode canceledNode)
     {
-        if (canceledNode != node)
-            return;
-
-
-        if (!isVisible &&
-            animationCoroutine == null)
-        {
-            return;
-        }
-
-
-        isClosing = true;
-
-
-        if (animationCoroutine != null)
-        {
-            StopCoroutine(
-                animationCoroutine
-            );
-        }
-
-
-        animationCoroutine =
-            StartCoroutine(
-                AnimateObjectsOut()
-            );
+        HideObjects();
     }
 
 
@@ -240,20 +128,135 @@ public class MapNodeFocusObject : MonoBehaviour
     {
         if (animationCoroutine != null)
         {
-            StopCoroutine(
-                animationCoroutine
-            );
+            StopCoroutine(animationCoroutine);
         }
 
-        isClosing = false;
 
-        // 현재 MapNode의 선택지 텍스트를 적용
-        SetChoiceTexts();
+        MapNode focusedNode =
+            orbitCamera.FocusedNode;
+
+
+        if (focusedNode == null)
+            return;
+
+
+        // -----------------------------------------------------
+        // Node Description
+        // -----------------------------------------------------
+
+        if (descriptionText != null)
+        {
+            descriptionText.text =
+                focusedNode.Description;
+        }
+
+
+        // -----------------------------------------------------
+        // Choice 설정
+        // -----------------------------------------------------
+
+        SetupChoices(
+            focusedNode
+        );
+
+
+        // -----------------------------------------------------
+        // 활성화
+        // -----------------------------------------------------
+
+        descriptionObject.gameObject.SetActive(true);
+        choicesObject.gameObject.SetActive(true);
+
+
+        // -----------------------------------------------------
+        // Description 위치
+        // -----------------------------------------------------
+
+        descriptionStartPosition =
+            descriptionBasePosition +
+            Vector3.left * descriptionOffset;
+
+        descriptionTargetPosition =
+            descriptionBasePosition;
+
+
+        // -----------------------------------------------------
+        // Choices 위치
+        // -----------------------------------------------------
+
+        choicesStartPosition =
+            choicesBasePosition +
+            Vector3.right * choicesOffset;
+
+        choicesTargetPosition =
+            choicesBasePosition;
+
+
+        descriptionObject.localPosition =
+            descriptionStartPosition;
+
+        choicesObject.localPosition =
+            choicesStartPosition;
+
+
+        descriptionMoveTimer = 0f;
+        choicesMoveTimer = 0f;
+
 
         animationCoroutine =
             StartCoroutine(
-                AnimateObjectsIn()
+                MoveIn()
             );
+    }
+
+
+    // =========================================================
+    // Choice 설정
+    // =========================================================
+
+    private void SetupChoices(MapNode node)
+    {
+        // 모든 버튼 비활성화
+        for (int i = 0; i < choiceButtons.Length; i++)
+        {
+            choiceButtons[i].SetActive(false);
+
+            if (i < choiceTexts.Length &&
+                choiceTexts[i] != null)
+            {
+                choiceTexts[i].text = "";
+            }
+        }
+
+        MapChoice[] choices = node.Choices;
+
+        if (choices == null)
+            return;
+
+        // 최대 3개까지만 표시
+        int count = Mathf.Min(
+            choices.Length,
+            choiceButtons.Length
+        );
+
+        for (int i = 0; i < count; i++)
+        {
+            MapChoice choice = choices[i];
+
+            if (choice == null)
+                continue;
+
+            // 버튼 활성화
+            choiceButtons[i].SetActive(true);
+
+            // TMP 변경
+            if (i < choiceTexts.Length &&
+                choiceTexts[i] != null)
+            {
+                choiceTexts[i].text =
+                    choice.ChoiceText;
+            }
+        }
     }
 
 
@@ -261,356 +264,125 @@ public class MapNodeFocusObject : MonoBehaviour
     // Hide
     // =========================================================
 
-    private void HideImmediately()
+    private void HideObjects()
     {
         if (animationCoroutine != null)
         {
-            StopCoroutine(
-                animationCoroutine
+            StopCoroutine(animationCoroutine);
+        }
+
+
+        descriptionStartPosition =
+            descriptionObject.localPosition;
+
+        descriptionTargetPosition =
+            descriptionBasePosition +
+            Vector3.left * descriptionOffset;
+
+
+        choicesStartPosition =
+            choicesObject.localPosition;
+
+        choicesTargetPosition =
+            choicesBasePosition +
+            Vector3.right * choicesOffset;
+
+
+        descriptionMoveTimer = 0f;
+        choicesMoveTimer = 0f;
+
+
+        animationCoroutine =
+            StartCoroutine(
+                MoveOut()
             );
-
-            animationCoroutine = null;
-        }
-
-
-        isVisible = false;
-        isClosing = false;
-
-
-        if (choiceObjects == null)
-            return;
-
-
-        foreach (Transform obj in choiceObjects)
-        {
-            if (obj != null)
-            {
-                obj.gameObject.SetActive(false);
-            }
-        }
     }
 
 
     // =========================================================
-    // Node 화면 위치 → Camera Local 좌표
+    // Move In
     // =========================================================
 
-    private bool CalculateTargetPositions(
-        Vector3[] targetPositions)
+    private IEnumerator MoveIn()
     {
-        if (node == null ||
-            mapCamera == null ||
-            uiRoot == null)
+        bool descriptionFinished = false;
+        bool choicesFinished = false;
+
+
+        while (!descriptionFinished ||
+               !choicesFinished)
         {
-            return false;
-        }
-
-
-        if (choiceObjects == null ||
-            choiceObjects.Length == 0)
-        {
-            return false;
-        }
-
-
-        /*
-         * =====================================================
-         * 1. Node를 Screen 좌표로 변환
-         * =====================================================
-         */
-
-        Vector3 screenPosition =
-            mapCamera.WorldToScreenPoint(
-                node.transform.position
-            );
-
-
-        if (screenPosition.z <= 0f)
-            return false;
-
-
-        /*
-         * =====================================================
-         * 2. Viewport 좌표
-         * =====================================================
-         */
-
-        Vector3 viewport =
-            mapCamera.ScreenToViewportPoint(
-                screenPosition
-            );
-
-
-        /*
-         * =====================================================
-         * 3. Camera Local 좌표 계산
-         * =====================================================
-         *
-         * uiDistance 거리의 카메라 평면에서
-         * Node와 동일한 화면 위치를 계산합니다.
-         */
-
-        float halfHeight =
-            Mathf.Tan(
-                mapCamera.fieldOfView *
-                0.5f *
-                Mathf.Deg2Rad
-            ) *
-            uiDistance;
-
-
-        float halfWidth =
-            halfHeight *
-            mapCamera.aspect;
-
-
-        float localX =
-            (viewport.x - 0.5f) *
-            halfWidth *
-            2f;
-
-
-        float localY =
-            (viewport.y - 0.5f) *
-            halfHeight *
-            2f;
-
-
-        /*
-         * Inspector Offset
-         */
-        localX +=
-            screenOffset.x;
-
-        localY +=
-            screenOffset.y;
-
-
-        /*
-         * =====================================================
-         * 4. 선택지 세로 정렬
-         * =====================================================
-         *
-         * 예:
-         *
-         *      [0]
-         *
-         *      [1]
-         *
-         *      [2]
-         */
-
-        int count =
-            choiceObjects.Length;
-
-
-        float centerOffset =
-            (count - 1) * 0.5f;
-
-
-        for (int i = 0;
-             i < count;
-             i++)
-        {
-            float y =
-                localY +
-                (i - centerOffset) *
-                spacing;
-
-
-            /*
-             * UI Root가 Camera의 자식이므로
-             *
-             * X = 화면 좌우
-             * Y = 화면 상하
-             * Z = 카메라와의 거리
-             */
-
-            targetPositions[i] =
-                new Vector3(
-                    localX,
-                    y,
-                    uiDistance
-                );
-        }
-
-
-        return true;
-    }
-
-
-    // =========================================================
-    // 위치 갱신
-    // =========================================================
-
-    private void UpdateObjectPositions()
-    {
-        if (choiceObjects == null ||
-            choiceObjects.Length == 0)
-        {
-            return;
-        }
-
-
-        Vector3[] targetPositions =
-            new Vector3[
-                choiceObjects.Length
-            ];
-
-
-        if (!CalculateTargetPositions(
-            targetPositions))
-        {
-            return;
-        }
-
-
-        for (int i = 0;
-             i < choiceObjects.Length;
-             i++)
-        {
-            Transform obj =
-                choiceObjects[i];
-
-            if (obj == null)
-                continue;
-
-
-            /*
-             * 중요:
-             *
-             * World Position이 아닙니다.
-             *
-             * Camera UI Root 기준 Local Position입니다.
-             */
-            obj.localPosition =
-                targetPositions[i];
-
-
-            /*
-             * Hover Effect에
-             * 기본 위치 전달
-             */
-            MapChoiceHoverEffect hover =
-                obj.GetComponent<
-                    MapChoiceHoverEffect
-                >();
-
-
-            if (hover != null)
+            if (!descriptionFinished)
             {
-                hover.SetBaseLocalPosition(
-                    targetPositions[i]
-                );
-            }
-        }
-    }
+                descriptionMoveTimer +=
+                    Time.deltaTime;
 
 
-    // =========================================================
-    // 등장
-    // =========================================================
-
-    private IEnumerator AnimateObjectsIn()
-    {
-        if (choiceObjects == null ||
-            choiceObjects.Length == 0)
-        {
-            isVisible = true;
-            animationCoroutine = null;
-            yield break;
-        }
+                float t =
+                    Mathf.Clamp01(
+                        descriptionMoveTimer /
+                        descriptionMoveDuration
+                    );
 
 
-        foreach (Transform obj in choiceObjects)
-        {
-            if (obj != null)
-            {
-                obj.gameObject.SetActive(true);
-            }
-        }
+                t =
+                    t * t *
+                    (3f - 2f * t);
 
 
-        float timer = 0f;
-
-
-        while (timer < duration)
-        {
-            timer +=
-                Time.deltaTime;
-
-
-            float t =
-                Mathf.Clamp01(
-                    timer / duration
-                );
-
-
-            /*
-             * SmoothStep
-             */
-            t =
-                t * t *
-                (3f - 2f * t);
-
-
-            Vector3[] targetPositions =
-                new Vector3[
-                    choiceObjects.Length
-                ];
-
-
-            if (!CalculateTargetPositions(
-                targetPositions))
-            {
-                yield break;
-            }
-
-
-            /*
-             * =================================================
-             * 핵심
-             * =================================================
-             *
-             * 월드 X축이 아닙니다.
-             *
-             * Camera Local X축입니다.
-             *
-             * 따라서 카메라가 어느 방향을 바라보든
-             * "화면 오른쪽"에서 들어옵니다.
-             */
-
-            for (int i = 0;
-                 i < choiceObjects.Length;
-                 i++)
-            {
-                Transform obj =
-                    choiceObjects[i];
-
-                if (obj == null)
-                    continue;
-
-
-                Vector3 start =
-                    targetPositions[i];
-
-
-                /*
-                 * 화면 오른쪽
-                 */
-                start.x +=
-                    startOffset;
-
-
-                /*
-                 * 화면 오른쪽 → 목표 위치
-                 */
-                obj.localPosition =
+                descriptionObject.localPosition =
                     Vector3.Lerp(
-                        start,
-                        targetPositions[i],
+                        descriptionStartPosition,
+                        descriptionTargetPosition,
                         t
                     );
+
+
+                if (descriptionMoveTimer >=
+                    descriptionMoveDuration)
+                {
+                    descriptionObject.localPosition =
+                        descriptionTargetPosition;
+
+                    descriptionFinished = true;
+                }
+            }
+
+
+            if (!choicesFinished)
+            {
+                choicesMoveTimer +=
+                    Time.deltaTime;
+
+
+                float t =
+                    Mathf.Clamp01(
+                        choicesMoveTimer /
+                        choicesMoveDuration
+                    );
+
+
+                t =
+                    t * t *
+                    (3f - 2f * t);
+
+
+                choicesObject.localPosition =
+                    Vector3.Lerp(
+                        choicesStartPosition,
+                        choicesTargetPosition,
+                        t
+                    );
+
+
+                if (choicesMoveTimer >=
+                    choicesMoveDuration)
+                {
+                    choicesObject.localPosition =
+                        choicesTargetPosition;
+
+                    choicesFinished = true;
+                }
             }
 
 
@@ -618,92 +390,94 @@ public class MapNodeFocusObject : MonoBehaviour
         }
 
 
-        UpdateObjectPositions();
-
-
-        isVisible = true;
         animationCoroutine = null;
     }
 
 
     // =========================================================
-    // 퇴장
+    // Move Out
     // =========================================================
 
-    private IEnumerator AnimateObjectsOut()
+    private IEnumerator MoveOut()
     {
-        if (choiceObjects == null ||
-            choiceObjects.Length == 0)
+        bool descriptionFinished = false;
+        bool choicesFinished = false;
+
+
+        while (!descriptionFinished ||
+               !choicesFinished)
         {
-            HideImmediately();
-            yield break;
-        }
-
-
-        float timer = 0f;
-
-
-        while (timer < exitDuration)
-        {
-            timer +=
-                Time.deltaTime;
-
-
-            float t =
-                Mathf.Clamp01(
-                    timer / exitDuration
-                );
-
-
-            t =
-                t * t *
-                (3f - 2f * t);
-
-
-            Vector3[] targetPositions =
-                new Vector3[
-                    choiceObjects.Length
-                ];
-
-
-            if (!CalculateTargetPositions(
-                targetPositions))
+            if (!descriptionFinished)
             {
-                yield break;
+                descriptionMoveTimer +=
+                    Time.deltaTime;
+
+
+                float t =
+                    Mathf.Clamp01(
+                        descriptionMoveTimer /
+                        descriptionMoveDuration
+                    );
+
+
+                t =
+                    t * t *
+                    (3f - 2f * t);
+
+
+                descriptionObject.localPosition =
+                    Vector3.Lerp(
+                        descriptionStartPosition,
+                        descriptionTargetPosition,
+                        t
+                    );
+
+
+                if (descriptionMoveTimer >=
+                    descriptionMoveDuration)
+                {
+                    descriptionObject.localPosition =
+                        descriptionTargetPosition;
+
+                    descriptionFinished = true;
+                }
             }
 
 
-            for (int i = 0;
-                 i < choiceObjects.Length;
-                 i++)
+            if (!choicesFinished)
             {
-                Transform obj =
-                    choiceObjects[i];
-
-                if (obj == null)
-                    continue;
+                choicesMoveTimer +=
+                    Time.deltaTime;
 
 
-                Vector3 end =
-                    targetPositions[i];
+                float t =
+                    Mathf.Clamp01(
+                        choicesMoveTimer /
+                        choicesMoveDuration
+                    );
 
 
-                /*
-                 * 화면 오른쪽
-                 */
-                end.x +=
-                    startOffset;
+                t =
+                    t * t *
+                    (3f - 2f * t);
 
 
-                /*
-                 * 목표 위치 → 오른쪽
-                 */
-                obj.localPosition =
+                choicesObject.localPosition =
                     Vector3.Lerp(
-                        targetPositions[i],
-                        end,
+                        choicesStartPosition,
+                        choicesTargetPosition,
                         t
                     );
+
+
+                if (choicesMoveTimer >=
+                    choicesMoveDuration)
+                {
+                    choicesObject.localPosition =
+                        choicesTargetPosition;
+
+                    choicesFinished = true;
+                }
             }
 
 
@@ -711,57 +485,19 @@ public class MapNodeFocusObject : MonoBehaviour
         }
 
 
-        foreach (Transform obj in choiceObjects)
-        {
-            if (obj != null)
-            {
-                obj.gameObject.SetActive(false);
-            }
-        }
+        // 이동이 끝난 후 전체 Choices 숨김
+        descriptionObject.gameObject.SetActive(false);
+        choicesObject.gameObject.SetActive(false);
 
 
-        isVisible = false;
-        isClosing = false;
+        // 다음 Focus를 위해 위치 복구
+        descriptionObject.localPosition =
+            descriptionBasePosition;
+
+        choicesObject.localPosition =
+            choicesBasePosition;
+
+
         animationCoroutine = null;
-    }
-
-    private void SetChoiceTexts()
-    {
-        if (node == null)
-            return;
-
-        if (choiceObjects == null)
-            return;
-
-        MapNodeChoice[] choices =
-            node.Choices;
-
-        for (int i = 0;
-             i < choiceObjects.Length;
-             i++)
-        {
-            Transform obj =
-                choiceObjects[i];
-
-            if (obj == null)
-                continue;
-
-            TMP_Text text =
-                obj.GetComponentInChildren<TMP_Text>();
-
-            if (text == null)
-                continue;
-
-            if (choices != null &&
-                i < choices.Length)
-            {
-                text.text =
-                    choices[i].text;
-            }
-            else
-            {
-                text.text = "";
-            }
-        }
     }
 }

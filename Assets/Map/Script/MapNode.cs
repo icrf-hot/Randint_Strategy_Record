@@ -14,13 +14,6 @@ public enum MapNodeType
     Boss
 }
 
-[System.Serializable]
-public class MapNodeChoice
-{
-    [TextArea(2, 5)]
-    public string text;
-}
-
 public class MapNode : MonoBehaviour
 {
     [Header("Node Info")]
@@ -30,21 +23,26 @@ public class MapNode : MonoBehaviour
     [Header("Connections")]
     [SerializeField] private MapNode[] connectedNodes;
 
+    [Header("Description")]
+    [TextArea(3, 10)]
+    [SerializeField] private string description;
+
     [Header("Choices")]
-    [SerializeField] private MapNodeChoice[] choices;
+    [SerializeField] private MapChoice[] choices;
 
     public int NodeID => nodeID;
     public MapNodeType NodeType => nodeType;
+    public MapNode[] ConnectedNodes => connectedNodes;
 
-    public MapNode[] ConnectedNodes =>
-        connectedNodes;
-
-    public MapNodeChoice[] Choices =>
-        choices;
+    public string Description => description;
+    public MapChoice[] Choices => choices;
 
     public bool IsConnectedTo(MapNode node)
     {
         if (node == null)
+            return false;
+
+        if (connectedNodes == null)
             return false;
 
         foreach (MapNode connected in connectedNodes)
