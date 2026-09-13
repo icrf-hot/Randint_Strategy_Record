@@ -963,8 +963,8 @@ GameObject:
   m_Component:
   - component: {fileID: 363216333}
   - component: {fileID: 363216334}
-  - component: {fileID: 363216338}
   - component: {fileID: 363216337}
+  - component: {fileID: 363216338}
   m_Layer: 5
   m_Name: Square
   m_TagString: Untagged
@@ -1018,7 +1018,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: b52584e75e5aa044eadcd94931d4f29b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1063,23 +1063,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b28c585ac23f448811701b6552c35c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoiceHoverEffect
+  hitArea: {fileID: 0}
+  canvas: {fileID: 0}
   spriteRenderer: {fileID: 363216334}
-  mapCamera: {fileID: 316983480}
   normalColor: {r: 1, g: 1, b: 1, a: 0.09803922}
   hoverColor: {r: 0, g: 0, b: 0, a: 0.39215687}
   moveDistance: 0
   fadeDuration: 0.15
   moveDuration: 0.15
---- !u!61 &363216338
-BoxCollider2D:
+--- !u!65 &363216338
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 363216332}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -1088,34 +1086,12 @@ BoxCollider2D:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
   m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.0000001, z: 0.2}
+  m_Center: {x: 0, y: 0.000000029802322, z: 0}
 --- !u!1 &366050212
 GameObject:
   m_ObjectHideFlags: 0
@@ -1207,7 +1183,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &416008754
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1402,8 +1378,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b28c585ac23f448811701b6552c35c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoiceHoverEffect
+  hitArea: {fileID: 0}
+  canvas: {fileID: 0}
   spriteRenderer: {fileID: 508787427}
-  mapCamera: {fileID: 316983480}
   normalColor: {r: 0, g: 0, b: 0, a: 0.5882353}
   hoverColor: {r: 0, g: 0, b: 0, a: 0.88235295}
   moveDistance: 0
@@ -1591,6 +1568,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7286569409329988708, guid: f4496cf675832395f896b2d601be6f6d, type: 3}
   m_PrefabInstance: {fileID: 531466799}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &531466801 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7960541642642461473, guid: f4496cf675832395f896b2d601be6f6d, type: 3}
+  m_PrefabInstance: {fileID: 531466799}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &592358292
 GameObject:
   m_ObjectHideFlags: 0
@@ -1704,6 +1686,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7286569409329988708, guid: f4496cf675832395f896b2d601be6f6d, type: 3}
   m_PrefabInstance: {fileID: 614868082}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &614868084 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7960541642642461473, guid: f4496cf675832395f896b2d601be6f6d, type: 3}
+  m_PrefabInstance: {fileID: 614868082}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &621905964
 GameObject:
   m_ObjectHideFlags: 0
@@ -1742,14 +1729,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
   nodeID: 2
+  floorIndex: 1
   nodeType: 3
-  connectedNodes: []
+  connectedNodes:
+  - {fileID: 1670722690}
+  - {fileID: 1475734765}
   description: "\uBE44\uC20D \uB178\uB4DC\n\uC2DC\uC791\uC740 \uC26C\uC6B8\uC9C0
     \uBAB0\uB77C\uB3C4\n\uB05D\uC740 \uD56D\uC0C1 \uBE44\uADF9\uC774\uC5C8\uC2B5\uB2C8\uB2E4."
   choices:
   - {fileID: 621905972}
   - {fileID: 621905974}
   - {fileID: 621905973}
+  meshRenderer: {fileID: 651019049}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  currentColor: {r: 0, g: 0, b: 1, a: 1}
+  unavailableColor: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 0.39215687}
+  reachablePreviewColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &621905966
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1939,8 +1934,8 @@ GameObject:
   m_Component:
   - component: {fileID: 637687113}
   - component: {fileID: 637687114}
-  - component: {fileID: 637687116}
   - component: {fileID: 637687115}
+  - component: {fileID: 637687116}
   m_Layer: 5
   m_Name: Square (3)
   m_TagString: Untagged
@@ -1994,7 +1989,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: b52584e75e5aa044eadcd94931d4f29b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2039,23 +2034,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b28c585ac23f448811701b6552c35c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoiceHoverEffect
+  hitArea: {fileID: 0}
+  canvas: {fileID: 0}
   spriteRenderer: {fileID: 637687114}
-  mapCamera: {fileID: 316983480}
   normalColor: {r: 1, g: 1, b: 1, a: 0.09803922}
   hoverColor: {r: 0, g: 0, b: 0, a: 0.39215687}
   moveDistance: 0
   fadeDuration: 0.15
   moveDuration: 0.15
---- !u!61 &637687116
-BoxCollider2D:
+--- !u!65 &637687116
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 637687112}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -2064,34 +2057,12 @@ BoxCollider2D:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
   m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.0000001, z: 0.2}
+  m_Center: {x: 0, y: -0.00000023841858, z: 0}
 --- !u!1001 &651019047
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2166,6 +2137,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8599945307328464763, guid: 3eb86ea646bdc62ef87d5aea53cc06ae, type: 3}
   m_PrefabInstance: {fileID: 651019047}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &651019049 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5466402638421007780, guid: 3eb86ea646bdc62ef87d5aea53cc06ae, type: 3}
+  m_PrefabInstance: {fileID: 651019047}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &692577272
 GameObject:
   m_ObjectHideFlags: 0
@@ -2176,8 +2152,9 @@ GameObject:
   m_Component:
   - component: {fileID: 692577273}
   - component: {fileID: 692577276}
-  - component: {fileID: 692577275}
   - component: {fileID: 692577274}
+  - component: {fileID: 692577278}
+  - component: {fileID: 692577279}
   m_Layer: 5
   m_Name: Choice (2)
   m_TagString: Untagged
@@ -2216,59 +2193,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b28c585ac23f448811701b6552c35c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoiceHoverEffect
+  hitArea: {fileID: 0}
+  canvas: {fileID: 0}
   spriteRenderer: {fileID: 692577276}
-  mapCamera: {fileID: 316983480}
   normalColor: {r: 0, g: 0, b: 0, a: 0.5882353}
   hoverColor: {r: 0, g: 0, b: 0, a: 0.88235295}
   moveDistance: 0
   fadeDuration: 0.15
   moveDuration: 0.15
---- !u!61 &692577275
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 692577272}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!212 &692577276
 SpriteRenderer:
   serializedVersion: 2
@@ -2328,6 +2260,43 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &692577278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 692577272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bcfd4975b5b7f64c85a0a816453c7ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MapChoiceButton
+  hitArea: {fileID: 0}
+  canvas: {fileID: 0}
+  focusObject: {fileID: 0}
+  choiceIndex: 1
+--- !u!65 &692577279
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 692577272}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.99999994, z: 0.20001529}
+  m_Center: {x: -0.000015258789, y: 0, z: 0}
 --- !u!1 &751059370
 GameObject:
   m_ObjectHideFlags: 0
@@ -2338,8 +2307,8 @@ GameObject:
   m_Component:
   - component: {fileID: 751059371}
   - component: {fileID: 751059372}
-  - component: {fileID: 751059374}
   - component: {fileID: 751059373}
+  - component: {fileID: 751059374}
   m_Layer: 5
   m_Name: Square (1)
   m_TagString: Untagged
@@ -2393,7 +2362,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: b52584e75e5aa044eadcd94931d4f29b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2438,23 +2407,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b28c585ac23f448811701b6552c35c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoiceHoverEffect
+  hitArea: {fileID: 0}
+  canvas: {fileID: 0}
   spriteRenderer: {fileID: 751059372}
-  mapCamera: {fileID: 316983480}
   normalColor: {r: 1, g: 1, b: 1, a: 0.09803922}
   hoverColor: {r: 0, g: 0, b: 0, a: 0.39215687}
   moveDistance: 0
   fadeDuration: 0.15
   moveDuration: 0.15
---- !u!61 &751059374
-BoxCollider2D:
+--- !u!65 &751059374
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 751059370}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -2463,34 +2430,12 @@ BoxCollider2D:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
   m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.0000001, z: 0.2}
+  m_Center: {x: 0, y: -0.00000023841858, z: 0}
 --- !u!1 &766637530
 GameObject:
   m_ObjectHideFlags: 0
@@ -2622,6 +2567,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
   nodeID: 1
+  floorIndex: 0
   nodeType: 0
   connectedNodes:
   - {fileID: 621905965}
@@ -2630,6 +2576,11 @@ MonoBehaviour:
   description: "\uC2DC\uC791 \uB178\uB4DC\n\uC544\uBB34\uC77C\uB3C4 \uC5C6\uC2B5\uB2C8\uB2E4.\n\uADF8\uB9AC\uACE0
     \uC544\uBB34\uC77C\uB3C4 \uC5C6\uC744\uAC83 \uC785\uB2C8\uB2E4."
   choices: []
+  meshRenderer: {fileID: 766637532}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  currentColor: {r: 0, g: 0, b: 1, a: 1}
+  unavailableColor: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 0.39215687}
+  reachablePreviewColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!114 &766637536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2825,8 +2776,6 @@ GameObject:
   m_Component:
   - component: {fileID: 822496000}
   - component: {fileID: 822496003}
-  - component: {fileID: 822496002}
-  - component: {fileID: 822496001}
   m_Layer: 5
   m_Name: Choice
   m_TagString: Untagged
@@ -2853,71 +2802,6 @@ RectTransform:
   m_AnchoredPosition: {x: 688, y: 30}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &822496001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 822495999}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32b28c585ac23f448811701b6552c35c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MapChoiceHoverEffect
-  spriteRenderer: {fileID: 822496003}
-  mapCamera: {fileID: 316983480}
-  normalColor: {r: 0, g: 0, b: 0, a: 0.5882353}
-  hoverColor: {r: 0, g: 0, b: 0, a: 0.88235295}
-  moveDistance: 0
-  fadeDuration: 0.15
-  moveDuration: 0.15
---- !u!61 &822496002
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 822495999}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!212 &822496003
 SpriteRenderer:
   serializedVersion: 2
@@ -2987,8 +2871,9 @@ GameObject:
   m_Component:
   - component: {fileID: 829191087}
   - component: {fileID: 829191090}
-  - component: {fileID: 829191089}
   - component: {fileID: 829191088}
+  - component: {fileID: 829191092}
+  - component: {fileID: 829191093}
   m_Layer: 5
   m_Name: Choice (1)
   m_TagString: Untagged
@@ -3027,59 +2912,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b28c585ac23f448811701b6552c35c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoiceHoverEffect
+  hitArea: {fileID: 0}
+  canvas: {fileID: 0}
   spriteRenderer: {fileID: 829191090}
-  mapCamera: {fileID: 316983480}
   normalColor: {r: 0, g: 0, b: 0, a: 0.5882353}
   hoverColor: {r: 0, g: 0, b: 0, a: 0.88235295}
   moveDistance: 0
   fadeDuration: 0.15
   moveDuration: 0.15
---- !u!61 &829191089
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 829191086}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!212 &829191090
 SpriteRenderer:
   serializedVersion: 2
@@ -3139,6 +2979,43 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &829191092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829191086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bcfd4975b5b7f64c85a0a816453c7ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MapChoiceButton
+  hitArea: {fileID: 0}
+  canvas: {fileID: 0}
+  focusObject: {fileID: 0}
+  choiceIndex: 0
+--- !u!65 &829191093
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829191086}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.99999994, z: 0.20001529}
+  m_Center: {x: -0.000015258789, y: 0.00000011920929, z: 0}
 --- !u!1 &834654014
 GameObject:
   m_ObjectHideFlags: 0
@@ -3149,8 +3026,9 @@ GameObject:
   m_Component:
   - component: {fileID: 834654015}
   - component: {fileID: 834654018}
-  - component: {fileID: 834654017}
   - component: {fileID: 834654016}
+  - component: {fileID: 834654020}
+  - component: {fileID: 834654021}
   m_Layer: 5
   m_Name: Choice (3)
   m_TagString: Untagged
@@ -3189,59 +3067,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b28c585ac23f448811701b6552c35c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoiceHoverEffect
+  hitArea: {fileID: 0}
+  canvas: {fileID: 0}
   spriteRenderer: {fileID: 834654018}
-  mapCamera: {fileID: 316983480}
   normalColor: {r: 0, g: 0, b: 0, a: 0.5882353}
   hoverColor: {r: 0, g: 0, b: 0, a: 0.88235295}
   moveDistance: 0
   fadeDuration: 0.15
   moveDuration: 0.15
---- !u!61 &834654017
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 834654014}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!212 &834654018
 SpriteRenderer:
   serializedVersion: 2
@@ -3301,6 +3134,43 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &834654020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 834654014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bcfd4975b5b7f64c85a0a816453c7ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MapChoiceButton
+  hitArea: {fileID: 0}
+  canvas: {fileID: 0}
+  focusObject: {fileID: 0}
+  choiceIndex: 2
+--- !u!65 &834654021
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 834654014}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.99999994, z: 0.20001529}
+  m_Center: {x: -0.000015258789, y: 0, z: 0}
 --- !u!1 &845458451
 GameObject:
   m_ObjectHideFlags: 0
@@ -3903,6 +3773,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7462645598304883682, guid: 79ddb178bba7cbc529b9e5f5354b761e, type: 3}
   m_PrefabInstance: {fileID: 953118915}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &953118917 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4897477925742523185, guid: 79ddb178bba7cbc529b9e5f5354b761e, type: 3}
+  m_PrefabInstance: {fileID: 953118915}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &987168170
 GameObject:
   m_ObjectHideFlags: 0
@@ -3913,8 +3788,8 @@ GameObject:
   m_Component:
   - component: {fileID: 987168171}
   - component: {fileID: 987168172}
-  - component: {fileID: 987168174}
   - component: {fileID: 987168173}
+  - component: {fileID: 987168174}
   m_Layer: 5
   m_Name: Square (2)
   m_TagString: Untagged
@@ -3968,7 +3843,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: b52584e75e5aa044eadcd94931d4f29b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4013,23 +3888,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b28c585ac23f448811701b6552c35c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoiceHoverEffect
+  hitArea: {fileID: 0}
+  canvas: {fileID: 0}
   spriteRenderer: {fileID: 987168172}
-  mapCamera: {fileID: 316983480}
   normalColor: {r: 1, g: 1, b: 1, a: 0.09803922}
   hoverColor: {r: 0, g: 0, b: 0, a: 0.39215687}
   moveDistance: 0
   fadeDuration: 0.15
   moveDuration: 0.15
---- !u!61 &987168174
-BoxCollider2D:
+--- !u!65 &987168174
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 987168170}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -4038,34 +3911,12 @@ BoxCollider2D:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
   m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.0000001, z: 0.2}
+  m_Center: {x: 0, y: -0.00000047683716, z: 0}
 --- !u!1 &1013811364
 GameObject:
   m_ObjectHideFlags: 0
@@ -4453,14 +4304,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
   nodeID: 4
+  floorIndex: 1
   nodeType: 3
-  connectedNodes: []
+  connectedNodes:
+  - {fileID: 1475734765}
+  - {fileID: 1907453441}
   description: "\uB8E9 \uB178\uB4DC\n\uC55E\uACFC \uB4A4\uB97C \uC8FC\uC758\uD558\uC2ED\uC2DC\uC624.\n\uD76C\uC0DD\uC740
     \uB2F9\uC5F0\uD55C \uC218\uC21C\uC785\uB2C8\uB2E4.\n"
   choices:
-  - {fileID: 621905972}
-  - {fileID: 621905974}
-  - {fileID: 621905973}
+  - {fileID: 1148619776}
+  - {fileID: 1148619778}
+  - {fileID: 1148619777}
+  meshRenderer: {fileID: 953118917}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  currentColor: {r: 0, g: 0, b: 1, a: 1}
+  unavailableColor: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 1}
+  reachablePreviewColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1148619770
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4650,6 +4509,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1159467339}
   - component: {fileID: 1159467338}
+  - component: {fileID: 1159467340}
   m_Layer: 0
   m_Name: NodeClickManager
   m_TagString: Untagged
@@ -4669,7 +4529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d6c3eabb8536114fb95a1176379d8f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNodeClickHandler
-  orbitCamera: {fileID: 316983483}
+  orbitCamera: {fileID: 0}
   dragThreshold: 5
 --- !u!4 &1159467339
 Transform:
@@ -4686,6 +4546,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1159467340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1159467337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd1a7e9cdae199443b7662e293a85b8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MapPlayerPositionFeedback
+  mapCamera: {fileID: 316983480}
+  startNode: {fileID: 766637535}
+  nodeLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  raycastDistance: 1000
 --- !u!1001 &1217805762
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4758,6 +4636,11 @@ PrefabInstance:
 --- !u!4 &1217805763 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6814049319609876266, guid: 7b89b155d7a18a01a9a4f529cd6260dd, type: 3}
+  m_PrefabInstance: {fileID: 1217805762}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &1217805764 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5684582468133487780, guid: 7b89b155d7a18a01a9a4f529cd6260dd, type: 3}
   m_PrefabInstance: {fileID: 1217805762}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1262065504
@@ -4971,6 +4854,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6814049319609876266, guid: 7b89b155d7a18a01a9a4f529cd6260dd, type: 3}
   m_PrefabInstance: {fileID: 1292259480}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &1292259482 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5684582468133487780, guid: 7b89b155d7a18a01a9a4f529cd6260dd, type: 3}
+  m_PrefabInstance: {fileID: 1292259480}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1338953778
 GameObject:
   m_ObjectHideFlags: 0
@@ -5177,6 +5065,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b89b155d7a18a01a9a4f529cd6260dd, type: 3}
+--- !u!23 &1370315270 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5684582468133487780, guid: 7b89b155d7a18a01a9a4f529cd6260dd, type: 3}
+  m_PrefabInstance: {fileID: 1370315269}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1385161379
 GameObject:
   m_ObjectHideFlags: 0
@@ -5424,12 +5317,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
   nodeID: 6
+  floorIndex: 2
   nodeType: 1
-  connectedNodes: []
+  connectedNodes:
+  - {fileID: 1903569405}
   description: "\uC804\uD22C \uB178\uB4DC\n\uBA48\uCD9C\uC218 \uC5C6\uB294\n\uB9C8\uC9C0\uB9C9
     \uC120\uD0DD"
   choices:
   - {fileID: 1475734772}
+  meshRenderer: {fileID: 1292259482}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  currentColor: {r: 0, g: 0, b: 1, a: 1}
+  unavailableColor: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 0.39215687}
+  reachablePreviewColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1475734766
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5819,8 +5719,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
   nodeID: 3
+  floorIndex: 1
   nodeType: 3
-  connectedNodes: []
+  connectedNodes:
+  - {fileID: 1670722690}
+  - {fileID: 1907453441}
   description: "\uB098\uC774\uD2B8 \uB178\uB4DC\n\uAE30\uBCD1\uC740 \uD56D\uC0C1
     \uC804\uD22C\uC758 \uC911\uC2EC\uC774\uC5C8\uACE0,\n\uC804\uD22C\uC758 \uB05D\uC744
     \uC54C\uB838\uC2B5\uB2C8\uB2E4."
@@ -5828,6 +5731,11 @@ MonoBehaviour:
   - {fileID: 1568378347}
   - {fileID: 1568378349}
   - {fileID: 1568378348}
+  meshRenderer: {fileID: 531466801}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  currentColor: {r: 0, g: 0, b: 1, a: 1}
+  unavailableColor: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 0.39215687}
+  reachablePreviewColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1568378341
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6057,8 +5965,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b28c585ac23f448811701b6552c35c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoiceHoverEffect
+  hitArea: {fileID: 0}
+  canvas: {fileID: 0}
   spriteRenderer: {fileID: 1625934046}
-  mapCamera: {fileID: 316983480}
   normalColor: {r: 0, g: 0, b: 0, a: 0.5882353}
   hoverColor: {r: 0, g: 0, b: 0, a: 0.88235295}
   moveDistance: 0
@@ -6380,12 +6289,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
   nodeID: 5
+  floorIndex: 2
   nodeType: 1
-  connectedNodes: []
+  connectedNodes:
+  - {fileID: 1903569405}
   description: "\uC804\uD22C \uB178\uB4DC\n\uBA48\uCD9C\uC218 \uC5C6\uB294\n\uB9C8\uC9C0\uB9C9
     \uC120\uD0DD"
   choices:
-  - {fileID: 1475734772}
+  - {fileID: 1670722697}
+  meshRenderer: {fileID: 1370315270}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  currentColor: {r: 0, g: 0, b: 1, a: 1}
+  unavailableColor: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 0.39215687}
+  reachablePreviewColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1670722691
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6706,13 +6622,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
   nodeID: 8
+  floorIndex: 3
   nodeType: 4
   connectedNodes: []
   description: "\uC0C1\uC810 \uB178\uB4DC\n\uAD6C\uB9E4\uC640 \uC2E0\uB8B0\uB294
     \uACB0\uCF54\n\uC774\uC5B4\uC9C0\uC9C0 \uBABB\uD55C\uB2E4."
   choices:
   - {fileID: 1903569412}
-  - {fileID: 1903569414}
+  meshRenderer: {fileID: 614868084}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  currentColor: {r: 0, g: 0, b: 1, a: 1}
+  unavailableColor: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 0.39215687}
+  reachablePreviewColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1903569406
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6930,12 +6851,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
   nodeID: 7
+  floorIndex: 2
   nodeType: 1
-  connectedNodes: []
+  connectedNodes:
+  - {fileID: 1903569405}
   description: "\uC804\uD22C \uB178\uB4DC\n\uBA48\uCD9C\uC218 \uC5C6\uB294\n\uB9C8\uC9C0\uB9C9
     \uC120\uD0DD"
   choices:
-  - {fileID: 1475734772}
+  - {fileID: 1907453448}
+  meshRenderer: {fileID: 1217805764}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  currentColor: {r: 0, g: 0, b: 1, a: 1}
+  unavailableColor: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 0.39215687}
+  reachablePreviewColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!65 &1907453442
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7125,7 +7053,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1984718306}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 804629fcb4315094b93badd02f4f707b, type: 3}
   m_Name: 

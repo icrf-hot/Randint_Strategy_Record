@@ -6,6 +6,7 @@ public class MapNodeFocusObject : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private MapOrbitCamera orbitCamera;
+    [SerializeField] private MapPlayerPositionFeedback positionFeedback;
 
 
     [Header("Objects")]
@@ -52,6 +53,8 @@ public class MapNodeFocusObject : MonoBehaviour
 
     private bool previousFocusState;
 
+    private MapChoice[] currentChoices;
+
 
     private void Awake()
     {
@@ -60,6 +63,12 @@ public class MapNodeFocusObject : MonoBehaviour
 
         choicesBasePosition =
             choicesObject.localPosition;
+
+        if (positionFeedback == null)
+        {
+            positionFeedback =
+                FindFirstObjectByType<MapPlayerPositionFeedback>();
+        }
     }
 
 
@@ -164,8 +173,20 @@ public class MapNodeFocusObject : MonoBehaviour
         // 활성화
         // -----------------------------------------------------
 
+        bool canShowChoices =
+            CanShowChoicesFor(focusedNode);
+
+        if (canShowChoices)
+        {
+            SetupChoices(focusedNode);
+        }
+        else
+        {
+            ClearChoices();
+        }
+
         descriptionObject.gameObject.SetActive(true);
-        choicesObject.gameObject.SetActive(true);
+        choicesObject.gameObject.SetActive(canShowChoices);
 
 
         // -----------------------------------------------------
@@ -207,6 +228,8 @@ public class MapNodeFocusObject : MonoBehaviour
             StartCoroutine(
                 MoveIn()
             );
+
+
     }
 
 
@@ -216,7 +239,8 @@ public class MapNodeFocusObject : MonoBehaviour
 
     private void SetupChoices(MapNode node)
     {
-        // 모든 버튼 비활성화
+        currentChoices = node.Choices;
+
         for (int i = 0; i < choiceButtons.Length; i++)
         {
             choiceButtons[i].SetActive(false);
@@ -228,20 +252,17 @@ public class MapNodeFocusObject : MonoBehaviour
             }
         }
 
-        MapChoice[] choices = node.Choices;
-
-        if (choices == null)
+        if (currentChoices == null)
             return;
 
-        // 최대 3개까지만 표시
         int count = Mathf.Min(
-            choices.Length,
+            currentChoices.Length,
             choiceButtons.Length
         );
 
         for (int i = 0; i < count; i++)
         {
-            MapChoice choice = choices[i];
+            MapChoice choice = currentChoices[i];
 
             if (choice == null)
                 continue;
@@ -253,8 +274,37 @@ public class MapNodeFocusObject : MonoBehaviour
             if (i < choiceTexts.Length &&
                 choiceTexts[i] != null)
             {
-                choiceTexts[i].text =
-                    choice.ChoiceText;
+                choiceTexts[i].text = choice.ChoiceText;
+            }
+        }
+    }
+
+    // =========================================================
+    // Choice 활성화 유무
+    // =========================================================
+
+    private bool CanShowChoicesFor(MapNode node)
+    {
+        if (positionFeedback == null)
+            return true;
+
+        return positionFeedback.CanOpenChoicesFor(node);
+    }
+
+    private void ClearChoices()
+    {
+        currentChoices = null;
+
+        for (int i = 0; i < choiceButtons.Length; i++)
+        {
+            choiceButtons[i].SetActive(false);
+        }
+
+        for (int i = 0; i < choiceTexts.Length; i++)
+        {
+            if (choiceTexts[i] != null)
+            {
+                choiceTexts[i].text = "";
             }
         }
     }
@@ -499,5 +549,36 @@ public class MapNodeFocusObject : MonoBehaviour
 
 
         animationCoroutine = null;
+    }
+
+    public void SelectChoice(int index)
+    {
+        if (orbitCamera == null)
+            return;
+
+        MapNode focusedNode =
+            orbitCamera.FocusedNode;
+
+        if (focusedNode == null)
+            return;
+
+        if (currentChoices == null)
+            return;
+
+        if (index < 0 ||
+            index >= currentChoices.Length)
+        {
+            return;
+        }
+
+        MapChoice choice =
+            currentChoices[index];
+
+        if (choice == null)
+            return;
+
+        choice.Select(focusedNode);
+
+        orbitCamera.CancelFocus();
     }
 }

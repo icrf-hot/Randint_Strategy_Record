@@ -417,7 +417,7 @@ public class MapOrbitCamera : MonoBehaviour
     }
 
 
-    public void CancelFocus()
+        public void CancelFocus()
     {
         if (focusedNode == null)
             return;
