@@ -1,18 +1,15 @@
 public enum OperatorClass
 {
-    Front,
+    // Front
     Defender,
     Guard,
     Vanguard,
 
-
-
-    Middle,
+    // Middle
     Caster,
     Sniper,
 
-
-
+    // Back
     AttackHealer,
     Healer,
     Supporter

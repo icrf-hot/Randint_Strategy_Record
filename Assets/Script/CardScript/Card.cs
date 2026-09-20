@@ -58,6 +58,21 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         cardNumber = 0;
     }
 
+    public void StopVisualAnimations()
+    {
+        if (moveCoroutine != null)
+        {
+            StopCoroutine(moveCoroutine);
+            moveCoroutine = null;
+        }
+
+        if (hoverCoroutine != null)
+        {
+            StopCoroutine(hoverCoroutine);
+            hoverCoroutine = null;
+        }
+    }
+
     public void MoveTo(Vector3 target)
     {
         if (moveCoroutine != null)
@@ -67,14 +82,28 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         moveCoroutine = StartCoroutine(MoveRoutine(target));
     }
 
-    public void SetSelected(bool selected, CardSelectionManagerBase manager)
+    public void SetSelected(
+    bool selected,
+    CardSelectionManagerBase manager)
     {
-        ownerManager = selected ? manager : null;
+        ownerManager =
+            selected ? manager : null;
+
+        // 이미 사라진 카드는 선택 상태만 해제하고
+        // 위치 애니메이션은 실행하지 않는다.
+        if (!isActiveAndEnabled)
+            return;
 
         if (selected)
-            HoverTo(originalPosition + Vector3.up * selectedHeight);
+        {
+            HoverTo(
+                originalPosition +
+                Vector3.up * selectedHeight);
+        }
         else
+        {
             HoverTo(originalPosition);
+        }
     }
 
     private IEnumerator MoveRoutine(Vector3 target)
@@ -138,10 +167,22 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     private void HoverTo(Vector3 target)
     {
-        if (hoverCoroutine != null)
-            StopCoroutine(hoverCoroutine);
+        // 비활성화된 GameObject에서는
+        // StartCoroutine을 실행할 수 없다.
+        if (!isActiveAndEnabled)
+        {
+            transform.position = target;
+            return;
+        }
 
-        hoverCoroutine = StartCoroutine(HoverRoutine(target));
+        if (hoverCoroutine != null)
+        {
+            StopCoroutine(hoverCoroutine);
+        }
+
+        hoverCoroutine =
+            StartCoroutine(
+                HoverRoutine(target));
     }
 
     private IEnumerator HoverRoutine(Vector3 target)

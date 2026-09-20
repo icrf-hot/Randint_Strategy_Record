@@ -8,17 +8,33 @@ public class OperatorClickHandler : MonoBehaviour
     private Camera mainCamera;
     private Operator operatorData;
 
-    [Header("Position")]
-    [SerializeField]
-    private OperatorPosition operatorPosition;
+    public OperatorPosition Position
+    {
+        get
+        {
+            if (operatorData == null)
+            {
+                operatorData =
+                    GetComponent<Operator>();
+            }
 
-    public OperatorPosition Position => operatorPosition;
+            if (operatorData == null)
+                return OperatorPosition.Front;
+
+            return operatorData.Position;
+        }
+    }
+
     private void Awake()
     {
-        operatorData = GetComponent<Operator>();
+        operatorData =
+            GetComponent<Operator>();
 
         if (targetCollider == null)
-            targetCollider = GetComponent<Collider2D>();
+        {
+            targetCollider =
+                GetComponent<Collider2D>();
+        }
 
         mainCamera = Camera.main;
     }
@@ -37,23 +53,40 @@ public class OperatorClickHandler : MonoBehaviour
         if (operatorData == null)
             return;
 
+        if (OperatorFocusManager.Instance == null)
+            return;
+
         OperatorFocusManager.Instance.EnterFocus(this);
     }
 
     private bool IsPointerInsideCollider()
     {
-        if (mainCamera == null || targetCollider == null)
+        if (mainCamera == null ||
+            targetCollider == null)
+        {
             return false;
+        }
 
-        Vector2 mousePosition = Mouse.current.position.ReadValue();
+        Vector2 mousePosition =
+            Mouse.current.position.ReadValue();
 
-        Ray ray = mainCamera.ScreenPointToRay(mousePosition);
-        Plane plane = new Plane(Vector3.forward, transform.position);
+        Ray ray =
+            mainCamera.ScreenPointToRay(mousePosition);
 
-        if (!plane.Raycast(ray, out float distance))
+        Plane plane =
+            new Plane(
+                Vector3.forward,
+                transform.position);
+
+        if (!plane.Raycast(
+            ray,
+            out float distance))
+        {
             return false;
+        }
 
-        Vector3 worldPoint = ray.GetPoint(distance);
+        Vector3 worldPoint =
+            ray.GetPoint(distance);
 
         return targetCollider.OverlapPoint(worldPoint);
     }

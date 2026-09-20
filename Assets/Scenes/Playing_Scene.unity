@@ -5652,6 +5652,9 @@ MonoBehaviour:
   specialRangeMax: 5
   specialCardText: T
   spawnDelay: 0.2
+  gatherDuration: 0.35
+  dropDuration: 0.4
+  dropDistance: 3
 --- !u!4 &880990621
 Transform:
   m_ObjectHideFlags: 0
@@ -10698,9 +10701,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cc18db0a900edd42856bfd209faa6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleExecuteManager
-  frontOperator: {fileID: 382881484}
-  middleOperator: {fileID: 1760688018}
-  backOperator: {fileID: 1894390089}
+  focusBeforeActionDelay: 0.6
+  actionInterval: 0.5
+  backHealAmount: 50
 --- !u!1 &1781536713
 GameObject:
   m_ObjectHideFlags: 0
@@ -13018,6 +13021,7 @@ MonoBehaviour:
   frontManager: {fileID: 792409677}
   middleManager: {fileID: 373043620}
   backManager: {fileID: 522934675}
+  operatorParent: {fileID: 383388173}
   battleButton: {fileID: 31507715}
 --- !u!1 &2141285735
 GameObject:

@@ -59,6 +59,7 @@ public class MiddleCardSelectionManager : CardSelectionManagerBase
     private CardAttribute selectedAttribute = CardAttribute.None;
 
     public bool IsAccess { get; private set; }
+    public bool IsPhysicalMode => isPhysicalMode;
 
     [Header("Access TMP")]
     [SerializeField] private TMP_Text accessText;

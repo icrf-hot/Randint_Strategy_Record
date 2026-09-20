@@ -117,40 +117,90 @@ public class OperatorFocusManager : MonoBehaviour
             return;
         }
 
-        bool changeOperator = currentOperator != null;
+        // 직접 클릭한 경우에는 설명창 표시
+        ApplyFocus(handler, true);
+    }
+
+    public void EnterBattleFocus(Operator op)
+    {
+        if (op == null)
+            return;
+
+        OperatorClickHandler handler =
+            op.GetComponent<OperatorClickHandler>();
+
+        if (handler == null)
+        {
+            Debug.LogWarning(
+                $"[전투 Focus 실패] {op.gameObject.name}에 " +
+                "OperatorClickHandler가 없습니다.");
+
+            return;
+        }
+
+        // 전투 중 자동 Focus에서는 설명창을 표시하지 않음
+        ApplyFocus(handler, false);
+    }
+
+    private void ApplyFocus(
+    OperatorClickHandler handler,
+    bool showInfoUI)
+    {
+        if (handler == null)
+            return;
+
+        bool changeOperator =
+            currentOperator != null &&
+            currentOperator != handler;
 
         currentOperator = handler;
 
         Time.timeScale = focusTimeScale;
 
         Operator op =
-        handler.GetComponent<Operator>();
+            handler.GetComponent<Operator>();
 
-        EnemyTargetingManager.Instance
-            .BeginTargeting(op);
-
-        if (changeOperator)
-            infoUI.ChangeOperator(handler);
-        else
-            infoUI.Show(handler);
-
-        Transform focusPoint = GetFocusPoint(handler.Position);
-
-        if (focusPoint != null)
+        if (EnemyTargetingManager.Instance != null)
         {
-            targetCameraPosition =
-                new Vector3(
-                    focusPoint.position.x,
-                    focusPoint.position.y,
-                    originalCameraPosition.z);
+            EnemyTargetingManager.Instance.BeginTargeting(op);
+        }
 
-            targetOrthographicSize = GetOrthographicSize(handler.Position);
+        if (infoUI != null)
+        {
+            if (!showInfoUI)
+            {
+                infoUI.Hide();
+            }
+            else if (changeOperator)
+            {
+                infoUI.ChangeOperator(handler);
+            }
+            else
+            {
+                infoUI.Show(handler);
+            }
+        }
 
-            targetRotation = Quaternion.Euler(
+        Transform focusPoint =
+            GetFocusPoint(handler.Position);
+
+        if (focusPoint == null)
+            return;
+
+        targetCameraPosition =
+            new Vector3(
+                focusPoint.position.x,
+                focusPoint.position.y,
+                originalCameraPosition.z);
+
+        targetOrthographicSize =
+            GetOrthographicSize(handler.Position);
+
+        targetRotation =
+            Quaternion.Euler(
                 GetCameraRotationX(handler.Position),
                 GetCameraRotationY(handler.Position),
                 originalRotation.eulerAngles.z);
-        }
     }
 
     public void ExitFocus()
@@ -169,7 +219,10 @@ public class OperatorFocusManager : MonoBehaviour
             infoUI.Hide();
         }
 
-        EnemyTargetingManager.Instance.EndTargeting();
+        if (EnemyTargetingManager.Instance != null)
+        {
+            EnemyTargetingManager.Instance.EndTargeting();
+        }
     }
 
     private Transform GetFocusPoint(OperatorPosition position)

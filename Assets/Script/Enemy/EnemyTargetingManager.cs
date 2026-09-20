@@ -54,10 +54,28 @@ public class EnemyTargetingManager : MonoBehaviour
 
         currentOperator = op;
 
-        FindTargets();
+        ClearTargets();
 
-        // 기존에 선택했던 타겟 복구
+        // 타깃이 필요 없는 캐릭터는 적 선택 UI를 열지 않는다.
+        if (!op.RequiresEnemyTarget)
+        {
+            selectedTargets.Remove(op);
+
+            if (BattleAccessManager.Instance != null)
+            {
+                BattleAccessManager.Instance.Refresh();
+            }
+
+            return;
+        }
+
+        FindTargets();
         RestoreSelectedTarget();
+
+        if (BattleAccessManager.Instance != null)
+        {
+            BattleAccessManager.Instance.Refresh();
+        }
     }
 
     // =========================================================
@@ -115,10 +133,12 @@ public class EnemyTargetingManager : MonoBehaviour
     // 타겟 선택
     // =========================================================
 
-    public void SelectTarget(
-        EnemyTargetable target)
+    public void SelectTarget(EnemyTargetable target)
     {
         if (currentOperator == null)
+            return;
+
+        if (!currentOperator.RequiresEnemyTarget)
             return;
 
         if (target == null)
@@ -127,7 +147,6 @@ public class EnemyTargetingManager : MonoBehaviour
         if (!availableTargets.Contains(target))
             return;
 
-        // 기존 선택 해제
         EnemyTargetable previousTarget =
             SelectedTarget;
 
@@ -137,7 +156,7 @@ public class EnemyTargetingManager : MonoBehaviour
             previousTarget.ShowClickable();
         }
 
-        // 같은 타겟을 다시 클릭하면 선택 취소
+        // 같은 적을 다시 클릭하면 선택 해제
         if (previousTarget == target)
         {
             selectedTargets.Remove(
@@ -145,18 +164,77 @@ public class EnemyTargetingManager : MonoBehaviour
 
             target.ShowClickable();
 
+            Debug.Log(
+                $"[타깃 해제] {currentOperator.gameObject.name}");
+
+            if (BattleAccessManager.Instance != null)
+            {
+                BattleAccessManager.Instance.Refresh();
+            }
+
             return;
         }
 
-        // 새로운 타겟 저장
         selectedTargets[currentOperator] =
             target;
 
         target.ShowSelected();
 
         Debug.Log(
-            $"{currentOperator.name} → " +
-            $"{target.name}");
+            $"[타깃 선택] {currentOperator.gameObject.name} → " +
+            $"{target.gameObject.name}");
+
+        if (BattleAccessManager.Instance != null)
+        {
+            BattleAccessManager.Instance.Refresh();
+        }
+    }
+
+
+    // =========================================================
+    // 타겟 선택일껄?
+    // =========================================================
+
+    public EnemyTargetable GetSelectedTarget(Operator op)
+    {
+        if (op == null)
+            return null;
+
+        if (!selectedTargets.TryGetValue(
+            op,
+            out EnemyTargetable target))
+        {
+            return null;
+        }
+
+        if (target == null)
+        {
+            selectedTargets.Remove(op);
+            return null;
+        }
+
+        Enemy enemy = target.GetComponent<Enemy>();
+
+        if (enemy == null || enemy.CurrentHP <= 0)
+        {
+            selectedTargets.Remove(op);
+            return null;
+        }
+
+        return target;
+    }
+
+
+    public bool IsTargetRequirementMet(Operator op)
+    {
+        if (op == null)
+            return false;
+
+        // 적 타깃이 필요 없는 캐릭터는 자동 통과
+        if (!op.RequiresEnemyTarget)
+            return true;
+
+        return GetSelectedTarget(op) != null;
     }
 
     // =========================================================
@@ -208,33 +286,24 @@ public class EnemyTargetingManager : MonoBehaviour
     // =========================================================
 
     private bool CanTargetEnemy(
-        Operator op,
-        EnemyTargetable enemy)
+    Operator op,
+    EnemyTargetable enemy)
     {
         if (op == null || enemy == null)
             return false;
 
-        switch (op.Class)
+        if (!op.RequiresEnemyTarget)
+            return false;
+
+        switch (op.Position)
         {
-            case OperatorClass.Front:
-
+            case OperatorPosition.Front:
                 return
-                    enemy.Position ==
-                        EnemyPosition.FrontLeft ||
+                    enemy.Position == EnemyPosition.FrontLeft ||
+                    enemy.Position == EnemyPosition.FrontRight;
 
-                    enemy.Position ==
-                        EnemyPosition.FrontRight;
-
-            case OperatorClass.Middle:
-                return true;
-
-            case OperatorClass.AttackHealer:
-                return true;
-
-            case OperatorClass.Healer:
-                return false;
-
-            case OperatorClass.Supporter:
+            case OperatorPosition.Middle:
+            case OperatorPosition.Back:
                 return true;
         }
 

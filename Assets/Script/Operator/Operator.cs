@@ -32,13 +32,40 @@ public class Operator : MonoBehaviour
     public OperatorSkill[] Skills => skills;
 
     // =========================================================
-    // Targeting
+    // Class / Targeting
     // =========================================================
 
-    [Header("Targeting")]
-    [SerializeField] private OperatorClass operatorClass;
+    public OperatorPosition Position
+    {
+        get
+        {
+            if (data == null)
+                return OperatorPosition.Front;
 
-    public OperatorClass Class => operatorClass;
+            return data.Position;
+        }
+    }
+
+    public OperatorClass Class
+    {
+        get
+        {
+            if (data == null)
+                return OperatorClass.Defender;
+
+            return data.DetailedClass;
+        }
+    }
+
+    public bool RequiresEnemyTarget
+    {
+        get
+        {
+            return
+                data != null &&
+                data.RequiresEnemyTarget;
+        }
+    }
 
     // =========================================================
     // Data
