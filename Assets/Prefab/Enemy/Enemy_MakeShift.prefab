@@ -245,8 +245,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b376d299f3d05d142b923bfd07c05002, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  maxHP: 100
-  attack: 20
+  maxHP: 2000
+  attack: 200
   defense: 10
   artsResistance: 15
   attackSpeed: 1
@@ -279,6 +279,10 @@ MonoBehaviour:
   targetCollider: {fileID: 6374815326784966002}
   clickableIndicator: {fileID: 3894370870601463069}
   selectedIndicator: {fileID: 9118305358929344080}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  targetableColor: {r: 0.55, g: 0.55, b: 0.55, a: 1}
+  untargetableColor: {r: 0.25, g: 0.25, b: 0.25, a: 1}
+  selectedColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &5013347131807850491
 GameObject:
   m_ObjectHideFlags: 0
