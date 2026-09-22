@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "TODO LIST/TODO LIST.md",
+                "file": "랜드인트 작전기록 대문.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "TODO LIST"
+              "title": "랜드인트 작전기록 대문"
             }
           }
         ]
@@ -41,9 +41,7 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false,
-                "showSearch": false,
-                "searchQuery": ""
+                "autoReveal": false
               },
               "icon": "lucide-folder-closed",
               "title": "파일 탐색기"
@@ -190,9 +188,15 @@
   },
   "active": "436cbd4e987b4e8e",
   "lastOpenFiles": [
+    "00 프로젝트/상태 표기 규칙.md",
+    "00 프로젝트/프로젝트 개요.md",
+    "00 프로젝트/구현 현황.md",
+    "로직트리/세부 로직트리.canvas",
+    "AI 주의사항.md",
+    "TODO LIST/TODO LIST.md",
+    "랜드인트 작전기록 대문.md",
     "03 개발 기록/씬과 코드 구조.md",
     "03 개발 기록/미구현·주의사항.md",
-    "로직트리/세부 로직트리.canvas",
     "캐릭터/스킬/Dorothy Skill 1.md",
     "캐릭터/스킬/스킬 인덱스.md",
     "캐릭터/아군/아군 인덱스.md",
@@ -201,13 +205,8 @@
     "캐릭터/아군/도로시 프랭크스.md",
     "캐릭터/캐릭터 인덱스.md",
     "캐릭터/직군/직군 인덱스.md",
-    "00 프로젝트/프로젝트 개요.md",
     "01 시스템/전투 시스템.md",
-    "00 프로젝트/상태 표기 규칙.md",
-    "랜드인트 작전기록 대문.md",
-    "TODO LIST/TODO LIST.md",
     "02 데이터/현재 데이터 카탈로그.md",
-    "00 프로젝트/구현 현황.md",
     "01 시스템/카드 시스템.md",
     "01 시스템/맵 시스템.md",
     "01 시스템/대원·적·스킬.md",
