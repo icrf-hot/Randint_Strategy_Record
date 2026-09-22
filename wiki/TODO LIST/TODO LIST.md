@@ -1,7 +1,7 @@
 ---
 tags: [todo, project/randint-strategy-record]
 status: active
-updated: 2026-09-22
+updated: 2026-09-23
 ---
 
 # TODO LIST
@@ -11,8 +11,11 @@ updated: 2026-09-22
 
 ## P0 · 게임 흐름
 
-- [ ] 🔴 `Title` → `Map` → `Playing_Scene` 전환 라우터
-- [ ] 🔴 맵 노드 종류별 실행기(Battle / Shop / Event)
+- [ ] 🔴 `Title` → `Map_1F` 진입 라우터
+- [ ] 🟡 Battle 노드 → `Playing_Scene` 전환 실행 검증
+- [ ] 🟡 로딩 배경 이미지 Asset 선정 및 `LoadingCanvas/BackGround` 연결
+- [ ] 🟡 직렬화된 `battleScenePath` 확장자와 Build Index 확인
+- [ ] 🔴 Shop / Event 노드 실행기
 - [ ] 🔴 전투 승리·패배 판정
 - [ ] 🔴 전투 결과를 맵으로 반환하는 런 컨텍스트
 - [ ] 🔴 저장·불러오기 및 런 상태 영속화
@@ -31,7 +34,7 @@ updated: 2026-09-22
 - [ ] 🟡 선택지별 결과 데이터 모델
 - [ ] 🟡 이벤트 선택 결과 분기
 - [ ] 🔴 상점 구매·재화 시스템
-- [ ] 🔴 전투 노드 진입과 복귀 처리
+- [ ] 🟡 전투 노드 진입 마무리 및 전투 후 맵 복귀 처리
 - [ ] 🟡 `MapPath` 실제 사용 여부 확정 및 연결
 
 ## P2 · 데이터와 구조
@@ -52,9 +55,13 @@ updated: 2026-09-22
 - [x] 🟢 공격 속도 기반 턴 실행
 - [x] 🟢 적 타기팅과 Back 자동 회복 타기팅
 - [x] 🟢 8개 노드 맵 이동과 포커스 UI
+- [x] 🟢 EventSystem 기반 선택지 클릭·호버 및 맵 클릭 충돌 방지
+- [x] 🟢 `Map_1F`와 `Playing_Scene` Build Settings 등록
+- [x] 🟢 로딩 CanvasGroup 페이드와 점 애니메이션 기반 구축
 
 ## 관련 문서
 
 - [[00 프로젝트/구현 현황|구현 현황]]
 - [[03 개발 기록/미구현·주의사항|미구현·주의사항]]
+- [[01 시스템/씬 전환 및 로딩|씬 전환 및 로딩]]
 - [[로직트리/세부 로직트리.canvas|세부 로직트리]]

@@ -11,14 +11,17 @@
             "id": "436cbd4e987b4e8e",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "TODO LIST/TODO LIST.md",
-                "mode": "source",
-                "source": false
+                "file": "로직트리/세부 로직트리.canvas",
+                "viewState": {
+                  "x": 605,
+                  "y": 60,
+                  "zoom": -2.407076213576161
+                }
               },
-              "icon": "lucide-file",
-              "title": "TODO LIST"
+              "icon": "lucide-layout-dashboard",
+              "title": "세부 로직트리"
             }
           }
         ]
@@ -190,17 +193,20 @@
   },
   "active": "436cbd4e987b4e8e",
   "lastOpenFiles": [
-    "랜드인트 작전기록 대문.md",
-    "00 프로젝트/상태 표기 규칙.md",
-    "00 프로젝트/프로젝트 개요.md",
-    "00 프로젝트/구현 현황.md",
-    "로직트리/세부 로직트리.canvas",
-    "AI 주의사항.md",
-    "TODO LIST/TODO LIST.md",
-    "03 개발 기록/씬과 코드 구조.md",
-    "03 개발 기록/미구현·주의사항.md",
     "캐릭터/스킬/Dorothy Skill 1.md",
     "캐릭터/스킬/스킬 인덱스.md",
+    "AI 주의사항.md",
+    "TODO LIST/TODO LIST.md",
+    "랜드인트 작전기록 대문.md",
+    "00 프로젝트/프로젝트 개요.md",
+    "00 프로젝트/상태 표기 규칙.md",
+    "00 프로젝트/구현 현황.md",
+    "01 시스템/맵 시스템.md",
+    "01 시스템/대원·적·스킬.md",
+    "01 시스템/씬 전환 및 로딩.md",
+    "로직트리/세부 로직트리.canvas",
+    "03 개발 기록/씬과 코드 구조.md",
+    "03 개발 기록/미구현·주의사항.md",
     "캐릭터/아군/아군 인덱스.md",
     "캐릭터/아군/조이스 무어.md",
     "캐릭터/아군/사리아.md",
@@ -210,8 +216,6 @@
     "01 시스템/전투 시스템.md",
     "02 데이터/현재 데이터 카탈로그.md",
     "01 시스템/카드 시스템.md",
-    "01 시스템/맵 시스템.md",
-    "01 시스템/대원·적·스킬.md",
     "03 개발 기록",
     "02 데이터",
     "01 시스템",
