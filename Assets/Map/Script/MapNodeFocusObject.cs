@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -58,6 +59,8 @@ public class MapNodeFocusObject : MonoBehaviour
 
     private void Awake()
     {
+        AutoAssignChoiceUI();
+
         descriptionBasePosition =
             descriptionObject.localPosition;
 
@@ -68,6 +71,36 @@ public class MapNodeFocusObject : MonoBehaviour
         {
             positionFeedback =
                 FindFirstObjectByType<MapPlayerPositionFeedback>();
+        }
+    }
+
+    private void AutoAssignChoiceUI()
+    {
+        if (choicesObject == null)
+            return;
+
+        MapChoiceButton[] buttons =
+            choicesObject.GetComponentsInChildren<MapChoiceButton>(true)
+                .OrderBy(button => button.ChoiceIndex)
+                .ToArray();
+
+        if (buttons.Length == 0)
+            return;
+
+        choiceButtons = new GameObject[buttons.Length];
+        choiceTexts = new TMP_Text[buttons.Length];
+
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            Transform row = buttons[i].transform.parent;
+
+            choiceButtons[i] =
+                row != null
+                    ? row.gameObject
+                    : buttons[i].gameObject;
+
+            choiceTexts[i] =
+                choiceButtons[i].GetComponentInChildren<TMP_Text>(true);
         }
     }
 
@@ -106,7 +139,7 @@ public class MapNodeFocusObject : MonoBehaviour
             orbitCamera.IsFocused;
 
 
-        // Focus ½ÃÀÛ
+        // Focus ì‹œìž‘
         if (!previousFocusState &&
             currentFocusState)
         {
@@ -120,7 +153,7 @@ public class MapNodeFocusObject : MonoBehaviour
 
 
     // =========================================================
-    // Focus Ãë¼Ò
+    // Focus ì·¨ì†Œ
     // =========================================================
 
     private void OnFocusCanceled(MapNode canceledNode)
@@ -161,16 +194,7 @@ public class MapNodeFocusObject : MonoBehaviour
 
 
         // -----------------------------------------------------
-        // Choice ¼³Á¤
-        // -----------------------------------------------------
-
-        SetupChoices(
-            focusedNode
-        );
-
-
-        // -----------------------------------------------------
-        // È°¼ºÈ­
+        // í™œì„±í™”
         // -----------------------------------------------------
 
         bool canShowChoices =
@@ -190,7 +214,7 @@ public class MapNodeFocusObject : MonoBehaviour
 
 
         // -----------------------------------------------------
-        // Description À§Ä¡
+        // Description ìœ„ì¹˜
         // -----------------------------------------------------
 
         descriptionStartPosition =
@@ -202,7 +226,7 @@ public class MapNodeFocusObject : MonoBehaviour
 
 
         // -----------------------------------------------------
-        // Choices À§Ä¡
+        // Choices ìœ„ì¹˜
         // -----------------------------------------------------
 
         choicesStartPosition =
@@ -234,7 +258,7 @@ public class MapNodeFocusObject : MonoBehaviour
 
 
     // =========================================================
-    // Choice ¼³Á¤
+    // Choice ì„¤ì •
     // =========================================================
 
     private void SetupChoices(MapNode node)
@@ -267,10 +291,10 @@ public class MapNodeFocusObject : MonoBehaviour
             if (choice == null)
                 continue;
 
-            // ¹öÆ° È°¼ºÈ­
+            // ë²„íŠ¼ í™œì„±í™”
             choiceButtons[i].SetActive(true);
 
-            // TMP º¯°æ
+            // TMP ë³€ê²½
             if (i < choiceTexts.Length &&
                 choiceTexts[i] != null)
             {
@@ -280,7 +304,7 @@ public class MapNodeFocusObject : MonoBehaviour
     }
 
     // =========================================================
-    // Choice È°¼ºÈ­ À¯¹«
+    // Choice í™œì„±í™” ìœ ë¬´
     // =========================================================
 
     private bool CanShowChoicesFor(MapNode node)
@@ -535,12 +559,12 @@ public class MapNodeFocusObject : MonoBehaviour
         }
 
 
-        // ÀÌµ¿ÀÌ ³¡³­ ÈÄ ÀüÃ¼ Choices ¼û±è
+        // ì´ë™ì´ ëë‚œ í›„ ì „ì²´ Choices ìˆ¨ê¹€
         descriptionObject.gameObject.SetActive(false);
         choicesObject.gameObject.SetActive(false);
 
 
-        // ´ÙÀ½ Focus¸¦ À§ÇØ À§Ä¡ º¹±¸
+        // ë‹¤ìŒ Focusë¥¼ ìœ„í•´ ìœ„ì¹˜ ë³µêµ¬
         descriptionObject.localPosition =
             descriptionBasePosition;
 

@@ -1,27 +1,21 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class MapChoiceButton : MonoBehaviour
+[RequireComponent(typeof(RectTransform))]
+public class MapChoiceButton : MonoBehaviour, IPointerClickHandler
 {
     [Header("References")]
-    [SerializeField] private RectTransform hitArea;
-    [SerializeField] private Canvas canvas;
     [SerializeField] private MapNodeFocusObject focusObject;
 
     [Header("Choice")]
     [SerializeField] private int choiceIndex;
 
+    public int ChoiceIndex => choiceIndex;
+
     private void Awake()
     {
-        if (hitArea == null)
-        {
-            hitArea = GetComponent<RectTransform>();
-        }
-
-        if (canvas == null)
-        {
-            canvas = GetComponentInParent<Canvas>();
-        }
+        EnsureRaycastGraphic();
 
         if (focusObject == null)
         {
@@ -29,51 +23,27 @@ public class MapChoiceButton : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void EnsureRaycastGraphic()
     {
-        Mouse mouse = Mouse.current;
+        Image raycastImage = GetComponent<Image>();
 
-        if (mouse == null)
-            return;
+        if (raycastImage == null)
+        {
+            raycastImage = gameObject.AddComponent<Image>();
+            raycastImage.color = Color.clear;
+        }
 
-        if (!mouse.leftButton.wasPressedThisFrame)
-            return;
+        raycastImage.raycastTarget = true;
+    }
 
-        if (!IsMouseOver())
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button != PointerEventData.InputButton.Left)
             return;
 
         if (focusObject == null)
             return;
 
         focusObject.SelectChoice(choiceIndex);
-    }
-
-    private bool IsMouseOver()
-    {
-        if (hitArea == null)
-            return false;
-
-        Vector2 mousePosition =
-            Mouse.current.position.ReadValue();
-
-        Camera uiCamera =
-            GetUICamera();
-
-        return RectTransformUtility.RectangleContainsScreenPoint(
-            hitArea,
-            mousePosition,
-            uiCamera
-        );
-    }
-
-    private Camera GetUICamera()
-    {
-        if (canvas == null)
-            return null;
-
-        if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
-            return null;
-
-        return canvas.worldCamera;
     }
 }

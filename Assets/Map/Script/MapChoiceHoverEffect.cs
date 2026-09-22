@@ -1,11 +1,12 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
-public class MapChoiceHoverEffect : MonoBehaviour
+public class MapChoiceHoverEffect :
+    MonoBehaviour,
+    IPointerEnterHandler,
+    IPointerExitHandler
 {
     [Header("References")]
-    [SerializeField] private RectTransform hitArea;
-    [SerializeField] private Canvas canvas;
     [SerializeField] private SpriteRenderer spriteRenderer;
 
     [Header("Color")]
@@ -32,16 +33,6 @@ public class MapChoiceHoverEffect : MonoBehaviour
 
     private void Awake()
     {
-        if (hitArea == null)
-        {
-            hitArea = GetComponent<RectTransform>();
-        }
-
-        if (canvas == null)
-        {
-            canvas = GetComponentInParent<Canvas>();
-        }
-
         if (spriteRenderer == null)
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
@@ -70,64 +61,18 @@ public class MapChoiceHoverEffect : MonoBehaviour
 
     private void Update()
     {
-        CheckHover();
         UpdateColor();
         UpdateMovement();
     }
 
-
-    // =========================================================
-    // Hover Detection
-    // =========================================================
-    private void CheckHover()
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        bool hoveringNow = IsMouseOver();
-
-        if (hoveringNow == isHovering)
-            return;
-
-        if (hoveringNow)
-        {
-            BeginHover();
-        }
-        else
-        {
-            EndHover();
-        }
+        BeginHover();
     }
 
-    private bool IsMouseOver()
+    public void OnPointerExit(PointerEventData eventData)
     {
-        Mouse mouse = Mouse.current;
-
-        if (mouse == null ||
-            hitArea == null)
-        {
-            return false;
-        }
-
-        Vector2 mousePosition =
-            mouse.position.ReadValue();
-
-        Camera uiCamera =
-            GetUICamera();
-
-        return RectTransformUtility.RectangleContainsScreenPoint(
-            hitArea,
-            mousePosition,
-            uiCamera
-        );
-    }
-
-    private Camera GetUICamera()
-    {
-        if (canvas == null)
-            return null;
-
-        if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
-            return null;
-
-        return canvas.worldCamera;
+        EndHover();
     }
 
     private void BeginHover()
@@ -230,10 +175,10 @@ public class MapChoiceHoverEffect : MonoBehaviour
         baseLocalPosition = position;
 
         /*
-         * Hover ÁßÀÌ¸é °Çµå¸®Áö ¾Ê½À´Ï´Ù.
+         * Hover ì¤‘ì´ë©´ ê±´ë“œë¦¬ì§€ ì•ŠìŠµë‹ˆë‹¤.
          *
-         * Hover ¾Ö´Ï¸ŞÀÌ¼ÇÀº
-         * ÀÌ ½ºÅ©¸³Æ®°¡ Ã¥ÀÓÁı´Ï´Ù.
+         * Hover ì• ë‹ˆë©”ì´ì…˜ì€
+         * ì´ ìŠ¤í¬ë¦½íŠ¸ê°€ ì±…ì„ì§‘ë‹ˆë‹¤.
          */
         if (isHovering)
             return;

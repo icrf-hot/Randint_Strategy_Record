@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class MapNodeClickHandler : MonoBehaviour
@@ -30,7 +31,7 @@ public class MapNodeClickHandler : MonoBehaviour
         if (mouse.leftButton.wasPressedThisFrame)
         {
             mouseDownPosition = mouse.position.ReadValue();
-            possibleClick = true;
+            possibleClick = !IsPointerOverUI();
         }
 
         if (possibleClick)
@@ -57,6 +58,9 @@ public class MapNodeClickHandler : MonoBehaviour
 
     private void TryClickNode(Vector2 mousePosition)
     {
+        if (IsPointerOverUI())
+            return;
+
         if (orbitCamera == null)
             return;
 
@@ -79,5 +83,11 @@ public class MapNodeClickHandler : MonoBehaviour
             return;
 
         orbitCamera.FocusNode(node);
+    }
+
+    private bool IsPointerOverUI()
+    {
+        return EventSystem.current != null &&
+               EventSystem.current.IsPointerOverGameObject();
     }
 }
