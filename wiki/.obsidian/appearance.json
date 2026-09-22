@@ -1,1 +1,5 @@
-{}
+{
+  "enabledCssSnippets": [
+    "implementation-status"
+  ]
+}

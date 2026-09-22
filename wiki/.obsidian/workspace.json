@@ -11,17 +11,14 @@
             "id": "436cbd4e987b4e8e",
             "type": "leaf",
             "state": {
-              "type": "canvas",
+              "type": "markdown",
               "state": {
-                "file": "로직트리/세부 로직트리.canvas",
-                "viewState": {
-                  "x": 0,
-                  "y": 0,
-                  "zoom": 0
-                }
+                "file": "TODO LIST/TODO LIST.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-layout-dashboard",
-              "title": "세부 로직트리"
+              "icon": "lucide-file",
+              "title": "TODO LIST"
             }
           }
         ]
@@ -193,8 +190,31 @@
   },
   "active": "436cbd4e987b4e8e",
   "lastOpenFiles": [
-    "랜드인트 작전기록 대문.md",
+    "03 개발 기록/씬과 코드 구조.md",
+    "03 개발 기록/미구현·주의사항.md",
     "로직트리/세부 로직트리.canvas",
+    "캐릭터/스킬/Dorothy Skill 1.md",
+    "캐릭터/스킬/스킬 인덱스.md",
+    "캐릭터/아군/아군 인덱스.md",
+    "캐릭터/아군/조이스 무어.md",
+    "캐릭터/아군/사리아.md",
+    "캐릭터/아군/도로시 프랭크스.md",
+    "캐릭터/캐릭터 인덱스.md",
+    "캐릭터/직군/직군 인덱스.md",
+    "00 프로젝트/프로젝트 개요.md",
+    "01 시스템/전투 시스템.md",
+    "00 프로젝트/상태 표기 규칙.md",
+    "랜드인트 작전기록 대문.md",
+    "TODO LIST/TODO LIST.md",
+    "02 데이터/현재 데이터 카탈로그.md",
+    "00 프로젝트/구현 현황.md",
+    "01 시스템/카드 시스템.md",
+    "01 시스템/맵 시스템.md",
+    "01 시스템/대원·적·스킬.md",
+    "03 개발 기록",
+    "02 데이터",
+    "01 시스템",
+    "00 프로젝트",
     "2026-09-22.md",
     "로직트리/무제.md",
     "환영합니다!.md",

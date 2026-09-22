@@ -1,0 +1,20 @@
+/* Randint Strategy Record implementation status colors */
+.callout[data-callout="implemented"] {
+  --callout-color: 46, 160, 67;
+  --callout-icon: lucide-check-circle-2;
+}
+
+.callout[data-callout="partial"] {
+  --callout-color: 218, 165, 32;
+  --callout-icon: lucide-circle-dot-dashed;
+}
+
+.callout[data-callout="unimplemented"] {
+  --callout-color: 220, 53, 69;
+  --callout-icon: lucide-circle-x;
+}
+
+.status-implemented { color: rgb(46, 160, 67); font-weight: 700; }
+.status-partial { color: rgb(218, 165, 32); font-weight: 700; }
+.status-unimplemented { color: rgb(220, 53, 69); font-weight: 700; }
+
