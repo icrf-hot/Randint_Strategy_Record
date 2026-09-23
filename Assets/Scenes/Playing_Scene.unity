@@ -4854,7 +4854,7 @@ MonoBehaviour:
   loadingMessage: PSR - 01
   dotInterval: 0.35
   textFadeInDuration: 0.25
-  textHoldDuration: 0.35
+  textHoldDuration: 1
   textFadeOutDuration: 0.2
   screenFadeOutDelay: 0.1
   screenFadeOutDuration: 0.45

@@ -5503,7 +5503,7 @@ MonoBehaviour:
   loadingMessage: "\uC791\uC804 \uAE30\uB85D \uC555\uCD95 \uD574\uC81C\uC911..."
   fadeStartDelay: 0.1
   fadeToBlackDuration: 0.35
-  minimumLoadingTime: 0.8
+  minimumLoadingTime: 1.5
   mapTextFadeOutDuration: 0.25
   dotInterval: 0.35
 --- !u!1 &1719145487
