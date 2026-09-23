@@ -52,8 +52,30 @@ public class CardSpawner : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
+    private IEnumerator Start()
     {
+        BattleSceneFadeIn sceneFade =
+            FindFirstObjectByType<BattleSceneFadeIn>();
+
+        if (sceneFade != null)
+        {
+            Debug.Log(
+                "[카드] Battle 진입 Fade가 끝날 때까지 기다립니다."
+            );
+
+            while (!sceneFade.IsFadeComplete)
+            {
+                yield return null;
+            }
+        }
+
+        // Fade가 끝난 프레임과 카드 생성 프레임을 분리합니다.
+        yield return null;
+
+        Debug.Log(
+            "[카드] Battle 진입 Fade 완료. 카드 배분을 시작합니다."
+        );
+
         DealNewCards();
     }
 

@@ -17,32 +17,37 @@ public class MapBattleSceneLoader : MonoBehaviour
     [SerializeField, HideInInspector]
     private string battleScenePath;
 
-    private int battleSceneBuildIndex = -1;
-
     [SerializeField]
     private LoadSceneMode loadSceneMode = LoadSceneMode.Single;
 
-    [Header("Loading UI")]
-    [SerializeField] private CanvasGroup loadingCanvasGroup;
+    [Header("Exit Loading UI")]
+    [SerializeField] private CanvasGroup exitCanvasGroup;
+    [SerializeField] private CanvasGroup loadingTextCanvasGroup;
     [SerializeField] private TMP_Text loadingText;
-    [SerializeField] private string loadingMessage = "작전 지역으로 이동 중";
+    [SerializeField] private string loadingMessage = "작전 기록 압축 해제 중";
 
     [Header("Timing")]
     [Min(0f)]
-    [SerializeField] private float fadeDuration = 0.3f;
+    [SerializeField] private float fadeStartDelay = 0.1f;
+
+    [Min(0f)]
+    [SerializeField] private float fadeToBlackDuration = 0.35f;
 
     [Min(0f)]
     [SerializeField] private float minimumLoadingTime = 0.8f;
 
+    [Min(0f)]
+    [SerializeField] private float mapTextFadeOutDuration = 0.25f;
+
     [Min(0.1f)]
     [SerializeField] private float dotInterval = 0.35f;
 
+
+
     private bool isLoading;
-    private GameObject transitionRoot;
+    private int battleSceneBuildIndex = -1;
 
     public bool IsLoading => isLoading;
-
-
 
 #if UNITY_EDITOR
     private void OnValidate()
@@ -56,7 +61,20 @@ public class MapBattleSceneLoader : MonoBehaviour
 
     private void Awake()
     {
-        SetLoadingState(false);
+        if (exitCanvasGroup != null)
+        {
+            exitCanvasGroup.alpha = 0f;
+            exitCanvasGroup.interactable = false;
+            exitCanvasGroup.blocksRaycasts = false;
+        }
+
+        if (loadingTextCanvasGroup != null)
+        {
+            loadingTextCanvasGroup.alpha = 1f;
+            loadingTextCanvasGroup.interactable = false;
+            loadingTextCanvasGroup.blocksRaycasts = false;
+        }
+
         UpdateLoadingText();
     }
 
@@ -65,13 +83,13 @@ public class MapBattleSceneLoader : MonoBehaviour
         if (isLoading)
             return;
 
-        if (!ValidateBattleRequest(battleNode))
+        if (!ValidateRequest(battleNode))
             return;
 
         StartCoroutine(LoadBattleRoutine(battleNode));
     }
 
-    private bool ValidateBattleRequest(MapNode battleNode)
+    private bool ValidateRequest(MapNode battleNode)
     {
         if (battleNode == null)
         {
@@ -92,10 +110,10 @@ public class MapBattleSceneLoader : MonoBehaviour
             return false;
         }
 
-        if (loadingCanvasGroup == null)
+        if (exitCanvasGroup == null)
         {
             Debug.LogError(
-                "[Map Battle] Loading Canvas Group이 지정되지 않았습니다.",
+                "[Map Battle] Exit Canvas Group이 지정되지 않았습니다.",
                 this
             );
             return false;
@@ -104,7 +122,7 @@ public class MapBattleSceneLoader : MonoBehaviour
         if (string.IsNullOrWhiteSpace(battleScenePath))
         {
             Debug.LogError(
-                "[Map Battle] Battle Scene을 지정하십시오.",
+                "[Map Battle] Battle Scene이 지정되지 않았습니다.",
                 this
             );
             return false;
@@ -112,25 +130,14 @@ public class MapBattleSceneLoader : MonoBehaviour
 
         battleSceneBuildIndex =
             SceneUtility.GetBuildIndexByScenePath(
-            battleScenePath
-        );
+                battleScenePath
+            );
 
         if (battleSceneBuildIndex < 0)
         {
             Debug.LogError(
                 $"[Map Battle] '{battleScenePath}'이 " +
-                "Build Settings에 등록되어 있지 않습니다.",
-                this
-            );
-            return false;
-        }
-
-        if (!Application.CanStreamedLevelBeLoaded(
-                battleSceneBuildIndex))
-        {
-            Debug.LogError(
-                $"[Map Battle] Build Index " +
-                $"{battleSceneBuildIndex}의 Scene을 불러올 수 없습니다.",
+                "Build Settings에 없습니다.",
                 this
             );
             return false;
@@ -143,14 +150,25 @@ public class MapBattleSceneLoader : MonoBehaviour
     {
         isLoading = true;
 
-        // Single 모드로 Scene이 바뀌어도 Loading UI가 살아 있도록 유지합니다.
-        transitionRoot = transform.root.gameObject;
-        DontDestroyOnLoad(transitionRoot);
+        exitCanvasGroup.interactable = true;
+        exitCanvasGroup.blocksRaycasts = true;
 
-        loadingCanvasGroup.blocksRaycasts = true;
-        loadingCanvasGroup.interactable = true;
+        Debug.Log(
+            $"[Map Battle] 전투 Scene 전환 시작. " +
+            $"Node ID: {battleNode.NodeID}",
+            battleNode
+        );
 
-        yield return FadeCanvas(0f, 1f);
+        // 전투 선택 직후 짧은 연출 여유를 둡니다.
+        if (fadeStartDelay > 0f)
+        {
+            yield return new WaitForSecondsRealtime(
+                fadeStartDelay
+            );
+        }
+
+        // Map 화면을 완전히 검게 가립니다.
+        yield return FadeToBlack();
 
         float loadingStartTime =
             Time.realtimeSinceStartup;
@@ -164,27 +182,16 @@ public class MapBattleSceneLoader : MonoBehaviour
         if (operation == null)
         {
             Debug.LogError(
-                "[Map Battle] 비동기 Scene 로드를 시작하지 못했습니다.",
+                "[Map Battle] Scene 로드를 시작하지 못했습니다.",
                 this
             );
 
-            yield return FadeCanvas(1f, 0f);
-
-            SetLoadingState(false);
+            yield return RestoreMapScreen();
             isLoading = false;
             yield break;
         }
 
         operation.allowSceneActivation = false;
-
-        Debug.Log(
-            $"[Map Battle] Loading 시작. " +
-            $"Node ID: {battleNode.NodeID}, " +
-            $"Floor: {battleNode.FloorIndex}, " +
-            $"Scene: {battleScenePath}, " +
-            $"Build Index: {battleSceneBuildIndex}",
-            battleNode
-        );
 
         while (operation.progress < 0.9f ||
                Time.realtimeSinceStartup - loadingStartTime <
@@ -194,80 +201,77 @@ public class MapBattleSceneLoader : MonoBehaviour
             yield return null;
         }
 
-        operation.allowSceneActivation = true;
-
-        while (!operation.isDone)
-        {
-            UpdateLoadingText();
-            yield return null;
-        }
-
-        // Battle Scene의 첫 화면이 준비될 시간을 한 프레임 제공합니다.
-        yield return null;
-
-        yield return FadeCanvas(1f, 0f);
-
-        SetLoadingState(false);
-
         Debug.Log(
-            "[Map Battle] Loading 완료.",
+            "[Map Battle] 전투 Scene 준비 완료. Scene을 활성화합니다.",
             this
         );
 
-        if (transitionRoot != null)
-        {
-            Destroy(transitionRoot);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        // Scene이 준비되면 Map의 안내 문구부터 지웁니다.
+        yield return FadeCanvasGroup(
+            loadingTextCanvasGroup,
+            0f,
+            mapTextFadeOutDuration
+        );
+
+        Debug.Log(
+            "[Map Battle] Map Loading TMP Fade Out 완료. " +
+            "Battle Scene을 활성화합니다.",
+            this
+        );
+
+        operation.allowSceneActivation = true;
     }
 
-    private IEnumerator FadeCanvas(float from, float to)
+    private IEnumerator FadeToBlack()
     {
-        if (loadingCanvasGroup == null)
-        {
-            Debug.LogError(
-                "[Map Battle] Loading Canvas Group이 사라졌습니다.",
-                this
-            );
-            yield break;
-        }
-
-        if (fadeDuration <= 0f)
-        {
-            loadingCanvasGroup.alpha = to;
-            yield break;
-        }
-
         float timer = 0f;
-        loadingCanvasGroup.alpha = from;
+        float startAlpha = exitCanvasGroup.alpha;
 
-        while (timer < fadeDuration)
+        while (timer < fadeToBlackDuration)
         {
-            if (loadingCanvasGroup == null)
-                yield break;
-
             timer += Time.unscaledDeltaTime;
 
             float t =
-                Mathf.Clamp01(timer / fadeDuration);
+                fadeToBlackDuration <= 0f
+                    ? 1f
+                    : Mathf.Clamp01(
+                        timer / fadeToBlackDuration
+                    );
 
             t = t * t * (3f - 2f * t);
 
-            loadingCanvasGroup.alpha =
-                Mathf.Lerp(from, to, t);
+            exitCanvasGroup.alpha =
+                Mathf.Lerp(startAlpha, 1f, t);
 
             UpdateLoadingText();
-
             yield return null;
         }
 
-        if (loadingCanvasGroup != null)
+        exitCanvasGroup.alpha = 1f;
+    }
+
+    private IEnumerator RestoreMapScreen()
+    {
+        float timer = 0f;
+
+        while (timer < fadeToBlackDuration)
         {
-            loadingCanvasGroup.alpha = to;
+            timer += Time.unscaledDeltaTime;
+
+            float t =
+                fadeToBlackDuration <= 0f
+                    ? 1f
+                    : Mathf.Clamp01(
+                        timer / fadeToBlackDuration
+                    );
+
+            exitCanvasGroup.alpha = 1f - t;
+            yield return null;
         }
+
+        exitCanvasGroup.alpha = 0f;
+        exitCanvasGroup.interactable = false;
+        exitCanvasGroup.blocksRaycasts = false;
     }
 
     private void UpdateLoadingText()
@@ -285,15 +289,45 @@ public class MapBattleSceneLoader : MonoBehaviour
             new string('.', dotCount);
     }
 
-    private void SetLoadingState(bool visible)
+    private IEnumerator FadeCanvasGroup(
+    CanvasGroup targetGroup,
+    float targetAlpha,
+    float duration)
     {
-        if (loadingCanvasGroup == null)
-            return;
+        if (targetGroup == null)
+            yield break;
 
-        loadingCanvasGroup.alpha =
-            visible ? 1f : 0f;
+        float startAlpha = targetGroup.alpha;
 
-        loadingCanvasGroup.interactable = visible;
-        loadingCanvasGroup.blocksRaycasts = visible;
+        if (duration <= 0f)
+        {
+            targetGroup.alpha = targetAlpha;
+            yield break;
+        }
+
+        float timer = 0f;
+
+        while (timer < duration)
+        {
+            timer += Time.unscaledDeltaTime;
+
+            float t =
+                Mathf.Clamp01(timer / duration);
+
+            t = t * t * (3f - 2f * t);
+
+            targetGroup.alpha =
+                Mathf.Lerp(
+                    startAlpha,
+                    targetAlpha,
+                    t
+                );
+
+            UpdateLoadingText();
+
+            yield return null;
+        }
+
+        targetGroup.alpha = targetAlpha;
     }
 }
