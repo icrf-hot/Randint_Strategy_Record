@@ -26,7 +26,7 @@
 		{"id":"route","type":"text","text":"현재 맵 경로\n\n1 Start\n→ 2·3·4 Event\n→ 5·6·7 Battle\n→ 8 Shop","x":1030,"y":110,"width":300,"height":190},
 		{"id":"map_doc","type":"file","file":"01 시스템/맵 시스템.md","x":950,"y":-2240,"width":1120,"height":1600,"color":"4"},
 		{"id":"risk_doc","type":"file","file":"03 개발 기록/미구현·주의사항.md","x":950,"y":650,"width":1120,"height":1710,"color":"1"},
-		{"id":"loading_doc","type":"file","file":"01 시스템/씬 전환 및 로딩.md","x":2150,"y":-2240,"width":1120,"height":1600,"color":"3"}
+		{"id":"loading_doc","type":"file","file":"01 시스템/씬 전환 및 로딩.md","x":2150,"y":-2240,"width":2050,"height":1600,"color":"3"}
 	],
 	"edges":[
 		{"id":"e2","fromNode":"deal","fromSide":"right","toNode":"front","toSide":"left"},
