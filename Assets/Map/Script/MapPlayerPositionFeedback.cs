@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MapPlayerPositionFeedback : MonoBehaviour
@@ -26,11 +26,19 @@ public class MapPlayerPositionFeedback : MonoBehaviour
 
     private void Start()
     {
-        if (startNode != null)
+        MapNode initialNode = FindSavedNode();
+
+        if (initialNode == null)
         {
-            SetCurrentNode(startNode);
+            initialNode = startNode;
+        }
+
+        if (initialNode != null)
+        {
+            SetCurrentNode(initialNode);
         }
     }
+
 
     private void Update()
     {
@@ -56,9 +64,16 @@ public class MapPlayerPositionFeedback : MonoBehaviour
 
     private void SetCurrentNode(MapNode nextNode)
     {
+        if (nextNode == null)
+            return;
+
         HideReachableNodes();
 
         currentNode = nextNode;
+
+        MapRunState.SaveCurrentNode(
+            currentNode.NodeID
+        );
 
         UpdateUnavailableNodesByFloor();
         RefreshAllNodeVisuals();
@@ -212,5 +227,32 @@ public class MapPlayerPositionFeedback : MonoBehaviour
             return node == startNode;
 
         return currentNode.IsConnectedTo(node);
+    }
+
+    private MapNode FindSavedNode()
+    {
+        if (!MapRunState.HasCurrentNode)
+            return null;
+
+        MapNode[] nodes =
+            FindObjectsByType<MapNode>(
+                FindObjectsSortMode.None
+            );
+
+        foreach (MapNode node in nodes)
+        {
+            if (node != null &&
+                node.NodeID == MapRunState.CurrentNodeID)
+            {
+                return node;
+            }
+        }
+
+        Debug.LogWarning(
+            $"[Map] 저장된 Node ID " +
+            $"{MapRunState.CurrentNodeID}를 찾을 수 없습니다."
+        );
+
+        return null;
     }
 }

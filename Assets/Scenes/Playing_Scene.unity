@@ -839,7 +839,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 751393154}
   - {fileID: 557305628}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1503,6 +1502,7 @@ Transform:
   - {fileID: 1449457225}
   - {fileID: 2048998675}
   - {fileID: 1352076400}
+  - {fileID: 751393154}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &261378031
@@ -4829,12 +4829,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 751393153}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 897.161, y: 1.702, z: -3352.6199}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 111647802}
+  m_Father: {fileID: 232295763}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &751393155
 MonoBehaviour:
@@ -11106,6 +11106,7 @@ GameObject:
   - component: {fileID: 1775249101}
   - component: {fileID: 1775249102}
   - component: {fileID: 1775249103}
+  - component: {fileID: 1775249104}
   m_Layer: 0
   m_Name: AttackCalculatorManager
   m_TagString: Untagged
@@ -11169,6 +11170,29 @@ MonoBehaviour:
   focusBeforeActionDelay: 0.6
   actionInterval: 0.5
   backHealAmount: 50
+  mapSceneLoader: {fileID: 1775249104}
+--- !u!114 &1775249104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1775249100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50a2e2af2046cc54e8103ac3a3c5828b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattleToMapSceneLoader
+  mapSceneName: Map_1F
+  exitCanvasGroup: {fileID: 557305630}
+  loadingTextCanvasGroup: {fileID: 1689994506}
+  loadingText: {fileID: 1746350483}
+  loadingMessage: "\uAC80\uC0AC \uC644\uB8CC\uB428. \uC7AC\uC555\uCD95\uC911"
+  fadeStartDelay: 0.3
+  fadeToBlackDuration: 0.45
+  minimumLoadingTime: 0.8
+  textFadeOutDuration: 0.25
+  dotInterval: 0.35
 --- !u!1 &1781536713
 GameObject:
   m_ObjectHideFlags: 0

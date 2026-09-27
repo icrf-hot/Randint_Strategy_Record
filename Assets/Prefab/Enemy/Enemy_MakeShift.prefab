@@ -245,7 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b376d299f3d05d142b923bfd07c05002, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  maxHP: 2000
+  maxHP: 1
   attack: 200
   defense: 10
   artsResistance: 15

@@ -1,7 +1,8 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public class BattleExecuteManager : MonoBehaviour
 {
@@ -18,6 +19,12 @@ public class BattleExecuteManager : MonoBehaviour
 
     [Header("Back Action")]
     [SerializeField] private int backHealAmount = 50;
+
+    [Header("Battle Result")]
+    [SerializeField]
+    private BattleToMapSceneLoader mapSceneLoader;
+
+    private bool isReturningToMap;
 
     private Coroutine battleRoutine;
 
@@ -60,15 +67,15 @@ public class BattleExecuteManager : MonoBehaviour
     {
         if (battleRoutine != null)
         {
-            Debug.Log("[ÀüÅõ] ÀÌ¹Ì ÀüÅõ°¡ ½ÇÇà ÁßÀÔ´Ï´Ù.");
+            Debug.Log("[ì „íˆ¬] ì´ë¯¸ ì „íˆ¬ê°€ ì‹¤í–‰ ì¤‘ì…ë‹ˆë‹¤.");
             return;
         }
 
         if (!LoadOperators())
         {
             Debug.LogError(
-                "[ÀüÅõ] CharacterSet¿¡¼­ ¸ğµç Operator¸¦ " +
-                "ºÒ·¯¿ÀÁö ¸øÇß½À´Ï´Ù.");
+                "[ì „íˆ¬] CharacterSetì—ì„œ ëª¨ë“  Operatorë¥¼ " +
+                "ë¶ˆëŸ¬ì˜¤ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
 
             return;
         }
@@ -76,7 +83,7 @@ public class BattleExecuteManager : MonoBehaviour
         if (BattleAccessManager.Instance != null &&
             !BattleAccessManager.Instance.CanBattle)
         {
-            Debug.LogWarning("[ÀüÅõ] Ä«µå ¼±ÅÃÀÌ ¿Ï·áµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogWarning("[ì „íˆ¬] ì¹´ë“œ ì„ íƒì´ ì™„ë£Œë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
             return;
         }
 
@@ -91,8 +98,8 @@ public class BattleExecuteManager : MonoBehaviour
             BattleAccessManager.Instance.SetBattleRunning(true);
         }
 
-        // ±â´Ù¸®Áö ¾Ê°í Ä«µå ¿¬Ãâ ÄÚ·çÆ¾¸¸ ½ÃÀÛÇÔ
-        // ÀÌÈÄ ÀüÅõ ¼ø¼­ °è»ê°ú Çàµ¿ Ã³¸®°¡ ¹Ù·Î ÀÌ¾îÁü
+        // ê¸°ë‹¤ë¦¬ì§€ ì•Šê³  ì¹´ë“œ ì—°ì¶œ ì½”ë£¨í‹´ë§Œ ì‹œì‘í•¨
+        // ì´í›„ ì „íˆ¬ ìˆœì„œ ê³„ì‚°ê³¼ í–‰ë™ ì²˜ë¦¬ê°€ ë°”ë¡œ ì´ì–´ì§
         if (CardSpawner.Instance != null)
         {
             CardSpawner.Instance.BeginDiscardAnimation();
@@ -100,22 +107,22 @@ public class BattleExecuteManager : MonoBehaviour
         else
         {
             Debug.LogWarning(
-                "[Ä«µå È¸¼ö ½ÇÆĞ] CardSpawner¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+                "[ì¹´ë“œ íšŒìˆ˜ ì‹¤íŒ¨] CardSpawnerë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
         }
 
         List<TurnAction> turnOrder = CreateTurnOrder();
 
         turnOrder.Sort(CompareTurnAction);
 
-        Debug.Log("========== ÀüÅõ ¼ø¼­ ==========");
+        Debug.Log("========== ì „íˆ¬ ìˆœì„œ ==========");
 
         for (int i = 0; i < turnOrder.Count; i++)
         {
             TurnAction action = turnOrder[i];
 
             Debug.Log(
-                $"[ÀüÅõ ¼ø¼­] {i + 1}. {action.Name} " +
-                $"| °ø°İ¼Óµµ: {action.Speed:0.##}");
+                $"[ì „íˆ¬ ìˆœì„œ] {i + 1}. {action.Name} " +
+                $"| ê³µê²©ì†ë„: {action.Speed:0.##}");
         }
 
         Debug.Log("==============================");
@@ -127,18 +134,18 @@ public class BattleExecuteManager : MonoBehaviour
             if (!action.CanAct)
             {
                 Debug.Log(
-                    $"[Çàµ¿ Ãë¼Ò] {action.Name}Àº Çàµ¿ÇÒ ¼ö ¾ø½À´Ï´Ù.");
+                    $"[í–‰ë™ ì·¨ì†Œ] {action.Name}ì€ í–‰ë™í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
 
                 continue;
             }
 
-            // ¿ÀÆÛ·¹ÀÌÅÍ Çàµ¿ Àü ÀÚµ¿ Focus
+            // ì˜¤í¼ë ˆì´í„° í–‰ë™ ì „ ìë™ Focus
             if (action.Operator != null)
             {
                 if (OperatorFocusManager.Instance != null)
                 {
                     Debug.Log(
-                        $"[Çàµ¿ Focus] {action.Name}¿¡°Ô Focus¸¦ ÀÌµ¿ÇÕ´Ï´Ù.");
+                        $"[í–‰ë™ Focus] {action.Name}ì—ê²Œ Focusë¥¼ ì´ë™í•©ë‹ˆë‹¤.");
 
                     OperatorFocusManager.Instance.EnterBattleFocus(
                         action.Operator);
@@ -152,18 +159,28 @@ public class BattleExecuteManager : MonoBehaviour
                 else
                 {
                     Debug.LogWarning(
-                        "[Çàµ¿ Focus ½ÇÆĞ] " +
-                        "OperatorFocusManager°¡ ¾ø½À´Ï´Ù.");
+                        "[í–‰ë™ Focus ì‹¤íŒ¨] " +
+                        "OperatorFocusManagerê°€ ì—†ìŠµë‹ˆë‹¤.");
                 }
             }
 
             Debug.Log(
-                $"[Çàµ¿ ½ÃÀÛ] {i + 1}. {action.Name} " +
-                $"| °ø°İ¼Óµµ: {action.Speed:0.##}");
+                $"[í–‰ë™ ì‹œì‘] {i + 1}. {action.Name} " +
+                $"| ê³µê²©ì†ë„: {action.Speed:0.##}");
 
             action.Execute?.Invoke();
 
-            Debug.Log($"[Çàµ¿ Á¾·á] {action.Name}");
+            Debug.Log($"[í–‰ë™ ì¢…ë£Œ] {action.Name}");
+
+
+            // Destroy ì˜ˆì•½ê³¼ ì²´ë ¥ ë³€ê²½ì´ ë°˜ì˜ë  ë•Œê¹Œì§€ í•œ í”„ë ˆì„ ê¸°ë‹¤ë¦½ë‹ˆë‹¤.
+            yield return null;
+
+            if (AreAllEnemiesDefeated())
+            {
+                ReturnToMap();
+                yield break;
+            }   
 
             if (actionInterval > 0f)
             {
@@ -183,8 +200,8 @@ public class BattleExecuteManager : MonoBehaviour
 
         ResetOperatorBonuses();
 
-        // ÀüÅõ°¡ Ä«µå ¿¬Ãâº¸´Ù »¡¸® ³¡³­ °æ¿ì¿¡¸¸
-        // ³²Àº Ä«µå ¿¬ÃâÀÌ ³¡³¯ ¶§±îÁö ±â´Ù¸°´Ù.
+        // ì „íˆ¬ê°€ ì¹´ë“œ ì—°ì¶œë³´ë‹¤ ë¹¨ë¦¬ ëë‚œ ê²½ìš°ì—ë§Œ
+        // ë‚¨ì€ ì¹´ë“œ ì—°ì¶œì´ ëë‚  ë•Œê¹Œì§€ ê¸°ë‹¤ë¦°ë‹¤.
         if (CardSpawner.Instance != null)
         {
             yield return CardSpawner.Instance
@@ -200,10 +217,10 @@ public class BattleExecuteManager : MonoBehaviour
         else
         {
             Debug.LogWarning(
-                "[Ä«µå ¹èºĞ ½ÇÆĞ] CardSpawner¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+                "[ì¹´ë“œ ë°°ë¶„ ì‹¤íŒ¨] CardSpawnerë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
         }
 
-        Debug.Log("========== ÀüÅõ Á¾·á ==========");
+        Debug.Log("========== ì „íˆ¬ ì¢…ë£Œ ==========");
 
         if (BattleAccessManager.Instance != null)
         {
@@ -328,9 +345,9 @@ public class BattleExecuteManager : MonoBehaviour
         if (front.ActionType == FrontActionType.Defense)
         {
             Debug.Log(
-                $"[Front ¹æ¾î] {frontOperator.gameObject.name} " +
-                $"| ¹æ¾î +{front.DefenseBonus} " +
-                $"| ¸¶¹ı ÀúÇ× +{front.ArtsResistanceBonus}");
+                $"[Front ë°©ì–´] {frontOperator.gameObject.name} " +
+                $"| ë°©ì–´ +{front.DefenseBonus} " +
+                $"| ë§ˆë²• ì €í•­ +{front.ArtsResistanceBonus}");
 
             return;
         }
@@ -340,15 +357,15 @@ public class BattleExecuteManager : MonoBehaviour
         if (target == null)
         {
             Debug.LogWarning(
-                "[Front °ø°İ Ãë¼Ò] ¼±ÅÃµÈ ÀûÀÌ ¾ø½À´Ï´Ù.");
+                "[Front ê³µê²© ì·¨ì†Œ] ì„ íƒëœ ì ì´ ì—†ìŠµë‹ˆë‹¤.");
 
             return;
         }
 
         Debug.Log(
-            $"[Front °ø°İ] {frontOperator.gameObject.name} ¡æ " +
+            $"[Front ê³µê²©] {frontOperator.gameObject.name} â†’ " +
             $"{target.gameObject.name} " +
-            $"| ¹°¸® °ø°İ·Â: {frontOperator.Attack}");
+            $"| ë¬¼ë¦¬ ê³µê²©ë ¥: {frontOperator.Attack}");
 
         target.TakePhysicalDamage(frontOperator.Attack);
     }
@@ -373,18 +390,18 @@ public class BattleExecuteManager : MonoBehaviour
         if (target == null)
         {
             Debug.LogWarning(
-                "[Middle °ø°İ Ãë¼Ò] ¼±ÅÃµÈ ÀûÀÌ ¾ø½À´Ï´Ù.");
+                "[Middle ê³µê²© ì·¨ì†Œ] ì„ íƒëœ ì ì´ ì—†ìŠµë‹ˆë‹¤.");
 
             return;
         }
 
         string damageType =
-            middle.IsPhysicalMode ? "¹°¸®" : "¾ÆÃ÷";
+            middle.IsPhysicalMode ? "ë¬¼ë¦¬" : "ì•„ì¸ ";
 
         Debug.Log(
-            $"[Middle °ø°İ] {middleOperator.gameObject.name} ¡æ " +
+            $"[Middle ê³µê²©] {middleOperator.gameObject.name} â†’ " +
             $"{target.gameObject.name} " +
-            $"| {damageType} °ø°İ·Â: {middleOperator.Attack}");
+            $"| {damageType} ê³µê²©ë ¥: {middleOperator.Attack}");
 
         if (middle.IsPhysicalMode)
         {
@@ -404,7 +421,7 @@ public class BattleExecuteManager : MonoBehaviour
         if (AllyTargetingManager.Instance == null)
         {
             Debug.LogWarning(
-                "[Back È¸º¹ Ãë¼Ò] AllyTargetingManager°¡ ¾ø½À´Ï´Ù.");
+                "[Back íšŒë³µ ì·¨ì†Œ] AllyTargetingManagerê°€ ì—†ìŠµë‹ˆë‹¤.");
 
             return;
         }
@@ -415,7 +432,7 @@ public class BattleExecuteManager : MonoBehaviour
 
         if (targets.Count == 0)
         {
-            Debug.Log("[Back È¸º¹] È¸º¹ÇÒ ´ë»óÀÌ ¾ø½À´Ï´Ù.");
+            Debug.Log("[Back íšŒë³µ] íšŒë³µí•  ëŒ€ìƒì´ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
@@ -425,9 +442,9 @@ public class BattleExecuteManager : MonoBehaviour
                 continue;
 
             Debug.Log(
-                $"[Back È¸º¹] {backOperator.gameObject.name} ¡æ " +
+                $"[Back íšŒë³µ] {backOperator.gameObject.name} â†’ " +
                 $"{target.gameObject.name} " +
-                $"| È¸º¹·®: {backHealAmount}");
+                $"| íšŒë³µëŸ‰: {backHealAmount}");
 
             target.Heal(backHealAmount);
         }
@@ -443,16 +460,16 @@ public class BattleExecuteManager : MonoBehaviour
         if (target == null)
         {
             Debug.LogWarning(
-                $"[Enemy °ø°İ Ãë¼Ò] {enemy.gameObject.name}ÀÇ " +
-                "°ø°İ ´ë»óÀÌ ¾ø½À´Ï´Ù.");
+                $"[Enemy ê³µê²© ì·¨ì†Œ] {enemy.gameObject.name}ì˜ " +
+                "ê³µê²© ëŒ€ìƒì´ ì—†ìŠµë‹ˆë‹¤.");
 
             return;
         }
 
         Debug.Log(
-            $"[Enemy °ø°İ] {enemy.gameObject.name} ¡æ " +
+            $"[Enemy ê³µê²©] {enemy.gameObject.name} â†’ " +
             $"{target.gameObject.name} " +
-            $"| ¹°¸® °ø°İ·Â: {enemy.Attack}");
+            $"| ë¬¼ë¦¬ ê³µê²©ë ¥: {enemy.Attack}");
 
         target.TakePhysicalDamage(enemy.Attack);
     }
@@ -533,7 +550,7 @@ public class BattleExecuteManager : MonoBehaviour
             backManager.ResetSelection();
         }
 
-        Debug.Log("[Ä«µå] ¸ğµç Ä«µå ¼±ÅÃÀ» ÃÊ±âÈ­Çß½À´Ï´Ù.");
+        Debug.Log("[ì¹´ë“œ] ëª¨ë“  ì¹´ë“œ ì„ íƒì„ ì´ˆê¸°í™”í–ˆìŠµë‹ˆë‹¤.");
     }
 
     private bool LoadOperators()
@@ -559,7 +576,7 @@ public class BattleExecuteManager : MonoBehaviour
         backOperator =
             accessManager.BackOperator;
 
-        // ¾ÆÁ÷ °Ë»öµÇÁö ¾Ê¾Ò´Ù¸é ´Ù½Ã °Ë»ö
+        // ì•„ì§ ê²€ìƒ‰ë˜ì§€ ì•Šì•˜ë‹¤ë©´ ë‹¤ì‹œ ê²€ìƒ‰
         if (frontOperator == null ||
             middleOperator == null ||
             backOperator == null)
@@ -580,5 +597,62 @@ public class BattleExecuteManager : MonoBehaviour
             frontOperator != null &&
             middleOperator != null &&
             backOperator != null;
+    }
+
+    private bool AreAllEnemiesDefeated()
+    {
+        Enemy[] enemies =
+            FindObjectsByType<Enemy>(
+                FindObjectsSortMode.None
+            );
+
+        foreach (Enemy enemy in enemies)
+        {
+            if (enemy != null &&
+                enemy.CurrentHP > 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void ReturnToMap()
+    {
+        if (isReturningToMap)
+            return;
+
+        if (mapSceneLoader == null)
+        {
+            mapSceneLoader =
+                FindFirstObjectByType<BattleToMapSceneLoader>();
+        }
+
+        if (mapSceneLoader == null)
+        {
+            Debug.LogError(
+                "[ì „íˆ¬ ì¢…ë£Œ] BattleToMapSceneLoaderë¥¼ " +
+                "ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.",
+                this
+            );
+
+            return;
+        }
+
+        isReturningToMap = true;
+
+        if (BattleAccessManager.Instance != null)
+        {
+            BattleAccessManager.Instance
+                .SetBattleRunning(false);
+        }
+
+        if (OperatorFocusManager.Instance != null)
+        {
+            OperatorFocusManager.Instance.ExitFocus();
+        }
+
+        mapSceneLoader.LoadMap();
     }
 }
