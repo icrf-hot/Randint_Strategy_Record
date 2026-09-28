@@ -6,7 +6,7 @@ public class Operator : MonoBehaviour
     [SerializeField] private OperatorData data;
 
     // =========================================================
-    // ±âº»/ÇöÀç ½ºÅÈ
+    // ê¸°ë³¸/í˜„ì¬ ìŠ¤íƒ¯
     // =========================================================
 
     private int currentHP;
@@ -16,7 +16,7 @@ public class Operator : MonoBehaviour
     private float currentAttackSpeed;
 
     // =========================================================
-    // ÀÌ¹ø ÀüÅõÀÇ ÀÓ½Ã º¸Á¤°ª
+    // ì´ë²ˆ ì „íˆ¬ì˜ ì„ì‹œ ë³´ì •ê°’
     // =========================================================
 
     private int battleAttackBonus;
@@ -74,20 +74,20 @@ public class Operator : MonoBehaviour
     public OperatorData Data => data;
 
     // =========================================================
-    // ±âº» ½ºÅÈ
+    // ê¸°ë³¸ ìŠ¤íƒ¯
     // =========================================================
 
     public int MaxHP => data.MaxHP;
 
-    // ÇöÀç ÀüÅõ¿¡¼­ »ç¿ëµÇ´Â ½ÇÁ¦ °ø°İ·Â
+    // í˜„ì¬ ì „íˆ¬ì—ì„œ ì‚¬ìš©ë˜ëŠ” ì‹¤ì œ ê³µê²©ë ¥
     public int Attack =>
         currentAttack + battleAttackBonus;
 
-    // ÇöÀç ÀüÅõ¿¡¼­ »ç¿ëµÇ´Â ½ÇÁ¦ ¹æ¾î·Â
+    // í˜„ì¬ ì „íˆ¬ì—ì„œ ì‚¬ìš©ë˜ëŠ” ì‹¤ì œ ë°©ì–´ë ¥
     public int Defense =>
         currentDefense + battleDefenseBonus;
 
-    // ÇöÀç ÀüÅõ¿¡¼­ »ç¿ëµÇ´Â ½ÇÁ¦ ¾ÆÃ÷ ÀúÇ×
+    // í˜„ì¬ ì „íˆ¬ì—ì„œ ì‚¬ìš©ë˜ëŠ” ì‹¤ì œ ì•„ì¸  ì €í•­
     public int ArtsResistance =>
         currentArtsResistance +
         battleArtsResistanceBonus;
@@ -96,7 +96,7 @@ public class Operator : MonoBehaviour
         currentAttackSpeed;
 
     // =========================================================
-    // ¿ø·¡ ½ºÅÈ
+    // ì›ë˜ ìŠ¤íƒ¯
     // =========================================================
 
     public int BaseAttack =>
@@ -109,7 +109,7 @@ public class Operator : MonoBehaviour
         currentArtsResistance;
 
     // =========================================================
-    // ÀüÅõ º¸Á¤°ª
+    // ì „íˆ¬ ë³´ì •ê°’
     // =========================================================
 
     public int AttackBonus =>
@@ -122,7 +122,7 @@ public class Operator : MonoBehaviour
         battleArtsResistanceBonus;
 
     // =========================================================
-    // ½Ç½Ã°£ HP
+    // ì‹¤ì‹œê°„ HP
     // =========================================================
 
 
@@ -132,7 +132,7 @@ public class Operator : MonoBehaviour
         : 0f;
 
     // =========================================================
-    // HP ¹èÀ²
+    // HP ë°°ìœ¨
     // =========================================================
 
 
@@ -140,7 +140,7 @@ public class Operator : MonoBehaviour
         currentHP;
 
     // =========================================================
-    // ÃÊ±âÈ­
+    // ì´ˆê¸°í™”
     // =========================================================
 
     private void Awake()
@@ -148,14 +148,14 @@ public class Operator : MonoBehaviour
         if (data == null)
         {
             Debug.LogError(
-                $"{gameObject.name}¿¡ OperatorData°¡ ¿¬°áµÇÁö ¾Ê¾Ò½À´Ï´Ù.",
+                $"{gameObject.name}ì— OperatorDataê°€ ì—°ê²°ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.",
                 this);
 
             return;
         }
 
         // -----------------------------------------------------
-        // Skill ÃÊ±âÈ­
+        // Skill ì´ˆê¸°í™”
         // -----------------------------------------------------
 
         if (data.Skills != null)
@@ -170,7 +170,7 @@ public class Operator : MonoBehaviour
                 if (data.Skills[i] == null)
                 {
                     Debug.LogWarning(
-                        $"{data.OperatorName}ÀÇ Skill {i}°¡ ºñ¾î ÀÖ½À´Ï´Ù.",
+                        $"{data.OperatorName}ì˜ Skill {i}ê°€ ë¹„ì–´ ìˆìŠµë‹ˆë‹¤.",
                         this);
 
                     continue;
@@ -183,7 +183,7 @@ public class Operator : MonoBehaviour
         }
 
         // -----------------------------------------------------
-        // ±âº» ½ºÅÈ ÃÊ±âÈ­
+        // ê¸°ë³¸ ìŠ¤íƒ¯ ì´ˆê¸°í™”
         // -----------------------------------------------------
 
         currentHP =
@@ -202,14 +202,14 @@ public class Operator : MonoBehaviour
             data.AttackSpeed;
 
         // -----------------------------------------------------
-        // ÀüÅõ º¸Á¤ ÃÊ±âÈ­
+        // ì „íˆ¬ ë³´ì • ì´ˆê¸°í™”
         // -----------------------------------------------------
 
         ResetBattleBonus();
     }
 
     // =========================================================
-    // ÇÇÇØ
+    // í”¼í•´
     // =========================================================
 
     public void TakePhysicalDamage(int damage)
@@ -227,7 +227,7 @@ public class Operator : MonoBehaviour
                 0);
 
         Debug.Log(
-            $"{gameObject.name} ¹°¸® ÇÇÇØ : {finalDamage}");
+            $"{gameObject.name} ë¬¼ë¦¬ í”¼í•´ : {finalDamage}");
 
         if (currentHP <= 0)
             Die();
@@ -248,14 +248,14 @@ public class Operator : MonoBehaviour
                 0);
 
         Debug.Log(
-            $"{gameObject.name} ¾ÆÃ÷ ÇÇÇØ : {finalDamage}");
+            $"{gameObject.name} ì•„ì¸  í”¼í•´ : {finalDamage}");
 
         if (currentHP <= 0)
             Die();
     }
 
     // =========================================================
-    // ÀüÅõ º¸Á¤ Àû¿ë
+    // ì „íˆ¬ ë³´ì • ì ìš©
     // =========================================================
 
     public void ApplyBattleBonus(
@@ -273,14 +273,14 @@ public class Operator : MonoBehaviour
             artsResistanceBonus;
 
         Debug.Log(
-            $"{gameObject.name} ÀüÅõ º¸Á¤ Àû¿ë\n" +
+            $"{gameObject.name} ì „íˆ¬ ë³´ì • ì ìš©\n" +
             $"AT : +{battleAttackBonus}\n" +
             $"DF : +{battleDefenseBonus}\n" +
             $"RES : +{battleArtsResistanceBonus}");
     }
 
     // =========================================================
-    // ÀüÅõ º¸Á¤ Á¦°Å
+    // ì „íˆ¬ ë³´ì • ì œê±°
     // =========================================================
 
     public void ResetBattleBonus()
@@ -291,7 +291,7 @@ public class Operator : MonoBehaviour
     }
 
     // =========================================================
-    // ±âº» ½ºÅÈ º¯°æ
+    // ê¸°ë³¸ ìŠ¤íƒ¯ ë³€ê²½
     // =========================================================
 
     public void SetAttack(int value)
@@ -315,7 +315,7 @@ public class Operator : MonoBehaviour
     }
 
     // =========================================================
-    // Ä¡À¯
+    // ì¹˜ìœ 
     // =========================================================
 
     public void Heal(int amount)
@@ -339,24 +339,24 @@ public class Operator : MonoBehaviour
             currentHP - previousHP;
 
         Debug.Log(
-            $"{gameObject.name} È¸º¹ : {actualHeal}");
+            $"{gameObject.name} íšŒë³µ : {actualHeal}");
     }
 
     // =========================================================
-    // »ç¸Á
+    // ì‚¬ë§
     // =========================================================
 
     private void Die()
     {
         Debug.Log(
-            $"{gameObject.name} ÀüÅõ ºÒ´É");
+            $"{gameObject.name} ì „íˆ¬ ë¶ˆëŠ¥");
 
         Destroy(gameObject);
     }
 
 
     // =========================================================
-    // µğ¹ö±× Àü¿ë ÇÇÇØ ÄÚµå
+    // ë””ë²„ê·¸ ì „ìš© í”¼í•´ ì½”ë“œ
     // =========================================================
 
     public void DebugDamage(int damage)
@@ -375,7 +375,7 @@ public class Operator : MonoBehaviour
                 0);
 
         Debug.Log(
-            $"[DEBUG] {gameObject.name} HP °¨¼Ò : " +
+            $"[DEBUG] {gameObject.name} HP ê°ì†Œ : " +
             $"-{damage} " +
             $"({currentHP}/{MaxHP})");
 
