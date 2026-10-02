@@ -2,7 +2,7 @@
 aliases: [Dorothy_Skill_1]
 tags: [character/skill]
 implementation: partial
-updated: 2026-09-22
+updated: 2026-10-02
 ---
 
 # Dorothy Skill 1
@@ -12,7 +12,7 @@ updated: 2026-09-22
 
 | 항목 | 값 |
 |---|---|
-| Asset | `Dorothy_Skill_1.asset` |
+| Asset | `Dorothy_Skill_1.asset` (JSON ID `dorothy_skill_1`) |
 | 표시 이름 | 미입력 |
 | 설명 | 미입력 |
 | Max SP | 2 |
@@ -24,7 +24,7 @@ updated: 2026-09-22
 ## 완료 조건
 
 - [ ] 이름과 설명 결정
-- [ ] [[캐릭터/아군/도로시 프랭크스|도로시 프랭크스]]의 `skills` 배열에 연결
+- [ ] [[캐릭터/아군/도로시 프랭크스|도로시 프랭크스]]에 해당하는 `operators.json`의 `skillIds`에 연결
 - [ ] 자연 회복 이벤트 호출 지점 연결
 - [ ] 실제 `SkillEffect` 구현
 - [ ] 스킬 발동 UI와 입력 흐름 구현

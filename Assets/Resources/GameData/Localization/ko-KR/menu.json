@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    { "key": "menu.title.name", "value": "Randint Strategy Record" },
+    { "key": "menu.title.subtitle", "value": "랜드인트 작전기록" },
+    { "key": "menu.title.context", "value": "데이터 검사중...(0000001/9290443" },
+    { "key": "menu.title.enter", "value": "관리자 권한 실행으로 실행." },
+    { "key": "menu.title.tag", "value": "OPERATION RECORD / INTERNAL ACCESS" },
+    { "key": "menu.lobby.window", "value": "작전기록 관리" },
+    { "key": "menu.lobby.path", "value": "내부 데이터 / 작전기록" },
+    { "key": "menu.lobby.hint", "value": "항목을 선택해 실행하십시오." },
+    { "key": "menu.lobby.taskbar", "value": "작전기록 데스크톱" },
+    { "key": "menu.lobby.status", "value": "내부 데이터 연결됨" },
+    { "key": "menu.settings.label", "value": "설정" },
+    { "key": "menu.settings.symbol", "value": "[설정]" },
+    { "key": "menu.settings.description", "value": "환경 설정 창 열기" },
+    { "key": "menu.settings.pending", "value": "설정 항목은 아직 확정되지 않았습니다.\n현재 창에서는 변경할 수 있는 설정이 없습니다." },
+    { "key": "menu.continue.label", "value": "작전기록 폴더" },
+    { "key": "menu.continue.symbol", "value": "[폴더]" },
+    { "key": "menu.continue.description", "value": "게임 이어하기" },
+    { "key": "menu.continue.empty", "value": "저장된 작전기록 없음\n\n디스크 저장·이어하기는 아직 구현되지 않았습니다.\n현재 메모리의 맵 위치는 저장 파일이 아닙니다." },
+    { "key": "menu.new_game.label", "value": "새 작전기록.exe" },
+    { "key": "menu.new_game.symbol", "value": "[.exe]" },
+    { "key": "menu.new_game.description", "value": "새 게임 시작" },
+    { "key": "menu.window.close", "value": "닫기" },
+    { "key": "menu.loading", "value": "내부 데이터 접근중..." },
+    { "key": "menu.load_error", "value": "화면을 열 수 없습니다. Scene 등록을 확인하십시오." }
+  ]
+}

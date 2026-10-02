@@ -8,6 +8,7 @@
 | --- | --- |
 | `Localization/ko-KR/ui.json` | UI 항목명·버튼·카드 표기·승인 문구·초기 placeholder |
 | `Localization/ko-KR/system.json` | 결과 화면과 네 가지 로딩 문구 |
+| `Localization/ko-KR/menu.json` | Title·Lobby·설정/이어하기 안내 및 메뉴 전환 문구 |
 | `Localization/ko-KR/maps.json` | 노드 표시명·설명·선택지·타이핑 문구 |
 | `Localization/ko-KR/characters.json` | 대원 이름과 소개 |
 | `Localization/ko-KR/skills.json` | 스킬 이름과 설명 |

@@ -59,6 +59,19 @@ public static class GameDataValidationMenu
         {
             if (component == null) { errors.Add($"{path}: Missing Script"); continue; }
             CheckFields(component, path + "/" + component.name, catalog, errors);
+            if (component is MenuSceneLoader)
+                CheckReferences(component, path, errors, "transitionCanvas", "transitionText");
+            if (component is TitleSceneController)
+            {
+                CheckReferences(component, path, errors, "sceneLoader", "enterButton");
+                CheckScenePath(component, "lobbyScenePath", path, errors);
+            }
+            if (component is LobbySceneController)
+            {
+                CheckReferences(component, path, errors, "sceneLoader", "mainWindow", "settingsWindow", "continueWindow",
+                    "settingsButton", "continueButton", "newGameButton", "settingsCloseButton", "continueCloseButton");
+                CheckScenePath(component, "mapScenePath", path, errors);
+            }
             if (component is Operator op && op.Data == null)
                 errors.Add($"{path}/{component.name}: OperatorData Asset 참조 누락");
             if (component is BattleResultPresenter)
@@ -82,6 +95,21 @@ public static class GameDataValidationMenu
                     errors.Add($"{path}: Battle Scene 경로가 활성 Build Settings에 없습니다: '{scenePath}'");
             }
         }
+    }
+
+    private static void CheckReferences(MonoBehaviour owner, string path, List<string> errors, params string[] fields)
+    {
+        var serialized = new SerializedObject(owner);
+        foreach (string field in fields)
+            if (serialized.FindProperty(field).objectReferenceValue == null)
+                errors.Add($"{path}/{owner.name}.{field}: 메뉴 UI 참조 누락");
+    }
+
+    private static void CheckScenePath(MonoBehaviour owner, string field, string path, List<string> errors)
+    {
+        string scenePath = new SerializedObject(owner).FindProperty(field).stringValue;
+        if (!Array.Exists(EditorBuildSettings.scenes, scene => scene.enabled && scene.path == scenePath))
+            errors.Add($"{path}/{owner.name}.{field}: 활성 Build Settings에 없는 Scene '{scenePath}'");
     }
 
     private static void CheckFields(object owner, string path, GameDataCatalog catalog, List<string> errors)

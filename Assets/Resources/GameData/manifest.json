@@ -9,6 +9,10 @@
   "files": [
     {
       "kind": "text",
+      "path": "GameData/Localization/ko-KR/menu"
+    },
+    {
+      "kind": "text",
       "path": "GameData/Localization/ko-KR/ui"
     },
     {
