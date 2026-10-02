@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AllyTargetable : MonoBehaviour
 {
@@ -16,11 +16,18 @@ public class AllyTargetable : MonoBehaviour
     public Operator Operator =>
         operatorData;
 
-    public bool CanBeTargeted =>
-        canBeTargeted;
-
     public Collider2D TargetCollider =>
         targetCollider;
+
+    public bool CanBeTargeted =>
+        canBeTargeted &&
+        operatorData != null &&
+        operatorData.IsCombatActive;
+
+    // 추후 부활 스킬 타기팅에서 사용할 수 있습니다.
+    public bool CanBeRevivalTarget =>
+        operatorData != null &&
+        operatorData.IsRetreated;
 
 
     private void Awake()

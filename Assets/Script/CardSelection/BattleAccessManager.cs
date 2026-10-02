@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class BattleAccessManager : MonoBehaviour
 {
@@ -10,7 +10,7 @@ public class BattleAccessManager : MonoBehaviour
     [SerializeField] private BackCardSelectionManager backManager;
 
     [Header("Operator Parent")]
-    [Tooltip("Front, Middle, Back ¿ÀÆÛ·¹ÀÌÅÍ°¡ µé¾î ÀÖ´Â »óÀ§ ¿ÀºêÁ§Æ®")]
+    [Tooltip("Front, Middle, Back ì˜¤í¼ë ˆì´í„°ê°€ ë“¤ì–´ ìˆëŠ” ìƒìœ„ ì˜¤ë¸Œì íŠ¸")]
     [SerializeField] private Transform operatorParent;
 
     [Header("Battle Button")]
@@ -53,8 +53,8 @@ public class BattleAccessManager : MonoBehaviour
         if (operatorParent == null)
         {
             Debug.LogError(
-                "[Battle Access] Operator Parent°¡ ¾ø½À´Ï´Ù. " +
-                "CharacterSetÀ» ¿¬°áÇØ ÁÖ½Ê½Ã¿À.",
+                "[Battle Access] Operator Parentê°€ ì—†ìŠµë‹ˆë‹¤. " +
+                "CharacterSetì„ ì—°ê²°í•´ ì£¼ì‹­ì‹œì˜¤.",
                 this);
 
             Refresh();
@@ -106,10 +106,10 @@ public class BattleAccessManager : MonoBehaviour
         if (slot != null)
         {
             Debug.LogError(
-                $"[Battle Access] {positionName} À§Ä¡ÀÇ " +
-                "Operator°¡ µÎ ¸í ÀÌ»óÀÔ´Ï´Ù.\n" +
-                $"±âÁ¸: {slot.gameObject.name}\n" +
-                $"Ãß°¡ ¹ß°ß: {candidate.gameObject.name}",
+                $"[Battle Access] {positionName} ìœ„ì¹˜ì˜ " +
+                "Operatorê°€ ë‘ ëª… ì´ìƒì…ë‹ˆë‹¤.\n" +
+                $"ê¸°ì¡´: {slot.gameObject.name}\n" +
+                $"ì¶”ê°€ ë°œê²¬: {candidate.gameObject.name}",
                 candidate);
 
             return;
@@ -121,7 +121,7 @@ public class BattleAccessManager : MonoBehaviour
     private void LogOperatorResult()
     {
         Debug.Log(
-            "[Battle Access] Operator ÀÚµ¿ °Ë»ö ¿Ï·á\n" +
+            "[Battle Access] Operator ìë™ ê²€ìƒ‰ ì™„ë£Œ\n" +
             $"Front: {GetOperatorName(frontOperator)}\n" +
             $"Middle: {GetOperatorName(middleOperator)}\n" +
             $"Back: {GetOperatorName(backOperator)}");
@@ -129,26 +129,26 @@ public class BattleAccessManager : MonoBehaviour
         if (frontOperator == null)
         {
             Debug.LogError(
-                "[Battle Access] Front Operator¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.");
+                "[Battle Access] Front Operatorë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
         }
 
         if (middleOperator == null)
         {
             Debug.LogError(
-                "[Battle Access] Middle Operator¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.");
+                "[Battle Access] Middle Operatorë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
         }
 
         if (backOperator == null)
         {
             Debug.LogError(
-                "[Battle Access] Back Operator¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.");
+                "[Battle Access] Back Operatorë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
         }
     }
 
     private string GetOperatorName(Operator op)
     {
         if (op == null)
-            return "¾øÀ½";
+            return "ì—†ìŒ";
 
         if (op.Data != null &&
             !string.IsNullOrWhiteSpace(
@@ -173,21 +173,41 @@ public class BattleAccessManager : MonoBehaviour
             middleManager != null &&
             backManager != null;
 
-        bool operatorsReady =
+        bool operatorsRegistered =
             frontOperator != null &&
             middleOperator != null &&
             backOperator != null;
 
+        bool hasActiveOperator =
+            IsOperatorActive(frontOperator) ||
+            IsOperatorActive(middleOperator) ||
+            IsOperatorActive(backOperator);
+
         bool cardsReady =
             managersReady &&
-            frontManager.IsAccess &&
-            middleManager.IsAccess &&
-            backManager.IsAccess;
+            IsSlotCardReady(
+                frontOperator,
+                frontManager.IsAccess
+            ) &&
+            IsSlotCardReady(
+                middleOperator,
+                middleManager.IsAccess
+            ) &&
+            IsSlotCardReady(
+                backOperator,
+                backManager.IsAccess
+            );
 
         bool frontActionSelected =
-            managersReady &&
-            frontManager.ActionType !=
-                FrontActionType.None;
+            frontOperator != null &&
+            (
+                !frontOperator.IsCombatActive ||
+                (
+                    managersReady &&
+                    frontManager.ActionType !=
+                        FrontActionType.None
+                )
+            );
 
         bool frontTargetReady =
             IsFrontTargetReady();
@@ -201,7 +221,8 @@ public class BattleAccessManager : MonoBehaviour
         CanBattle =
             !battleRunning &&
             managersReady &&
-            operatorsReady &&
+            operatorsRegistered &&
+            hasActiveOperator &&
             cardsReady &&
             frontActionSelected &&
             frontTargetReady &&
@@ -214,13 +235,38 @@ public class BattleAccessManager : MonoBehaviour
         }
     }
 
+    private bool IsOperatorActive(Operator op)
+    {
+        return
+            op != null &&
+            op.IsCombatActive;
+    }
+
+    private bool IsSlotCardReady(
+        Operator op,
+        bool cardSelected)
+    {
+        if (op == null)
+            return false;
+
+        // í‡´ê° ìŠ¬ë¡¯ì€ ì¹´ë“œ ì„ íƒì„ ìš”êµ¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
+        if (!op.IsCombatActive)
+            return true;
+
+        return cardSelected;
+    }
+
     private bool IsFrontTargetReady()
     {
-        if (frontManager == null ||
-            frontOperator == null)
-        {
+        if (frontOperator == null)
             return false;
-        }
+
+        // í‡´ê°í•œ FrontëŠ” í–‰ë™ ì„ íƒê³¼ ì  íƒ€ê¹ƒì´ í•„ìš”í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
+        if (!frontOperator.IsCombatActive)
+            return true;
+
+        if (frontManager == null)
+            return false;
 
         if (frontManager.ActionType ==
             FrontActionType.None)
@@ -241,6 +287,9 @@ public class BattleAccessManager : MonoBehaviour
     {
         if (op == null)
             return false;
+
+        if (!op.IsCombatActive)
+            return true;
 
         if (!op.RequiresEnemyTarget)
             return true;

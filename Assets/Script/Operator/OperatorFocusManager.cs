@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class OperatorFocusManager : MonoBehaviour
@@ -72,7 +72,7 @@ public class OperatorFocusManager : MonoBehaviour
 
         if (infoUI == null)
         {
-            Debug.LogError("IOperatorInfoUI°¡ ¿¬°áµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogError("IOperatorInfoUIê°€ ì—°ê²°ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
             enabled = false;
             return;
         }
@@ -117,7 +117,7 @@ public class OperatorFocusManager : MonoBehaviour
             return;
         }
 
-        // Á÷Á¢ Å¬¸¯ÇÑ °æ¿ì¿¡´Â ¼³¸íÃ¢ Ç¥½Ã
+        // ì§ì ‘ í´ë¦­í•œ ê²½ìš°ì—ëŠ” ì„¤ëª…ì°½ í‘œì‹œ
         ApplyFocus(handler, true);
     }
 
@@ -132,13 +132,13 @@ public class OperatorFocusManager : MonoBehaviour
         if (handler == null)
         {
             Debug.LogWarning(
-                $"[ÀüÅõ Focus ½ÇÆĞ] {op.gameObject.name}¿¡ " +
-                "OperatorClickHandler°¡ ¾ø½À´Ï´Ù.");
+                $"[ì „íˆ¬ Focus ì‹¤íŒ¨] {op.gameObject.name}ì— " +
+                "OperatorClickHandlerê°€ ì—†ìŠµë‹ˆë‹¤.");
 
             return;
         }
 
-        // ÀüÅõ Áß ÀÚµ¿ Focus¿¡¼­´Â ¼³¸íÃ¢À» Ç¥½ÃÇÏÁö ¾ÊÀ½
+        // ì „íˆ¬ ì¤‘ ìë™ Focusì—ì„œëŠ” ì„¤ëª…ì°½ì„ í‘œì‹œí•˜ì§€ ì•ŠìŒ
         ApplyFocus(handler, false);
     }
 
@@ -290,5 +290,22 @@ public class OperatorFocusManager : MonoBehaviour
         }
 
         return originalRotation.eulerAngles.y;
+    }
+
+    public void ExitFocusIfOperator(Operator targetOperator)
+    {
+        if (targetOperator == null ||
+            currentOperator == null)
+        {
+            return;
+        }
+
+        Operator focusedOperator =
+            currentOperator.GetComponent<Operator>();
+
+        if (focusedOperator == targetOperator)
+        {
+            ExitFocus();
+        }
     }
 }

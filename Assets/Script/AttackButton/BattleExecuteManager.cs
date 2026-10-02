@@ -23,6 +23,10 @@ public class BattleExecuteManager : MonoBehaviour
     [Header("Battle Result")]
     [SerializeField]
     private BattleToMapSceneLoader mapSceneLoader;
+    [SerializeField]
+    private BattleResultPresenter resultPresenter;
+
+    private bool isFinishingBattle;
 
     private bool isReturningToMap;
 
@@ -42,7 +46,7 @@ public class BattleExecuteManager : MonoBehaviour
             get
             {
                 if (Operator != null)
-                    return Operator.CurrentHP > 0;
+                    return Operator.IsCombatActive;
 
                 if (Enemy != null)
                     return Enemy.CurrentHP > 0;
@@ -178,9 +182,12 @@ public class BattleExecuteManager : MonoBehaviour
 
             if (AreAllEnemiesDefeated())
             {
-                ReturnToMap();
+                yield return FinishBattle(
+                    BattleResultType.Success
+                );
+
                 yield break;
-            }   
+            }
 
             if (actionInterval > 0f)
             {
@@ -198,10 +205,24 @@ public class BattleExecuteManager : MonoBehaviour
             OperatorFocusManager.Instance.ExitFocus();
         }
 
-        ResetOperatorBonuses();
+        // 예약된 재배치를 먼저 처리한 다음 패배 여부를 판정합니다.
+        ProcessOperatorRedeployments();
 
-        // 전투가 카드 연출보다 빨리 끝난 경우에만
-        // 남은 카드 연출이 끝날 때까지 기다린다.
+        bool isDefeated =
+            AreAllOperatorsRetreated();
+
+        // 다음 라운드 또는 씬 전환 전에 임시 보정을 한 번만 제거합니다.
+
+        if (isDefeated)
+        {
+            yield return FinishBattle(
+                BattleResultType.Failure
+            );
+
+            yield break;
+        }
+
+        // 패배하지 않았을 때만 카드 회수 완료를 기다립니다.
         if (CardSpawner.Instance != null)
         {
             yield return CardSpawner.Instance
@@ -224,10 +245,60 @@ public class BattleExecuteManager : MonoBehaviour
 
         if (BattleAccessManager.Instance != null)
         {
-            BattleAccessManager.Instance.SetBattleRunning(false);
+            BattleAccessManager.Instance
+                .SetBattleRunning(false);
         }
 
         battleRoutine = null;
+    }
+
+    private IEnumerator FinishBattle(
+    BattleResultType resultType)
+    {
+        if (isFinishingBattle)
+            yield break;
+
+        isFinishingBattle = true;
+
+        if (OperatorFocusManager.Instance != null)
+        {
+            OperatorFocusManager.Instance.ExitFocus();
+        }
+
+        ResetOperatorBonuses();
+
+        switch (resultType)
+        {
+            case BattleResultType.Success:
+                Debug.Log("[Battle Result] Victory");
+                break;
+
+            case BattleResultType.Failure:
+                Debug.Log("[Battle Result] Defeat");
+                break;
+        }
+
+        if (resultPresenter == null)
+        {
+            resultPresenter =
+                FindFirstObjectByType<BattleResultPresenter>();
+        }
+
+        if (resultPresenter != null)
+        {
+            yield return resultPresenter
+                .ShowResult(resultType);
+        }
+        else
+        {
+            Debug.LogWarning(
+                "[Battle Result] BattleResultPresenter를 " +
+                "찾을 수 없어 결과 화면을 생략합니다.",
+                this
+            );
+        }
+
+        ReturnToMap();
     }
 
     private List<TurnAction> CreateTurnOrder()
@@ -288,6 +359,44 @@ public class BattleExecuteManager : MonoBehaviour
         return result;
     }
 
+    private void ProcessOperatorRedeployments()
+    {
+        Operator[] operators =
+            FindObjectsByType<Operator>(
+                FindObjectsSortMode.None
+            );
+
+        foreach (Operator op in operators)
+        {
+            if (op == null)
+                continue;
+
+            op.ProcessRedeploymentTurn();
+        }
+    }
+
+    private bool AreAllOperatorsRetreated()
+    {
+        Operator[] operators =
+            FindObjectsByType<Operator>(
+                FindObjectsSortMode.None
+            );
+
+        if (operators.Length == 0)
+            return true;
+
+        foreach (Operator op in operators)
+        {
+            if (op != null &&
+                op.IsCombatActive)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private void AddOperatorAction(
         List<TurnAction> list,
         Operator op,
@@ -295,7 +404,7 @@ public class BattleExecuteManager : MonoBehaviour
         int tiePriority,
         Action execute)
     {
-        if (op == null || op.CurrentHP <= 0)
+        if (op == null || !op.IsCombatActive)
             return;
 
         string operatorName = op.gameObject.name;
@@ -498,19 +607,19 @@ public class BattleExecuteManager : MonoBehaviour
     private Operator GetEnemyTarget()
     {
         if (frontOperator != null &&
-            frontOperator.CurrentHP > 0)
+            frontOperator.IsCombatActive)
         {
             return frontOperator;
         }
 
         if (middleOperator != null &&
-            middleOperator.CurrentHP > 0)
+            middleOperator.IsCombatActive)
         {
             return middleOperator;
         }
 
         if (backOperator != null &&
-            backOperator.CurrentHP > 0)
+            backOperator.IsCombatActive)
         {
             return backOperator;
         }

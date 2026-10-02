@@ -11,17 +11,14 @@
             "id": "436cbd4e987b4e8e",
             "type": "leaf",
             "state": {
-              "type": "canvas",
+              "type": "markdown",
               "state": {
-                "file": "로직트리/세부 로직트리.canvas",
-                "viewState": {
-                  "x": 1607.038867866883,
-                  "y": 278.8621844000215,
-                  "zoom": -1.073742880242828
-                }
+                "file": "TODO LIST/TODO LIST.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-layout-dashboard",
-              "title": "세부 로직트리"
+              "icon": "lucide-file",
+              "title": "TODO LIST"
             }
           }
         ]
@@ -191,13 +188,13 @@
   },
   "active": "436cbd4e987b4e8e",
   "lastOpenFiles": [
+    "로직트리/세부 로직트리.canvas",
+    "AI 주의사항.md",
     "랜드인트 작전기록 대문.md",
     "TODO LIST/TODO LIST.md",
-    "로직트리/세부 로직트리.canvas",
     "캐릭터/적/Enemy MakeShift.md",
     "캐릭터/직군/직군 인덱스.md",
     "캐릭터/캐릭터 인덱스.md",
-    "AI 주의사항.md",
     "01 시스템/씬 전환 및 로딩.md",
     "01 시스템/맵 시스템.md",
     "01 시스템/대원·적·스킬.md",

@@ -1758,6 +1758,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
+  displayName: 
   nodeID: 2
   floorIndex: 1
   nodeType: 3
@@ -2287,6 +2288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
+  displayName: 
   nodeID: 1
   floorIndex: 0
   nodeType: 0
@@ -3878,6 +3880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
+  displayName: 
   nodeID: 4
   floorIndex: 1
   nodeType: 3
@@ -4714,6 +4717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
+  displayName: 
   nodeID: 6
   floorIndex: 2
   nodeType: 1
@@ -5140,6 +5144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
+  displayName: 
   nodeID: 3
   floorIndex: 1
   nodeType: 3
@@ -5544,6 +5549,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
+  displayName: 
   nodeID: 5
   floorIndex: 2
   nodeType: 1
@@ -5757,7 +5763,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapBattleSceneLoader
   battleScene: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
-  battleScenePath: Assets/Scenes/Playing_Scene.unity
+  battleScenePath: Assets/Script/Scenes/Playing_Scene.unity
   loadSceneMode: 0
   exitCanvasGroup: {fileID: 1732318487}
   loadingTextCanvasGroup: {fileID: 1251055671}
@@ -6162,6 +6168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
+  displayName: 
   nodeID: 8
   floorIndex: 3
   nodeType: 4
@@ -6364,6 +6371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
+  displayName: 
   nodeID: 7
   floorIndex: 2
   nodeType: 1

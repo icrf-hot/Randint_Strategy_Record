@@ -72,7 +72,8 @@ public class MapPlayerPositionFeedback : MonoBehaviour
         currentNode = nextNode;
 
         MapRunState.SaveCurrentNode(
-            currentNode.NodeID
+            currentNode.NodeID,
+            currentNode.DisplayName
         );
 
         UpdateUnavailableNodesByFloor();

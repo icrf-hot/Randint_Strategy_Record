@@ -1,4 +1,5 @@
-﻿public static class MapRunState
+﻿
+public static class MapRunState
 {
     public static bool HasCurrentNode { get; private set; }
     public static int CurrentNodeID { get; private set; }
@@ -9,9 +10,16 @@
         private set;
     }
 
-    public static void SaveCurrentNode(int nodeID)
+    public static string CurrentNodeDisplayName
+    {
+        get;
+        private set;
+    }
+
+    public static void SaveCurrentNode(int nodeID, string displayName)
     {
         CurrentNodeID = nodeID;
+        CurrentNodeDisplayName = displayName;
         HasCurrentNode = true;
     }
 
@@ -30,5 +38,6 @@
         CurrentNodeID = 0;
         HasCurrentNode = false;
         IsEnteringMapFromBattle = false;
+        CurrentNodeDisplayName = string.Empty;
     }
 }

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum MapNodeType
 {
@@ -25,6 +25,9 @@ public enum MapNodeVisualState
 public class MapNode : MonoBehaviour
 {
     [Header("Node Info")]
+
+    [SerializeField]
+    private string displayName;
     [SerializeField] private int nodeID;
     [SerializeField] private int floorIndex;
     [SerializeField] private MapNodeType nodeType;
@@ -56,6 +59,7 @@ public class MapNode : MonoBehaviour
     public MapNode[] ConnectedNodes => connectedNodes;
     public string Description => description;
     public MapChoice[] Choices => choices;
+    public string DisplayName => displayName;
 
     public bool IsUnavailable => isUnavailable;
 

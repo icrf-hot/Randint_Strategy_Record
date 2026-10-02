@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class OperatorClickHandler : MonoBehaviour
@@ -50,8 +50,10 @@ public class OperatorClickHandler : MonoBehaviour
         if (!IsPointerInsideCollider())
             return;
 
-        if (operatorData == null)
+        if (operatorData == null || !operatorData.IsCombatActive)
+        {
             return;
+        }
 
         if (OperatorFocusManager.Instance == null)
             return;
