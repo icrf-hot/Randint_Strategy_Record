@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+using Randint.Data;
+
 public enum MapNodeType
 {
     Start,
@@ -26,8 +28,8 @@ public class MapNode : MonoBehaviour
 {
     [Header("Node Info")]
 
-    [SerializeField]
-    private string displayName;
+    [SerializeField, GameTextKey]
+    private string displayNameKey;
     [SerializeField] private int nodeID;
     [SerializeField] private int floorIndex;
     [SerializeField] private MapNodeType nodeType;
@@ -36,8 +38,7 @@ public class MapNode : MonoBehaviour
     [SerializeField] private MapNode[] connectedNodes;
 
     [Header("Description")]
-    [TextArea(3, 10)]
-    [SerializeField] private string description;
+    [SerializeField, GameTextKey] private string descriptionKey;
 
     [Header("Choices")]
     [SerializeField] private MapChoice[] choices;
@@ -57,9 +58,9 @@ public class MapNode : MonoBehaviour
     public int FloorIndex => floorIndex;
     public MapNodeType NodeType => nodeType;
     public MapNode[] ConnectedNodes => connectedNodes;
-    public string Description => description;
+    public string Description => GameData.Text(descriptionKey);
     public MapChoice[] Choices => choices;
-    public string DisplayName => displayName;
+    public string DisplayName => GameData.Text(displayNameKey);
 
     public bool IsUnavailable => isUnavailable;
 

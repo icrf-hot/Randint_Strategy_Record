@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "key": "ui.card.special_face",
+      "value": "JK"
+    },
+    {
+      "key": "ui.battle.access.approved",
+      "value": "승인됨"
+    },
+    {
+      "key": "ui.battle.access.waiting",
+      "value": "승인 대기중"
+    },
+    {
+      "key": "ui.stat.attack",
+      "value": "AT"
+    },
+    {
+      "key": "ui.common.unavailable",
+      "value": "NA"
+    },
+    {
+      "key": "ui.damage.physical",
+      "value": "PHYS"
+    },
+    {
+      "key": "ui.placeholder.operator_name",
+      "value": "이름 "
+    },
+    {
+      "key": "ui.common.plus",
+      "value": "+"
+    },
+    {
+      "key": "ui.damage.arts",
+      "value": "ARTS"
+    },
+    {
+      "key": "ui.stat.sp",
+      "value": "SP"
+    },
+    {
+      "key": "ui.stat.defense",
+      "value": "DF"
+    },
+    {
+      "key": "ui.position.front",
+      "value": "'FRONT"
+    },
+    {
+      "key": "ui.position.back",
+      "value": "BACK"
+    },
+    {
+      "key": "ui.card.special",
+      "value": "T"
+    },
+    {
+      "key": "ui.stat.hp",
+      "value": "HP"
+    },
+    {
+      "key": "ui.placeholder.text",
+      "value": "Hello World"
+    },
+    {
+      "key": "ui.attribute.corrosion",
+      "value": "침식"
+    },
+    {
+      "key": "ui.battle.execute",
+      "value": "전투 시행"
+    },
+    {
+      "key": "ui.placeholder.operator_info",
+      "value": "오퍼레이터 정보가 들어갈 Operator UI Info입니다."
+    },
+    {
+      "key": "ui.stat.arts_resistance",
+      "value": "AR"
+    },
+    {
+      "key": "ui.stat.attack_speed",
+      "value": "SR"
+    },
+    {
+      "key": "ui.stat.arts_defense",
+      "value": "AR-DF"
+    },
+    {
+      "key": "ui.position.middle",
+      "value": "MIDDLE"
+    },
+    {
+      "key": "ui.map.integrity",
+      "value": "Integrity"
+    },
+    {
+      "key": "ui.map.enter_battle",
+      "value": "전투하기"
+    },
+    {
+      "key": "ui.map.data",
+      "value": "DATA"
+    },
+    {
+      "key": "ui.map.consistency",
+      "value": "Consistency"
+    }
+  ]
+}

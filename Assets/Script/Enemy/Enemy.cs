@@ -1,14 +1,18 @@
 using UnityEngine;
+using Randint.Data;
 
 public class Enemy : MonoBehaviour
 {
-    [Header("±âº» ½ºÅÈ")]
-
-    [SerializeField] private int maxHP = 100;
-    [SerializeField] private int attack = 20;
-    [SerializeField] private int defense = 10;
-    [SerializeField] private int artsResistance = 15;
-    [SerializeField] private float attackSpeed = 1.0f;
+    [Header("JSON Definition")]
+    [SerializeField, GameDefinitionId("enemy")] private string dataId;
+    public string DataId => dataId;
+    // ê¸°ë³¸ê°’ì€ ê³µìœ  ë°ì´í„°ì—ì„œ ì¡°íšŒí•˜ë©°, í˜„ìž¬ HPëŠ” ìƒì„±ëœ ì „íˆ¬ ê°ì²´ì—ë§Œ ì €ìž¥í•©ë‹ˆë‹¤.
+    private EnemyDefinition Definition => GameData.Catalog.Enemy(dataId);
+    private int maxHP => Definition.maxHP;
+    private int attack => Definition.attack;
+    private int defense => Definition.defense;
+    private int artsResistance => Definition.artsResistance;
+    private float attackSpeed => Definition.attackSpeed;
 
     private int currentHP;
 
@@ -31,7 +35,7 @@ public class Enemy : MonoBehaviour
         currentHP -= finalDamage;
         currentHP = Mathf.Max(currentHP, 0);
 
-        Debug.Log($"{gameObject.name} ¹°¸® ÇÇÇØ : {finalDamage}");
+        Debug.Log($"{gameObject.name} ë¬¼ë¦¬ í”¼í•´ : {finalDamage}");
 
         if (currentHP <= 0)
             Die();
@@ -44,7 +48,7 @@ public class Enemy : MonoBehaviour
         currentHP -= finalDamage;
         currentHP = Mathf.Max(currentHP, 0);
 
-        Debug.Log($"{gameObject.name} ¾ÆÃ÷ ÇÇÇØ : {finalDamage}");
+        Debug.Log($"{gameObject.name} ì•„ì¸  í”¼í•´ : {finalDamage}");
 
         if (currentHP <= 0)
             Die();
@@ -52,7 +56,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log($"{gameObject.name} »ç¸Á");
+        Debug.Log($"{gameObject.name} ì‚¬ë§");
 
         Destroy(gameObject);
     }

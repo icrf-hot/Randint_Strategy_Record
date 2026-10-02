@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using Randint.Data;
 using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
@@ -24,7 +25,8 @@ public class MapBattleSceneLoader : MonoBehaviour
     [SerializeField] private CanvasGroup exitCanvasGroup;
     [SerializeField] private CanvasGroup loadingTextCanvasGroup;
     [SerializeField] private TMP_Text loadingText;
-    [SerializeField] private string loadingMessage = "ÀÛÀü ±â·Ï ¾ĞÃà ÇØÁ¦ Áß";
+    [SerializeField] [GameTextKey] private string loadingMessageKey;
+    private string loadingMessage => GameData.Text(loadingMessageKey);
 
     [Header("Timing")]
     [Min(0f)]
@@ -94,7 +96,7 @@ public class MapBattleSceneLoader : MonoBehaviour
         if (battleNode == null)
         {
             Debug.LogError(
-                "[Map Battle] Battle Node°¡ ¾ø½À´Ï´Ù.",
+                "[Map Battle] Battle Nodeê°€ ì—†ìŠµë‹ˆë‹¤.",
                 this
             );
             return false;
@@ -103,8 +105,8 @@ public class MapBattleSceneLoader : MonoBehaviour
         if (battleNode.NodeType != MapNodeType.Battle)
         {
             Debug.LogWarning(
-                $"[Map Battle] Node {battleNode.NodeID}Àº " +
-                "Battle Å¸ÀÔÀÌ ¾Æ´Õ´Ï´Ù.",
+                $"[Map Battle] Node {battleNode.NodeID}ì€ " +
+                "Battle íƒ€ì…ì´ ì•„ë‹™ë‹ˆë‹¤.",
                 battleNode
             );
             return false;
@@ -113,7 +115,7 @@ public class MapBattleSceneLoader : MonoBehaviour
         if (exitCanvasGroup == null)
         {
             Debug.LogError(
-                "[Map Battle] Exit Canvas GroupÀÌ ÁöÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.",
+                "[Map Battle] Exit Canvas Groupì´ ì§€ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.",
                 this
             );
             return false;
@@ -122,7 +124,7 @@ public class MapBattleSceneLoader : MonoBehaviour
         if (string.IsNullOrWhiteSpace(battleScenePath))
         {
             Debug.LogError(
-                "[Map Battle] Battle SceneÀÌ ÁöÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.",
+                "[Map Battle] Battle Sceneì´ ì§€ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.",
                 this
             );
             return false;
@@ -136,8 +138,8 @@ public class MapBattleSceneLoader : MonoBehaviour
         if (battleSceneBuildIndex < 0)
         {
             Debug.LogError(
-                $"[Map Battle] '{battleScenePath}'ÀÌ " +
-                "Build Settings¿¡ ¾ø½À´Ï´Ù.",
+                $"[Map Battle] '{battleScenePath}'ì´ " +
+                "Build Settingsì— ì—†ìŠµë‹ˆë‹¤.",
                 this
             );
             return false;
@@ -154,12 +156,12 @@ public class MapBattleSceneLoader : MonoBehaviour
         exitCanvasGroup.blocksRaycasts = true;
 
         Debug.Log(
-            $"[Map Battle] ÀüÅõ Scene ÀüÈ¯ ½ÃÀÛ. " +
+            $"[Map Battle] ì „íˆ¬ Scene ì „í™˜ ì‹œì‘. " +
             $"Node ID: {battleNode.NodeID}",
             battleNode
         );
 
-        // ÀüÅõ ¼±ÅÃ Á÷ÈÄ ÂªÀº ¿¬Ãâ ¿©À¯¸¦ µÓ´Ï´Ù.
+        // ì „íˆ¬ ì„ íƒ ì§í›„ ì§§ì€ ì—°ì¶œ ì—¬ìœ ë¥¼ ë‘¡ë‹ˆë‹¤.
         if (fadeStartDelay > 0f)
         {
             yield return new WaitForSecondsRealtime(
@@ -167,7 +169,7 @@ public class MapBattleSceneLoader : MonoBehaviour
             );
         }
 
-        // Map È­¸éÀ» ¿ÏÀüÈ÷ °Ë°Ô °¡¸³´Ï´Ù.
+        // Map í™”ë©´ì„ ì™„ì „íˆ ê²€ê²Œ ê°€ë¦½ë‹ˆë‹¤.
         yield return FadeToBlack();
 
         float loadingStartTime =
@@ -182,7 +184,7 @@ public class MapBattleSceneLoader : MonoBehaviour
         if (operation == null)
         {
             Debug.LogError(
-                "[Map Battle] Scene ·Îµå¸¦ ½ÃÀÛÇÏÁö ¸øÇß½À´Ï´Ù.",
+                "[Map Battle] Scene ë¡œë“œë¥¼ ì‹œì‘í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.",
                 this
             );
 
@@ -202,11 +204,11 @@ public class MapBattleSceneLoader : MonoBehaviour
         }
 
         Debug.Log(
-            "[Map Battle] ÀüÅõ Scene ÁØºñ ¿Ï·á. SceneÀ» È°¼ºÈ­ÇÕ´Ï´Ù.",
+            "[Map Battle] ì „íˆ¬ Scene ì¤€ë¹„ ì™„ë£Œ. Sceneì„ í™œì„±í™”í•©ë‹ˆë‹¤.",
             this
         );
 
-        // SceneÀÌ ÁØºñµÇ¸é MapÀÇ ¾È³» ¹®±¸ºÎÅÍ Áö¿ó´Ï´Ù.
+        // Sceneì´ ì¤€ë¹„ë˜ë©´ Mapì˜ ì•ˆë‚´ ë¬¸êµ¬ë¶€í„° ì§€ì›ë‹ˆë‹¤.
         yield return FadeCanvasGroup(
             loadingTextCanvasGroup,
             0f,
@@ -214,8 +216,8 @@ public class MapBattleSceneLoader : MonoBehaviour
         );
 
         Debug.Log(
-            "[Map Battle] Map Loading TMP Fade Out ¿Ï·á. " +
-            "Battle SceneÀ» È°¼ºÈ­ÇÕ´Ï´Ù.",
+            "[Map Battle] Map Loading TMP Fade Out ì™„ë£Œ. " +
+            "Battle Sceneì„ í™œì„±í™”í•©ë‹ˆë‹¤.",
             this
         );
 

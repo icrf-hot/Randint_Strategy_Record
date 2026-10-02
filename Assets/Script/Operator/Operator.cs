@@ -205,16 +205,18 @@ public class Operator : MonoBehaviour
         // Skill 초기화
         // -----------------------------------------------------
 
-        if (data.Skills != null)
+        // 스킬 구성도 JSON의 ID 목록을 기준으로 새 전투 인스턴스를 만듭니다.
+        string[] skillIds = data.SkillIds;
+        if (skillIds != null)
         {
             skills =
-                new OperatorSkill[data.Skills.Length];
+                new OperatorSkill[skillIds.Length];
 
             for (int i = 0;
-                 i < data.Skills.Length;
+                 i < skillIds.Length;
                  i++)
             {
-                if (data.Skills[i] == null)
+                if (string.IsNullOrWhiteSpace(skillIds[i]))
                 {
                     Debug.LogWarning(
                         $"{data.OperatorName}의 Skill {i}가 비어 있습니다.",
@@ -225,7 +227,7 @@ public class Operator : MonoBehaviour
 
                 skills[i] =
                     new OperatorSkill(
-                        data.Skills[i]);
+                        skillIds[i]);
             }
         }
 

@@ -1,12 +1,13 @@
 using UnityEngine;
 
+using Randint.Data;
+
 public class MapChoice : MonoBehaviour
 {
     [Header("Choice")]
-    [TextArea(2, 5)]
-    [SerializeField] private string choiceText;
+    [SerializeField, GameTextKey] private string choiceTextKey;
 
-    public string ChoiceText => choiceText;
+    public string ChoiceText => GameData.Text(choiceTextKey);
 
     public void Select(MapNode targetNode)
     {

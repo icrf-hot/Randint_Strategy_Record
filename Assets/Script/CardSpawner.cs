@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Randint.Data;
 
 public class CardSpawner : MonoBehaviour
 {
@@ -22,7 +23,8 @@ public class CardSpawner : MonoBehaviour
     [Header("특별 카드 범위")]
     [SerializeField] private int specialRangeMin = 1;
     [SerializeField] private int specialRangeMax = 5;
-    [SerializeField] private string specialCardText = "JK";
+    [SerializeField, GameTextKey] private string specialCardTextKey;
+    private string specialCardText => GameData.Text(specialCardTextKey);
 
     [Header("카드 생성 간격")]
     [SerializeField] private float spawnDelay = 0.2f;

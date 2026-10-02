@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using TMPro;
 using UnityEngine;
+using Randint.Data;
 using UnityEngine.EventSystems;
 
 public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
@@ -56,6 +57,9 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         isSpecialCard = true;
         specialCardText = text;
         cardNumber = 0;
+        // 카드 면의 JK 표기와 선택 슬롯의 T 표기는 기존 표시를 그대로 보존합니다.
+        numberText1.text = GameData.Text("ui.card.special_face");
+        numberText2.text = GameData.Text("ui.card.special_face");
     }
 
     public void StopVisualAnimations()

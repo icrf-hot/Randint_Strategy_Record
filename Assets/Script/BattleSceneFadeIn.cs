@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using Randint.Data;
 
 public class BattleSceneFadeIn : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class BattleSceneFadeIn : MonoBehaviour
     [SerializeField] private TMP_Text loadingText;
 
     [Header("Text")]
-    [SerializeField] private string loadingMessage = "ÀÛÀü ÁØºñ ¿Ï·á";
+    [SerializeField] [GameTextKey] private string loadingMessageKey;
+    private string loadingMessage => GameData.Text(loadingMessageKey);
 
     [Min(0.1f)]
     [SerializeField] private float dotInterval = 0.35f;
@@ -49,7 +51,7 @@ public class BattleSceneFadeIn : MonoBehaviour
         if (entryCanvasGroup == null)
         {
             Debug.LogError(
-                "[Battle Fade] Entry CanvasGroupÀÌ ¾ø½À´Ï´Ù.",
+                "[Battle Fade] Entry CanvasGroupì´ ì—†ìŠµë‹ˆë‹¤.",
                 this
             );
 
@@ -76,10 +78,10 @@ public class BattleSceneFadeIn : MonoBehaviour
 
     private IEnumerator Start()
     {
-        // Battle SceneÀÇ Awake¿Í Start°¡ ½ÇÇàµÉ ½Ã°£À» Áİ´Ï´Ù.
+        // Battle Sceneì˜ Awakeì™€ Startê°€ ì‹¤í–‰ë  ì‹œê°„ì„ ì¤ë‹ˆë‹¤.
         yield return null;
 
-        // »õ SceneÀÇ TMP¸¦ °ËÀº È­¸é À§¿¡ ³ªÅ¸³À´Ï´Ù.
+        // ìƒˆ Sceneì˜ TMPë¥¼ ê²€ì€ í™”ë©´ ìœ„ì— ë‚˜íƒ€ëƒ…ë‹ˆë‹¤.
         yield return FadeGroup(
             loadingTextCanvasGroup,
             1f,
@@ -88,7 +90,7 @@ public class BattleSceneFadeIn : MonoBehaviour
 
         yield return WaitRealtime(textHoldDuration);
 
-        // Battle TMP¸¦ ¸ÕÀú Á¦°ÅÇÕ´Ï´Ù.
+        // Battle TMPë¥¼ ë¨¼ì € ì œê±°í•©ë‹ˆë‹¤.
         yield return FadeGroup(
             loadingTextCanvasGroup,
             0f,
@@ -97,7 +99,7 @@ public class BattleSceneFadeIn : MonoBehaviour
 
         yield return WaitRealtime(screenFadeOutDelay);
 
-        // ¸¶Áö¸·À¸·Î °ËÀº ¹è°æÀ» Á¦°ÅÇÕ´Ï´Ù.
+        // ë§ˆì§€ë§‰ìœ¼ë¡œ ê²€ì€ ë°°ê²½ì„ ì œê±°í•©ë‹ˆë‹¤.
         yield return FadeGroup(
             entryCanvasGroup,
             0f,
@@ -109,13 +111,13 @@ public class BattleSceneFadeIn : MonoBehaviour
         entryCanvasGroup.blocksRaycasts = false;
         entryCanvasGroup.gameObject.SetActive(false);
 
-        // È­¸é ¿¬ÃâÀÌ ÀüºÎ ³¡³­ ÈÄ¿¡¸¸ °ÔÀÓ ½Ã°£À» ½ÃÀÛÇÕ´Ï´Ù.
+        // í™”ë©´ ì—°ì¶œì´ ì „ë¶€ ëë‚œ í›„ì—ë§Œ ê²Œì„ ì‹œê°„ì„ ì‹œì‘í•©ë‹ˆë‹¤.
         Time.timeScale = gameTimeScaleAfterFade;
         gameTimeRestored = true;
         isFadeComplete = true;
 
         Debug.Log(
-            "[Battle Fade] ÁøÀÔ ¿¬Ãâ ¿Ï·á. °ÔÀÓ°ú Ä«µå ¹èºĞÀ» ½ÃÀÛÇÕ´Ï´Ù.",
+            "[Battle Fade] ì§„ì… ì—°ì¶œ ì™„ë£Œ. ê²Œì„ê³¼ ì¹´ë“œ ë°°ë¶„ì„ ì‹œì‘í•©ë‹ˆë‹¤.",
             this
         );
     }

@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Integrity
+  m_text: ""
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
   m_sharedMaterial: {fileID: -8782340136750818621, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
@@ -350,7 +350,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: NA
+  m_text: ""
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
   m_sharedMaterial: {fileID: -8782340136750818621, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
@@ -487,7 +487,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hello World
+  m_text: ""
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
   m_sharedMaterial: {fileID: -8782340136750818621, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
@@ -699,7 +699,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Integrity
+  m_text: ""
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
   m_sharedMaterial: {fileID: -8782340136750818621, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
@@ -836,7 +836,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC804\uD22C\uD558\uAE30"
+  m_text: ""
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
   m_sharedMaterial: {fileID: -8782340136750818621, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
@@ -1758,15 +1758,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
-  displayName: 
+  displayNameKey: map.map_1f.node_2.name
   nodeID: 2
   floorIndex: 1
   nodeType: 3
   connectedNodes:
   - {fileID: 1670722690}
   - {fileID: 1475734765}
-  description: "\uBE44\uC20D \uB178\uB4DC\n\uC2DC\uC791\uC740 \uC26C\uC6B8\uC9C0
-    \uBAB0\uB77C\uB3C4\n\uB05D\uC740 \uD56D\uC0C1 \uBE44\uADF9\uC774\uC5C8\uC2B5\uB2C8\uB2E4."
+  descriptionKey: map.map_1f.node_2.description
   choices:
   - {fileID: 621905972}
   - {fileID: 621905974}
@@ -1885,7 +1884,7 @@ MonoBehaviour:
   orbitCamera: {fileID: 316983483}
   node: {fileID: 621905965}
   targetText: {fileID: 247250063}
-  displayText: "\uC6B0\uC5F0"
+  displayTextKey: map.map_1f.node_label_621905971
   characterInterval: 0.06
   showCursor: 1
   cursorCharacter: _
@@ -1902,7 +1901,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: "\uB2E4\uAC00\uAC04\uB2E4"
+  choiceTextKey: map.map_1f.choice_621905972
 --- !u!114 &621905973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1915,7 +1914,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: "\uBB34\uC2DC\uD55C\uB2E4"
+  choiceTextKey: map.map_1f.choice_621905973
 --- !u!114 &621905974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1928,7 +1927,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: "\uACBD\uACC4\uD55C\uB2E4"
+  choiceTextKey: map.map_1f.choice_621905974
 --- !u!1001 &651019047
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2288,7 +2287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
-  displayName: 
+  displayNameKey: map.map_1f.node_1.name
   nodeID: 1
   floorIndex: 0
   nodeType: 0
@@ -2296,8 +2295,7 @@ MonoBehaviour:
   - {fileID: 621905965}
   - {fileID: 1568378340}
   - {fileID: 1148619769}
-  description: "\uC2DC\uC791 \uB178\uB4DC\n\uC544\uBB34\uC77C\uB3C4 \uC5C6\uC2B5\uB2C8\uB2E4.\n\uADF8\uB9AC\uACE0
-    \uC544\uBB34\uC77C\uB3C4 \uC5C6\uC744\uAC83 \uC785\uB2C8\uB2E4."
+  descriptionKey: map.map_1f.node_1.description
   choices: []
   meshRenderer: {fileID: 766637532}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -2319,7 +2317,7 @@ MonoBehaviour:
   orbitCamera: {fileID: 316983483}
   node: {fileID: 766637535}
   targetText: {fileID: 247250063}
-  displayText: "\uCD08\uC810"
+  displayTextKey: map.map_1f.node_label_766637537
   characterInterval: 0.06
   showCursor: 1
   cursorCharacter: _
@@ -2336,7 +2334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: 
+  choiceTextKey: map.map_1f.choice_766637538
 --- !u!114 &766637539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2349,7 +2347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: 
+  choiceTextKey: map.map_1f.choice_766637539
 --- !u!114 &766637540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2362,7 +2360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: 
+  choiceTextKey: map.map_1f.choice_766637540
 --- !u!1 &777768695
 GameObject:
   m_ObjectHideFlags: 0
@@ -2420,7 +2418,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hello World
+  m_text: ""
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
   m_sharedMaterial: {fileID: -8782340136750818621, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
@@ -3336,7 +3334,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: DATA
+  m_text: ""
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
   m_sharedMaterial: {fileID: -8782340136750818621, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
@@ -3726,7 +3724,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC804\uD22C\uD558\uAE30"
+  m_text: ""
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
   m_sharedMaterial: {fileID: -8782340136750818621, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
@@ -3880,15 +3878,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
-  displayName: 
+  displayNameKey: map.map_1f.node_4.name
   nodeID: 4
   floorIndex: 1
   nodeType: 3
   connectedNodes:
   - {fileID: 1475734765}
   - {fileID: 1907453441}
-  description: "\uB8E9 \uB178\uB4DC\n\uC55E\uACFC \uB4A4\uB97C \uC8FC\uC758\uD558\uC2ED\uC2DC\uC624.\n\uD76C\uC0DD\uC740
-    \uB2F9\uC5F0\uD55C \uC218\uC21C\uC785\uB2C8\uB2E4.\n"
+  descriptionKey: map.map_1f.node_4.description
   choices:
   - {fileID: 1148619776}
   - {fileID: 1148619778}
@@ -4007,7 +4004,7 @@ MonoBehaviour:
   orbitCamera: {fileID: 316983483}
   node: {fileID: 1148619769}
   targetText: {fileID: 247250063}
-  displayText: "\uC6B0\uC5F0"
+  displayTextKey: map.map_1f.node_label_1148619775
   characterInterval: 0.06
   showCursor: 1
   cursorCharacter: _
@@ -4024,7 +4021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: "\uB2E4\uAC00\uAC04\uB2E4"
+  choiceTextKey: map.map_1f.choice_1148619776
 --- !u!114 &1148619777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4037,7 +4034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: "\uBB34\uC2DC\uD55C\uB2E4"
+  choiceTextKey: map.map_1f.choice_1148619777
 --- !u!114 &1148619778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4050,7 +4047,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: "\uACBD\uACC4\uD55C\uB2E4"
+  choiceTextKey: map.map_1f.choice_1148619778
 --- !u!1 &1159467337
 GameObject:
   m_ObjectHideFlags: 0
@@ -4376,7 +4373,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: NA
+  m_text: ""
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
   m_sharedMaterial: {fileID: -8782340136750818621, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
@@ -4717,14 +4714,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
-  displayName: 
+  displayNameKey: map.map_1f.node_6.name
   nodeID: 6
   floorIndex: 2
   nodeType: 1
   connectedNodes:
   - {fileID: 1903569405}
-  description: "\uC804\uD22C \uB178\uB4DC\n\uBA48\uCD9C\uC218 \uC5C6\uB294\n\uB9C8\uC9C0\uB9C9
-    \uC120\uD0DD"
+  descriptionKey: map.map_1f.node_6.description
   choices:
   - {fileID: 1475734772}
   meshRenderer: {fileID: 1292259482}
@@ -4841,7 +4837,7 @@ MonoBehaviour:
   orbitCamera: {fileID: 316983483}
   node: {fileID: 1475734765}
   targetText: {fileID: 247250063}
-  displayText: "\uCDA9\uB3CC"
+  displayTextKey: map.map_1f.node_label_1475734771
   characterInterval: 0.06
   showCursor: 1
   cursorCharacter: _
@@ -4858,7 +4854,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: "\uB9DE\uC120\uB2E4"
+  choiceTextKey: map.map_1f.choice_1475734772
 --- !u!114 &1475734773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4871,7 +4867,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: 
+  choiceTextKey: map.map_1f.choice_1475734773
 --- !u!114 &1475734774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4884,7 +4880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: 
+  choiceTextKey: map.map_1f.choice_1475734774
 --- !u!1 &1514368093
 GameObject:
   m_ObjectHideFlags: 0
@@ -5028,7 +5024,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Consistency
+  m_text: ""
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
   m_sharedMaterial: {fileID: -8782340136750818621, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
@@ -5144,16 +5140,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
-  displayName: 
+  displayNameKey: map.map_1f.node_3.name
   nodeID: 3
   floorIndex: 1
   nodeType: 3
   connectedNodes:
   - {fileID: 1670722690}
   - {fileID: 1907453441}
-  description: "\uB098\uC774\uD2B8 \uB178\uB4DC\n\uAE30\uBCD1\uC740 \uD56D\uC0C1
-    \uC804\uD22C\uC758 \uC911\uC2EC\uC774\uC5C8\uACE0,\n\uC804\uD22C\uC758 \uB05D\uC744
-    \uC54C\uB838\uC2B5\uB2C8\uB2E4."
+  descriptionKey: map.map_1f.node_3.description
   choices:
   - {fileID: 1568378347}
   - {fileID: 1568378349}
@@ -5272,7 +5266,7 @@ MonoBehaviour:
   orbitCamera: {fileID: 316983483}
   node: {fileID: 1568378340}
   targetText: {fileID: 247250063}
-  displayText: "\uC6B0\uC5F0"
+  displayTextKey: map.map_1f.node_label_1568378346
   characterInterval: 0.06
   showCursor: 1
   cursorCharacter: _
@@ -5289,7 +5283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: "\uB2E4\uAC00\uAC04\uB2E4"
+  choiceTextKey: map.map_1f.choice_1568378347
 --- !u!114 &1568378348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5302,7 +5296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: "\uBB34\uC2DC\uD55C\uB2E4"
+  choiceTextKey: map.map_1f.choice_1568378348
 --- !u!114 &1568378349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5315,7 +5309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: "\uACBD\uACC4\uD55C\uB2E4"
+  choiceTextKey: map.map_1f.choice_1568378349
 --- !u!1 &1625934042
 GameObject:
   m_ObjectHideFlags: 0
@@ -5549,14 +5543,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
-  displayName: 
+  displayNameKey: map.map_1f.node_5.name
   nodeID: 5
   floorIndex: 2
   nodeType: 1
   connectedNodes:
   - {fileID: 1903569405}
-  description: "\uC804\uD22C \uB178\uB4DC\n\uBA48\uCD9C\uC218 \uC5C6\uB294\n\uB9C8\uC9C0\uB9C9
-    \uC120\uD0DD"
+  descriptionKey: map.map_1f.node_5.description
   choices:
   - {fileID: 1670722697}
   meshRenderer: {fileID: 1370315270}
@@ -5673,7 +5666,7 @@ MonoBehaviour:
   orbitCamera: {fileID: 316983483}
   node: {fileID: 1670722690}
   targetText: {fileID: 247250063}
-  displayText: "\uCDA9\uB3CC"
+  displayTextKey: map.map_1f.node_label_1670722696
   characterInterval: 0.06
   showCursor: 1
   cursorCharacter: _
@@ -5690,7 +5683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: "\uB9DE\uC120\uB2E4"
+  choiceTextKey: map.map_1f.choice_1670722697
 --- !u!114 &1670722698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5703,7 +5696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: 
+  choiceTextKey: map.map_1f.choice_1670722698
 --- !u!114 &1670722699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5716,7 +5709,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: 
+  choiceTextKey: map.map_1f.choice_1670722699
 --- !u!1 &1673677872
 GameObject:
   m_ObjectHideFlags: 0
@@ -5728,6 +5721,7 @@ GameObject:
   - component: {fileID: 1673677873}
   - component: {fileID: 1673677874}
   - component: {fileID: 1673677875}
+  - component: {fileID: 2100000010}
   m_Layer: 0
   m_Name: MapSceneManager
   m_TagString: Untagged
@@ -5763,12 +5757,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapBattleSceneLoader
   battleScene: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
-  battleScenePath: Assets/Script/Scenes/Playing_Scene.unity
+  battleScenePath: Assets/Scenes/Playing_Scene.unity
   loadSceneMode: 0
   exitCanvasGroup: {fileID: 1732318487}
   loadingTextCanvasGroup: {fileID: 1251055671}
   loadingText: {fileID: 777768697}
-  loadingMessage: "\uC791\uC804 \uAE30\uB85D \uC555\uCD95 \uD574\uC81C\uC911..."
+  loadingMessageKey: loading.map_out
   fadeStartDelay: 0.1
   fadeToBlackDuration: 0.35
   minimumLoadingTime: 1.5
@@ -5789,7 +5783,7 @@ MonoBehaviour:
   entryCanvasGroup: {fileID: 1690680464}
   loadingTextCanvasGroup: {fileID: 1514862981}
   loadingText: {fileID: 127758109}
-  loadingMessage: "\uC791\uC804 \uAE30\uB85D \uC555\uCD95 \uD574\uC81C \uC644\uB8CC"
+  loadingMessageKey: loading.map_in
   fadeStartDelay: 0.1
   fadeFromBlackDuration: 0.35
   minimumDisplayTime: 1.5
@@ -6168,13 +6162,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
-  displayName: 
+  displayNameKey: map.map_1f.node_8.name
   nodeID: 8
   floorIndex: 3
   nodeType: 4
   connectedNodes: []
-  description: "\uC0C1\uC810 \uB178\uB4DC\n\uAD6C\uB9E4\uC640 \uC2E0\uB8B0\uB294
-    \uACB0\uCF54\n\uC774\uC5B4\uC9C0\uC9C0 \uBABB\uD55C\uB2E4."
+  descriptionKey: map.map_1f.node_8.description
   choices:
   - {fileID: 1903569412}
   meshRenderer: {fileID: 614868084}
@@ -6291,7 +6284,7 @@ MonoBehaviour:
   orbitCamera: {fileID: 316983483}
   node: {fileID: 1903569405}
   targetText: {fileID: 247250063}
-  displayText: "\uAC70\uB798"
+  displayTextKey: map.map_1f.node_label_1903569411
   characterInterval: 0.06
   showCursor: 1
   cursorCharacter: _
@@ -6308,7 +6301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: "\uC778\uC0AC\uD55C\uB2E4"
+  choiceTextKey: map.map_1f.choice_1903569412
 --- !u!114 &1903569413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6321,7 +6314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: 
+  choiceTextKey: map.map_1f.choice_1903569413
 --- !u!114 &1903569414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6334,7 +6327,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: "\uB3C4\uB9DD\uCE5C\uB2E4 "
+  choiceTextKey: map.map_1f.choice_1903569414
 --- !u!1 &1907453440
 GameObject:
   m_ObjectHideFlags: 0
@@ -6371,14 +6364,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60d16f1e6f3a2e46a5335a8e10623a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapNode
-  displayName: 
+  displayNameKey: map.map_1f.node_7.name
   nodeID: 7
   floorIndex: 2
   nodeType: 1
   connectedNodes:
   - {fileID: 1903569405}
-  description: "\uC804\uD22C \uB178\uB4DC\n\uBA48\uCD9C\uC218 \uC5C6\uB294\n\uB9C8\uC9C0\uB9C9
-    \uC120\uD0DD"
+  descriptionKey: map.map_1f.node_7.description
   choices:
   - {fileID: 1907453448}
   meshRenderer: {fileID: 1217805764}
@@ -6495,7 +6487,7 @@ MonoBehaviour:
   orbitCamera: {fileID: 316983483}
   node: {fileID: 1907453441}
   targetText: {fileID: 247250063}
-  displayText: "\uCDA9\uB3CC"
+  displayTextKey: map.map_1f.node_label_1907453447
   characterInterval: 0.06
   showCursor: 1
   cursorCharacter: _
@@ -6512,7 +6504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: "\uB9DE\uC120\uB2E4"
+  choiceTextKey: map.map_1f.choice_1907453448
 --- !u!114 &1907453449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6525,7 +6517,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: 
+  choiceTextKey: map.map_1f.choice_1907453449
 --- !u!114 &1907453450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6538,7 +6530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceText: 
+  choiceTextKey: map.map_1f.choice_1907453450
 --- !u!1 &1912619404
 GameObject:
   m_ObjectHideFlags: 0
@@ -6651,7 +6643,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC804\uD22C\uD558\uAE30"
+  m_text: ""
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
   m_sharedMaterial: {fileID: -8782340136750818621, guid: d75c0084f1082244f8979d2dffdc35fb, type: 2}
@@ -6764,6 +6756,41 @@ Transform:
   - {fileID: 1690680462}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2100000010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673677872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 254b9a60a6df4d04b42613815dadb40b, type: 3}
+  m_Name: ""
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizedSceneTexts
+  bindings:
+  - target: {fileID: 65307191}
+    key: ui.map.integrity
+  - target: {fileID: 115434125}
+    key: ui.common.unavailable
+  - target: {fileID: 127758109}
+    key: ui.placeholder.text
+  - target: {fileID: 247250063}
+    key: ui.map.integrity
+  - target: {fileID: 308854278}
+    key: ui.map.enter_battle
+  - target: {fileID: 777768697}
+    key: ui.placeholder.text
+  - target: {fileID: 916953546}
+    key: ui.map.data
+  - target: {fileID: 1033661622}
+    key: ui.map.enter_battle
+  - target: {fileID: 1262065506}
+    key: ui.common.unavailable
+  - target: {fileID: 1524360760}
+    key: ui.map.consistency
+  - target: {fileID: 2034708065}
+    key: ui.map.enter_battle
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

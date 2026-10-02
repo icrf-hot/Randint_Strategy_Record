@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using Randint.Data;
 
 public enum CardAttribute
 {
@@ -439,7 +440,7 @@ public class MiddleCardSelectionManager : CardSelectionManagerBase
             thirdCard != null;
 
         if (accessText != null)
-            accessText.text = IsAccess ? "승인됨" : "승인 대기중";
+            accessText.text = GameData.Text(IsAccess ? "ui.battle.access.approved" : "ui.battle.access.waiting");
 
         BattleAccessManager.Instance.Refresh();
     }

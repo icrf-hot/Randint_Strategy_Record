@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "dorothy",
+      "nameKey": "operator.dorothy.name",
+      "infoKey": "operator.dorothy.info",
+      "position": "Middle",
+      "classId": "Caster",
+      "requiresEnemyTarget": true,
+      "skillIds": [],
+      "maxHP": 1502,
+      "attack": 581,
+      "defense": 172,
+      "artsResistance": 0,
+      "attackSpeed": 30
+    },
+    {
+      "id": "ptilopsis",
+      "nameKey": "operator.ptilopsis.name",
+      "infoKey": "operator.ptilopsis.info",
+      "position": "Back",
+      "classId": "Healer",
+      "requiresEnemyTarget": false,
+      "skillIds": [],
+      "maxHP": 1610,
+      "attack": 335,
+      "defense": 150,
+      "artsResistance": 0,
+      "attackSpeed": 10
+    },
+    {
+      "id": "saria",
+      "nameKey": "operator.saria.name",
+      "infoKey": "operator.saria.info",
+      "position": "Front",
+      "classId": "Defender",
+      "requiresEnemyTarget": true,
+      "skillIds": [],
+      "maxHP": 3150,
+      "attack": 485,
+      "defense": 595,
+      "artsResistance": 10,
+      "attackSpeed": 20
+    }
+  ]
+}

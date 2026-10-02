@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using TMPro;
 using UnityEngine;
+using Randint.Data;
 using UnityEngine.SceneManagement;
 
 public class BattleToMapSceneLoader : MonoBehaviour
@@ -20,7 +21,8 @@ public class BattleToMapSceneLoader : MonoBehaviour
     private TMP_Text loadingText;
 
     [SerializeField]
-    private string loadingMessage = "작전 기록 정리 중";
+    [GameTextKey] private string loadingMessageKey;
+    private string loadingMessage => GameData.Text(loadingMessageKey);
 
     [Header("Timing")]
     [Min(0f)]

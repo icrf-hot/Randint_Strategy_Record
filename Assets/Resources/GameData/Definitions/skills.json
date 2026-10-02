@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "dorothy_skill_1",
+      "nameKey": "skill.dorothy_skill_1.name",
+      "descriptionKey": "skill.dorothy_skill_1.description",
+      "maxSP": 2,
+      "chargeType": "Natural",
+      "chargeAmount": 1
+    }
+  ]
+}

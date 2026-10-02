@@ -1,24 +1,28 @@
 using UnityEngine;
+using Randint.Data;
 
 public class OperatorSkill
 {
-    private SkillData data;
+    private readonly SkillDefinition data;
 
     private int currentSP;
 
-    public SkillData Data => data;
+    public SkillDefinition Data => data;
 
     public int CurrentSP => currentSP;
-    public int MaxSP => data.MaxSP;
+    public int MaxSP => data.maxSP;
 
     public bool IsReady =>
-        currentSP >= data.MaxSP;
+        currentSP >= data.maxSP;
 
-    public OperatorSkill(SkillData skillData)
+    // ê¸°ë³¸ ì •ì˜ëŠ” JSONì—ì„œ ì¡°íšŒí•˜ê³  í˜„ì¬ SPëŠ” ì´ ì „íˆ¬ ì¸ìŠ¤í„´ìŠ¤ì—ë§Œ ì €ì¥í•©ë‹ˆë‹¤.
+    public OperatorSkill(string skillId)
     {
-        data = skillData;
+        data = GameData.Catalog.Skill(skillId);
         currentSP = 0;
     }
+
+    public OperatorSkill(SkillData skillData) : this(skillData.DataId) { }
 
     public void AddSP(int amount)
     {
@@ -28,35 +32,35 @@ public class OperatorSkill
         currentSP += amount;
 
         currentSP =
-            Mathf.Min(currentSP, data.MaxSP);
+            Mathf.Min(currentSP, data.maxSP);
     }
 
-    // ÀÚ¿¬È¸º¹
+    // ìì—°íšŒë³µ
     public void OnNaturalRecovery(int attackCount)
     {
-        if (data.ChargeType != SkillChargeType.Natural)
+        if (data.chargeType != "Natural")
             return;
 
         AddSP(
-            attackCount * data.ChargeAmount);
+            attackCount * data.chargeAmount);
     }
 
-    // °ø°İÈ¸º¹
+    // ê³µê²©íšŒë³µ
     public void OnAttack()
     {
-        if (data.ChargeType != SkillChargeType.Attack)
+        if (data.chargeType != "Attack")
             return;
 
-        AddSP(data.ChargeAmount);
+        AddSP(data.chargeAmount);
     }
 
-    // ÇÇ°İÈ¸º¹
+    // í”¼ê²©íšŒë³µ
     public void OnDamageTaken()
     {
-        if (data.ChargeType != SkillChargeType.DamageTaken)
+        if (data.chargeType != "DamageTaken")
             return;
 
-        AddSP(data.ChargeAmount);
+        AddSP(data.chargeAmount);
     }
 
     public void ResetSP()
@@ -70,9 +74,9 @@ public class OperatorSkill
             return;
 
         Debug.Log(
-            $"{owner.name} : {data.SkillName} ¹ßµ¿");
+            $"{owner.name} : {GameData.Text(data.nameKey)} ë°œë™");
 
-        // ½ÇÁ¦ SkillEffect´Â ³ªÁß¿¡ ±¸Çö
+        // ì‹¤ì œ SkillEffectëŠ” ë‚˜ì¤‘ì— êµ¬í˜„
 
         ResetSP();
     }

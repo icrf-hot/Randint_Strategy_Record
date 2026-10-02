@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using Randint.Data;
 
 public class BackCardSelectionManager : CardSelectionManagerBase
 {
@@ -36,32 +37,32 @@ public class BackCardSelectionManager : CardSelectionManagerBase
         if (card == null)
             return;
 
-        // Á¶Ä¿ »ç¿ë ºÒ°¡
+        // ì¡°ì»¤ ì‚¬ìš© ë¶ˆê°€
         if (card.IsSpecialCard)
             return;
 
-        // Ã¹ ¹øÂ° Ä«µå ´Ù½Ã Å¬¸¯
+        // ì²« ë²ˆì§¸ ì¹´ë“œ ë‹¤ì‹œ í´ë¦­
         if (card == firstCard)
         {
             ClearFirstCard();
             return;
         }
 
-        // µÎ ¹øÂ° Ä«µå ´Ù½Ã Å¬¸¯
+        // ë‘ ë²ˆì§¸ ì¹´ë“œ ë‹¤ì‹œ í´ë¦­
         if (card == secondCard)
         {
             ClearSecondCard();
             return;
         }
 
-        // Ã¹ ¹øÂ° ½½·Ô
+        // ì²« ë²ˆì§¸ ìŠ¬ë¡¯
         if (firstCard == null)
         {
             SetFirstCard(card);
             return;
         }
 
-        // µÎ ¹øÂ° ½½·Ô
+        // ë‘ ë²ˆì§¸ ìŠ¬ë¡¯
         if (secondCard == null)
         {
             SetSecondCard(card);
@@ -137,7 +138,7 @@ public class BackCardSelectionManager : CardSelectionManagerBase
             secondCard != null;
 
         if (accessText != null)
-            accessText.text = IsAccess ? "½ÂÀÎµÊ" : "½ÂÀÎ ´ë±âÁß";
+            accessText.text = GameData.Text(IsAccess ? "ui.battle.access.approved" : "ui.battle.access.waiting");
 
         BattleAccessManager.Instance.Refresh();
     }

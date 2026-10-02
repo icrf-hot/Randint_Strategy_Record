@@ -1,0 +1,6 @@
+{
+  "name": "Randint.GameData.Tests",
+  "references": ["Randint.GameData"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"]
+}

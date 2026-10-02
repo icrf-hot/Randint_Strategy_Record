@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "TODO LIST/TODO LIST.md",
+                "file": "TODO LIST/코드 TODO LIST.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "TODO LIST"
+              "title": "코드 TODO LIST"
             }
           }
         ]
@@ -188,10 +188,12 @@
   },
   "active": "436cbd4e987b4e8e",
   "lastOpenFiles": [
+    "TODO LIST/기획 TODO LIST.md",
+    "TODO LIST/코드 TODO LIST.md",
+    "TODO LIST/TODO LIST.md",
     "로직트리/세부 로직트리.canvas",
     "AI 주의사항.md",
     "랜드인트 작전기록 대문.md",
-    "TODO LIST/TODO LIST.md",
     "캐릭터/적/Enemy MakeShift.md",
     "캐릭터/직군/직군 인덱스.md",
     "캐릭터/캐릭터 인덱스.md",
@@ -217,7 +219,6 @@
     "02 데이터",
     "01 시스템",
     "00 프로젝트",
-    "2026-09-22.md",
     "로직트리"
   ]
 }

@@ -1,112 +1,25 @@
+using System;
+using Randint.Data;
 using UnityEngine;
 
-[CreateAssetMenu(
-    fileName = "NewOperatorData",
-    menuName = "Game/Operator Data")]
+[CreateAssetMenu(fileName = "NewOperatorData", menuName = "Game/Operator Data")]
 public class OperatorData : ScriptableObject
 {
-    [Header("±âº» Á¤º¸")]
-    [SerializeField] private string operatorName;
+    [Header("JSON Definition")]
+    [SerializeField, GameDefinitionId("operator")] private string dataId;
 
-    [TextArea]
-    [SerializeField] private string info;
-
-    [Header("¹èÄ¡ À§Ä¡")]
-    [SerializeField]
-    private OperatorPosition position =
-        OperatorPosition.Front;
-
-    [Header("¼¼ºÎ Á÷±º")]
-    [SerializeField]
-    private OperatorClass detailedClass =
-        OperatorClass.Defender;
-
-    [Header("Å¸°ÙÆÃ")]
-    [Tooltip("ÀüÅõ ½ÃÀÛ Àü¿¡ Àû ¸ñÇ¥¸¦ ¼±ÅÃÇØ¾ß ÇÏ´ÂÁö °áÁ¤ÇÕ´Ï´Ù.")]
-    [SerializeField]
-    private bool requiresEnemyTarget;
-
-    [Header("±âº» ´É·ÂÄ¡")]
-    [SerializeField] private int maxHP = 100;
-    [SerializeField] private int attack = 20;
-    [SerializeField] private int defense = 10;
-    [SerializeField] private int artsResistance = 15;
-    [SerializeField] private float attackSpeed = 1f;
-
-    [Header("½ºÅ³")]
-    [SerializeField] private SkillData[] skills;
-
-    public string OperatorName => operatorName;
-    public string Info => info;
-
-    public OperatorPosition Position => position;
-    public OperatorClass DetailedClass => detailedClass;
-    public bool RequiresEnemyTarget => requiresEnemyTarget;
-
-    public int MaxHP => maxHP;
-    public int Attack => attack;
-    public int Defense => defense;
-    public int ArtsResistance => artsResistance;
-    public float AttackSpeed => attackSpeed;
-
-    public SkillData[] Skills => skills;
-
-    private void OnValidate()
-    {
-        if (IsClassAllowed(position, detailedClass))
-            return;
-
-        detailedClass =
-            GetDefaultClass(position);
-
-        Debug.LogWarning(
-            $"{name}: {position} À§Ä¡¿¡¼­ »ç¿ëÇÒ ¼ö ¾ø´Â " +
-            $"¼¼ºÎ Á÷±ºÀÌ¹Ç·Î {detailedClass}(À¸)·Î º¯°æÇß½À´Ï´Ù.",
-            this);
-    }
-
-    private bool IsClassAllowed(
-        OperatorPosition targetPosition,
-        OperatorClass targetClass)
-    {
-        switch (targetPosition)
-        {
-            case OperatorPosition.Front:
-                return
-                    targetClass == OperatorClass.Defender ||
-                    targetClass == OperatorClass.Guard ||
-                    targetClass == OperatorClass.Vanguard;
-
-            case OperatorPosition.Middle:
-                return
-                    targetClass == OperatorClass.Caster ||
-                    targetClass == OperatorClass.Sniper;
-
-            case OperatorPosition.Back:
-                return
-                    targetClass == OperatorClass.AttackHealer ||
-                    targetClass == OperatorClass.Healer ||
-                    targetClass == OperatorClass.Supporter;
-        }
-
-        return false;
-    }
-
-    private OperatorClass GetDefaultClass(
-        OperatorPosition targetPosition)
-    {
-        switch (targetPosition)
-        {
-            case OperatorPosition.Front:
-                return OperatorClass.Defender;
-
-            case OperatorPosition.Middle:
-                return OperatorClass.Caster;
-
-            case OperatorPosition.Back:
-                return OperatorClass.Healer;
-        }
-
-        return OperatorClass.Defender;
-    }
+    // ê¸°ì¡´ í”„ë¦¬íŒ¹ì€ ì´ Assetì˜ IDë¥¼ ìœ ì§€í•˜ë©°, ì‹¤ì œ ì •ì˜ëŠ” JSONì—ì„œ ì¡°íšŒí•©ë‹ˆë‹¤.
+    public string DataId => dataId;
+    private OperatorDefinition Definition => GameData.Catalog.Operator(dataId);
+    public string OperatorName => GameData.Text(Definition.nameKey);
+    public string Info => GameData.Text(Definition.infoKey);
+    public OperatorPosition Position => (OperatorPosition)Enum.Parse(typeof(OperatorPosition), Definition.position);
+    public OperatorClass DetailedClass => (OperatorClass)Enum.Parse(typeof(OperatorClass), Definition.classId);
+    public bool RequiresEnemyTarget => Definition.requiresEnemyTarget;
+    public int MaxHP => Definition.maxHP;
+    public int Attack => Definition.attack;
+    public int Defense => Definition.defense;
+    public int ArtsResistance => Definition.artsResistance;
+    public float AttackSpeed => Definition.attackSpeed;
+    public string[] SkillIds => Definition.skillIds;
 }

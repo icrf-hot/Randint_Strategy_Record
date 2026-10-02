@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "locale": "ko-KR",
+  "requiredTextKeys": [
+    "ui.card.special_face",
+    "ui.battle.access.approved",
+    "ui.battle.access.waiting"
+  ],
+  "files": [
+    {
+      "kind": "text",
+      "path": "GameData/Localization/ko-KR/ui"
+    },
+    {
+      "kind": "text",
+      "path": "GameData/Localization/ko-KR/system"
+    },
+    {
+      "kind": "text",
+      "path": "GameData/Localization/ko-KR/maps"
+    },
+    {
+      "kind": "text",
+      "path": "GameData/Localization/ko-KR/characters"
+    },
+    {
+      "kind": "text",
+      "path": "GameData/Localization/ko-KR/skills"
+    },
+    {
+      "kind": "text",
+      "path": "GameData/Localization/ko-KR/Dialogue/battle_result"
+    },
+    {
+      "kind": "operator",
+      "path": "GameData/Definitions/operators"
+    },
+    {
+      "kind": "enemy",
+      "path": "GameData/Definitions/enemies"
+    },
+    {
+      "kind": "skill",
+      "path": "GameData/Definitions/skills"
+    }
+  ]
+}
