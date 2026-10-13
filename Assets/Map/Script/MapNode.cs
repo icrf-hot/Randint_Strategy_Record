@@ -2,16 +2,16 @@
 
 public enum MapNodeType
 {
-    Start,
-    Battle,
-    EliteBattle,
-    Event,
-    Shop,
-    Rest,
-    FirstBoss,
-    SecondBoss,
-    ThridBoss,
-    Boss
+    Start = 0,
+    Battle = 1,
+    EliteBattle = 2,
+    Event = 3,
+    Shop = 4,
+    Rest = 5,
+    FirstBoss = 6,
+    SecondBoss = 7,
+    ThirdBoss = 8,
+    Boss = 9
 }
 
 public enum MapNodeVisualState

@@ -76,7 +76,7 @@ updated: 2026-10-13
 - [ ] 🟡 반복 `FindObjectsByType` 호출의 캐시 필요성 검토
 - [ ] 🟡 코드·주석 파일 인코딩 UTF-8 통일
 - [ ] 🔴 향후 Cache N개 중복 및 특정 부품 조합 설계 — 현재 중복 구매는 금지
-- [ ] 🟡 `ThridBoss`를 `ThirdBoss`로 정정하고 직렬화 영향 확인
+- [x] 🟢 `ThridBoss` → `ThirdBoss` 정정 — enum 0~9 유지, 씬 8개 노드와 저장 값 8 검증 통과
 
 ## 완료 기록
 
