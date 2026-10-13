@@ -82,6 +82,12 @@ public class MiddleCardSelectionManager : CardSelectionManagerBase
 
     }
 
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
+    }
+
     public override void SelectCard(Card card)
     {
         if (card == null)

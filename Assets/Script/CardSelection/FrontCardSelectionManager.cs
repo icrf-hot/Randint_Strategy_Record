@@ -45,6 +45,12 @@ public class FrontCardSelectionManager : CardSelectionManagerBase
         Instance = this;
     }
 
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
+    }
+
     // =========================================================
     // Action Value
     // =========================================================
