@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b83e714e7a5a43b48843a5d28c2f16f1, type: 3}
+  m_Name: Cache_AttackSpeed
+  m_EditorClassIdentifier: Assembly-CSharp::CacheData
+  cacheId: cache_attack_speed
+  displayName: "\uacf5\uaca9 \uc18d\ub3c4 Cache"
+  description: "\uc624\ud37c\ub808\uc774\ud130 \ub2a5\ub825\uce58\ub97c \uace0\uc815 \uc218\uce58\ub85c \uac15\ud654\ud558\ub294 \uc784\uc2dc Cache. \uac00\uaca9\uacfc \uac15\ud654\ub7c9\uc740 \uae30\ub2a5 \uac1c\ubc1c\uc6a9\uc774\uba70 \ucd5c\uc885 \ubc38\ub7f0\uc2a4\uac00 \uc544\ub2c8\ub2e4."
+  icon: {fileID: 0}
+  packetPrice: 10
+  maxHPBonus: 0
+  attackBonus: 0
+  defenseBonus: 0
+  artsResistanceBonus: 0
+  attackSpeedBonus: 1
