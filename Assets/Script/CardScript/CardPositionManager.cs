@@ -15,7 +15,7 @@ public class CardPositionManager : MonoBehaviour
     {
         Instance = this;
 
-        // Ã³À½¿¡´Â MiddleÀ» »ç¿ë
+        // ì²˜ìŒì—ëŠ” Middleì„ ì‚¬ìš©
         CurrentSelectionManager = middleManager;
     }
 

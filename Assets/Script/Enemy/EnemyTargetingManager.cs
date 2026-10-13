@@ -11,7 +11,7 @@ public class EnemyTargetingManager : MonoBehaviour
         availableTargets =
         new List<EnemyTargetable>();
 
-    // ¿ÀÆÛ·¹ÀÌÅÍº° ¼±ÅÃµÈ Å¸°Ù
+    // ì˜¤í¼ë ˆì´í„°ë³„ ì„ íƒëœ íƒ€ê²Ÿ
     private readonly Dictionary<
         Operator,
         EnemyTargetable>
@@ -44,7 +44,7 @@ public class EnemyTargetingManager : MonoBehaviour
     }
 
     // =========================================================
-    // Å¸°ÙÆÃ ½ÃÀÛ
+    // íƒ€ê²ŸíŒ… ì‹œì‘
     // =========================================================
 
     public void BeginTargeting(Operator op)
@@ -56,7 +56,7 @@ public class EnemyTargetingManager : MonoBehaviour
 
         ClearTargets();
 
-        // Å¸±êÀÌ ÇÊ¿ä ¾ø´Â Ä³¸¯ÅÍ´Â Àû ¼±ÅÃ UI¸¦ ¿­Áö ¾Ê´Â´Ù.
+        // íƒ€ê¹ƒì´ í•„ìš” ì—†ëŠ” ìºë¦­í„°ëŠ” ì  ì„ íƒ UIë¥¼ ì—´ì§€ ì•ŠëŠ”ë‹¤.
         if (!op.RequiresEnemyTarget)
         {
             selectedTargets.Remove(op);
@@ -79,7 +79,7 @@ public class EnemyTargetingManager : MonoBehaviour
     }
 
     // =========================================================
-    // Å¸°ÙÆÃ Á¾·á
+    // íƒ€ê²ŸíŒ… ì¢…ë£Œ
     // =========================================================
 
     public void EndTargeting()
@@ -90,7 +90,7 @@ public class EnemyTargetingManager : MonoBehaviour
     }
 
     // =========================================================
-    // Å¸°Ù °Ë»ö
+    // íƒ€ê²Ÿ ê²€ìƒ‰
     // =========================================================
 
     private void FindTargets()
@@ -106,14 +106,14 @@ public class EnemyTargetingManager : MonoBehaviour
             if (enemy == null)
                 continue;
 
-            // Å¸°Ù ÀÚÃ¼°¡ ºÒ°¡´ÉÇÑ Àû
+            // íƒ€ê²Ÿ ìì²´ê°€ ë¶ˆê°€ëŠ¥í•œ ì 
             if (!enemy.CanBeTargeted)
             {
                 enemy.ShowUntargetable();
                 continue;
             }
 
-            // ÇöÀç ¿ÀÆÛ·¹ÀÌÅÍ°¡ °ø°İÇÒ ¼ö ¾ø´Â Àû
+            // í˜„ì¬ ì˜¤í¼ë ˆì´í„°ê°€ ê³µê²©í•  ìˆ˜ ì—†ëŠ” ì 
             if (!CanTargetEnemy(
                 currentOperator,
                 enemy))
@@ -122,7 +122,7 @@ public class EnemyTargetingManager : MonoBehaviour
                 continue;
             }
 
-            // ÇöÀç ¿ÀÆÛ·¹ÀÌÅÍ°¡ °ø°İÇÒ ¼ö ÀÖ´Â Àû
+            // í˜„ì¬ ì˜¤í¼ë ˆì´í„°ê°€ ê³µê²©í•  ìˆ˜ ìˆëŠ” ì 
             availableTargets.Add(enemy);
 
             enemy.ShowClickable();
@@ -130,7 +130,7 @@ public class EnemyTargetingManager : MonoBehaviour
     }
 
     // =========================================================
-    // Å¸°Ù ¼±ÅÃ
+    // íƒ€ê²Ÿ ì„ íƒ
     // =========================================================
 
     public void SelectTarget(EnemyTargetable target)
@@ -156,7 +156,7 @@ public class EnemyTargetingManager : MonoBehaviour
             previousTarget.ShowClickable();
         }
 
-        // °°Àº ÀûÀ» ´Ù½Ã Å¬¸¯ÇÏ¸é ¼±ÅÃ ÇØÁ¦
+        // ê°™ì€ ì ì„ ë‹¤ì‹œ í´ë¦­í•˜ë©´ ì„ íƒ í•´ì œ
         if (previousTarget == target)
         {
             selectedTargets.Remove(
@@ -165,7 +165,7 @@ public class EnemyTargetingManager : MonoBehaviour
             target.ShowClickable();
 
             Debug.Log(
-                $"[Å¸±ê ÇØÁ¦] {currentOperator.gameObject.name}");
+                $"[íƒ€ê¹ƒ í•´ì œ] {currentOperator.gameObject.name}");
 
             if (BattleAccessManager.Instance != null)
             {
@@ -181,7 +181,7 @@ public class EnemyTargetingManager : MonoBehaviour
         target.ShowSelected();
 
         Debug.Log(
-            $"[Å¸±ê ¼±ÅÃ] {currentOperator.gameObject.name} ¡æ " +
+            $"[íƒ€ê¹ƒ ì„ íƒ] {currentOperator.gameObject.name} â†’ " +
             $"{target.gameObject.name}");
 
         if (BattleAccessManager.Instance != null)
@@ -192,7 +192,7 @@ public class EnemyTargetingManager : MonoBehaviour
 
 
     // =========================================================
-    // Å¸°Ù ¼±ÅÃÀÏ²¬?
+    // íƒ€ê²Ÿ ì„ íƒì¼ê»„?
     // =========================================================
 
     public EnemyTargetable GetSelectedTarget(Operator op)
@@ -230,7 +230,7 @@ public class EnemyTargetingManager : MonoBehaviour
         if (op == null)
             return false;
 
-        // Àû Å¸±êÀÌ ÇÊ¿ä ¾ø´Â Ä³¸¯ÅÍ´Â ÀÚµ¿ Åë°ú
+        // ì  íƒ€ê¹ƒì´ í•„ìš” ì—†ëŠ” ìºë¦­í„°ëŠ” ìë™ í†µê³¼
         if (!op.RequiresEnemyTarget)
             return true;
 
@@ -238,7 +238,7 @@ public class EnemyTargetingManager : MonoBehaviour
     }
 
     // =========================================================
-    // ±âÁ¸ Å¸°Ù º¹±¸
+    // ê¸°ì¡´ íƒ€ê²Ÿ ë³µêµ¬
     // =========================================================
 
     private void RestoreSelectedTarget()
@@ -249,8 +249,8 @@ public class EnemyTargetingManager : MonoBehaviour
         if (target == null)
             return;
 
-        // ÀûÀÌ ÀÌ¹Ì Á×¾ú°Å³ª
-        // ´õ ÀÌ»ó Å¸°Ù ºÒ°¡´ÉÇÑ °æ¿ì
+        // ì ì´ ì´ë¯¸ ì£½ì—ˆê±°ë‚˜
+        // ë” ì´ìƒ íƒ€ê²Ÿ ë¶ˆê°€ëŠ¥í•œ ê²½ìš°
         if (!availableTargets.Contains(target))
         {
             selectedTargets.Remove(
@@ -263,7 +263,7 @@ public class EnemyTargetingManager : MonoBehaviour
     }
 
     // =========================================================
-    // Å¸°Ù ÀüÃ¼ Á¦°Å
+    // íƒ€ê²Ÿ ì „ì²´ ì œê±°
     // =========================================================
 
     private void ClearTargets()
@@ -282,7 +282,7 @@ public class EnemyTargetingManager : MonoBehaviour
     }
 
     // =========================================================
-    // Àû Å¸°Ù °¡´É ¿©ºÎ
+    // ì  íƒ€ê²Ÿ ê°€ëŠ¥ ì—¬ë¶€
     // =========================================================
 
     private bool CanTargetEnemy(

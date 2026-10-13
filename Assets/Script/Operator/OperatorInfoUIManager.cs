@@ -107,10 +107,10 @@ public class OperatorInfoUIManager : MonoBehaviour, IOperatorInfoUI
     {
         Debug.Log(currentHandler.name);
 
-        // ³ªÁß¿¡
+        // ë‚˜ì¤‘ì—
         // HP
         // Attack
         // Portrait
-        // µîÀ» °»½Å
+        // ë“±ì„ ê°±ì‹ 
     }
 }

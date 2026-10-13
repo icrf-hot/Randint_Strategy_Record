@@ -31,7 +31,7 @@ public class OperatorSkill
             Mathf.Min(currentSP, data.MaxSP);
     }
 
-    // ÀÚ¿¬È¸º¹
+    // ìì—°íšŒë³µ
     public void OnNaturalRecovery(int attackCount)
     {
         if (data.ChargeType != SkillChargeType.Natural)
@@ -41,7 +41,7 @@ public class OperatorSkill
             attackCount * data.ChargeAmount);
     }
 
-    // °ø°İÈ¸º¹
+    // ê³µê²©íšŒë³µ
     public void OnAttack()
     {
         if (data.ChargeType != SkillChargeType.Attack)
@@ -50,7 +50,7 @@ public class OperatorSkill
         AddSP(data.ChargeAmount);
     }
 
-    // ÇÇ°İÈ¸º¹
+    // í”¼ê²©íšŒë³µ
     public void OnDamageTaken()
     {
         if (data.ChargeType != SkillChargeType.DamageTaken)
@@ -70,9 +70,9 @@ public class OperatorSkill
             return;
 
         Debug.Log(
-            $"{owner.name} : {data.SkillName} ¹ßµ¿");
+            $"{owner.name} : {data.SkillName} ë°œë™");
 
-        // ½ÇÁ¦ SkillEffect´Â ³ªÁß¿¡ ±¸Çö
+        // ì‹¤ì œ SkillEffectëŠ” ë‚˜ì¤‘ì— êµ¬í˜„
 
         ResetSP();
     }

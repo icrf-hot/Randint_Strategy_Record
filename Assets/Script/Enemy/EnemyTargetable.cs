@@ -18,17 +18,17 @@ public class EnemyTargetable : MonoBehaviour
     [SerializeField]
     private Color normalColor = Color.white;
 
-    // ¼±ÅÃ °¡´ÉÇÏÁö¸¸ ¾ÆÁ÷ ¼±ÅÃµÇÁö ¾ÊÀ½
+    // ì„ íƒ ê°€ëŠ¥í•˜ì§€ë§Œ ì•„ì§ ì„ íƒë˜ì§€ ì•ŠìŒ
     [SerializeField]
     private Color targetableColor =
         new Color(0.55f, 0.55f, 0.55f, 1f);
 
-    // ¼±ÅÃ ºÒ°¡´É
+    // ì„ íƒ ë¶ˆê°€ëŠ¥
     [SerializeField]
     private Color untargetableColor =
         new Color(0.25f, 0.25f, 0.25f, 1f);
 
-    // ¼±ÅÃµÈ Àû
+    // ì„ íƒëœ ì 
     [SerializeField]
     private Color selectedColor =
         Color.white;
@@ -69,7 +69,7 @@ public class EnemyTargetable : MonoBehaviour
 
 
     // =========================================================
-    // SpawnPoint À§Ä¡
+    // SpawnPoint ìœ„ì¹˜
     // =========================================================
 
     public void SetPosition(
@@ -80,7 +80,7 @@ public class EnemyTargetable : MonoBehaviour
 
 
     // =========================================================
-    // Å¸°Ù °¡´É ¿©ºÎ
+    // íƒ€ê²Ÿ ê°€ëŠ¥ ì—¬ë¶€
     // =========================================================
 
     public bool CanBeTargetedBy(Operator op)
@@ -96,7 +96,7 @@ public class EnemyTargetable : MonoBehaviour
 
 
     // =========================================================
-    // ¼±ÅÃ °¡´ÉÇÑ Àû
+    // ì„ íƒ ê°€ëŠ¥í•œ ì 
     // =========================================================
 
     public void ShowClickable()
@@ -113,7 +113,7 @@ public class EnemyTargetable : MonoBehaviour
 
 
     // =========================================================
-    // ¼±ÅÃ ºÒ°¡´ÉÇÑ Àû
+    // ì„ íƒ ë¶ˆê°€ëŠ¥í•œ ì 
     // =========================================================
 
     public void ShowUntargetable()
@@ -130,7 +130,7 @@ public class EnemyTargetable : MonoBehaviour
 
 
     // =========================================================
-    // ¼±ÅÃµÈ Àû
+    // ì„ íƒëœ ì 
     // =========================================================
 
     public void ShowSelected()
@@ -147,7 +147,7 @@ public class EnemyTargetable : MonoBehaviour
 
 
     // =========================================================
-    // ¿ø·¡ »óÅÂ
+    // ì›ë˜ ìƒíƒœ
     // =========================================================
 
     public void SetNormalColor()
@@ -158,7 +158,7 @@ public class EnemyTargetable : MonoBehaviour
 
 
     // =========================================================
-    // Å¬¸¯ °¡´É Indicator Á¦°Å
+    // í´ë¦­ ê°€ëŠ¥ Indicator ì œê±°
     // =========================================================
 
     public void HideClickable()
@@ -169,7 +169,7 @@ public class EnemyTargetable : MonoBehaviour
 
 
     // =========================================================
-    // ¼±ÅÃ Indicator Á¦°Å
+    // ì„ íƒ Indicator ì œê±°
     // =========================================================
 
     public void HideSelected()
@@ -180,7 +180,7 @@ public class EnemyTargetable : MonoBehaviour
 
 
     // =========================================================
-    // ÀüÃ¼ ÃÊ±âÈ­
+    // ì „ì²´ ì´ˆê¸°í™”
     // =========================================================
 
     public void HideAllIndicators()

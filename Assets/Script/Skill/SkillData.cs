@@ -5,7 +5,7 @@ using UnityEngine;
     menuName = "Game/Skill Data")]
 public class SkillData : ScriptableObject
 {
-    [Header("±âº» Á¤º¸")]
+    [Header("ê¸°ë³¸ ì •ë³´")]
     [SerializeField] private string skillName;
 
     [TextArea(3, 10)]

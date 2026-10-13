@@ -3,8 +3,8 @@ using UnityEngine;
 
 public enum HealPriorityType
 {
-    SelfPriority,       // ÀÚ½Å ¿ì¼±
-    UniversalPriority   // ÀüÃ¼ HP°¡ ³·Àº ¾Æ±º ¿ì¼±
+    SelfPriority,       // ìì‹  ìš°ì„ 
+    UniversalPriority   // ì „ì²´ HPê°€ ë‚®ì€ ì•„êµ° ìš°ì„ 
 }
 
 public class AllyTargetingManager : MonoBehaviour
@@ -61,13 +61,13 @@ public class AllyTargetingManager : MonoBehaviour
             candidates.Add(op);
         }
 
-        // HP°¡ ³·Àº ¼ø
+        // HPê°€ ë‚®ì€ ìˆœ
         candidates.Sort(
             (a, b) =>
                 a.HPPercent.CompareTo(b.HPPercent));
 
         // =================================================
-        // ÀÚ½Å ¿ì¼±
+        // ìì‹  ìš°ì„ 
         // =================================================
 
         if (healPriority ==
@@ -81,7 +81,7 @@ public class AllyTargetingManager : MonoBehaviour
         }
 
         // =================================================
-        // ³ª¸ÓÁö Èú ´ë»ó
+        // ë‚˜ë¨¸ì§€ í ëŒ€ìƒ
         // =================================================
 
         foreach (Operator target in candidates)
@@ -102,13 +102,13 @@ public class AllyTargetingManager : MonoBehaviour
         List<Operator> targets)
     {
         Debug.Log(
-            $"========== Èú ´ë»ó ==========\n" +
-            $"Èú·¯ : {healer.name}\n" +
-            $"ÃÖ´ë Èú ÀÎ¿ø : {maxHealTargets}");
+            $"========== í ëŒ€ìƒ ==========\n" +
+            $"íëŸ¬ : {healer.name}\n" +
+            $"ìµœëŒ€ í ì¸ì› : {maxHealTargets}");
 
         if (targets.Count == 0)
         {
-            Debug.Log("Èú ´ë»ó ¾øÀ½");
+            Debug.Log("í ëŒ€ìƒ ì—†ìŒ");
             return;
         }
 
@@ -117,7 +117,7 @@ public class AllyTargetingManager : MonoBehaviour
             Operator target = targets[i];
 
             Debug.Log(
-                $"{i + 1}¼øÀ§ : " +
+                $"{i + 1}ìˆœìœ„ : " +
                 $"{target.name} " +
                 $"HP {target.CurrentHP}/{target.MaxHP} " +
                 $"({target.HPPercent * 100f:F1}%)");

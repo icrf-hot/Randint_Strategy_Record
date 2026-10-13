@@ -38,15 +38,15 @@ public class OperatorInfoWorldSpaceUIManager : MonoBehaviour, IOperatorInfoUI
     [SerializeField]
     private float distance = 5f;
 
-    // È­¸é ¹Û
+    // í™”ë©´ ë°–
     [SerializeField]
     private Vector2 hiddenViewport = new Vector2(-0.10f, 0.15f);
 
-    // ÃÖÁ¾ Ç¥½Ã À§Ä¡
+    // ìµœì¢… í‘œì‹œ ìœ„ì¹˜
     [SerializeField]
     private Vector2 visibleViewport = new Vector2(0.30f, 0.15f);
 
-    // ¿ÀÆÛ·¹ÀÌÅÍ º¯°æ ½Ã Àá½Ã µé¾î°¡´Â À§Ä¡
+    // ì˜¤í¼ë ˆì´í„° ë³€ê²½ ì‹œ ì ì‹œ ë“¤ì–´ê°€ëŠ” ìœ„ì¹˜
     [SerializeField]
     private Vector2 changeViewport = new Vector2(0.10f, 0.15f);
 
@@ -88,7 +88,7 @@ public class OperatorInfoWorldSpaceUIManager : MonoBehaviour, IOperatorInfoUI
     }
 
     // ============================================================
-    // UI Ç¥½Ã
+    // UI í‘œì‹œ
     // ============================================================
 
     public void Show(OperatorClickHandler handler)
@@ -108,7 +108,7 @@ public class OperatorInfoWorldSpaceUIManager : MonoBehaviour, IOperatorInfoUI
     }
 
     // ============================================================
-    // UI ¼û±è
+    // UI ìˆ¨ê¹€
     // ============================================================
 
     public void Hide()
@@ -123,7 +123,7 @@ public class OperatorInfoWorldSpaceUIManager : MonoBehaviour, IOperatorInfoUI
     }
 
     // ============================================================
-    // ´Ù¸¥ ¿ÀÆÛ·¹ÀÌÅÍ·Î º¯°æ
+    // ë‹¤ë¥¸ ì˜¤í¼ë ˆì´í„°ë¡œ ë³€ê²½
     // ============================================================
 
     public void ChangeOperator(OperatorClickHandler handler)
@@ -140,17 +140,17 @@ public class OperatorInfoWorldSpaceUIManager : MonoBehaviour, IOperatorInfoUI
     private IEnumerator ChangeRoutine(OperatorClickHandler handler)
     {
         // --------------------------------------------------------
-        // 1. ºü¸£°Ô ¾ÈÂÊÀ¸·Î ÀÌµ¿
+        // 1. ë¹ ë¥´ê²Œ ì•ˆìª½ìœ¼ë¡œ ì´ë™
         // --------------------------------------------------------
 
         currentMoveSpeed = fastMoveSpeed;
         state = UIState.Changing;
 
-        // Á¤º¸ ±³Ã¼ ½ÃÁ¡±îÁö ´ë±â
+        // ì •ë³´ êµì²´ ì‹œì ê¹Œì§€ ëŒ€ê¸°
         yield return new WaitForSecondsRealtime(changeHideTime);
 
         // --------------------------------------------------------
-        // 2. Á¤º¸ ±³Ã¼
+        // 2. ì •ë³´ êµì²´
         // --------------------------------------------------------
 
         currentHandler = handler;
@@ -158,7 +158,7 @@ public class OperatorInfoWorldSpaceUIManager : MonoBehaviour, IOperatorInfoUI
         RefreshUI();
 
         // --------------------------------------------------------
-        // 3. ´Ù½Ã µîÀå
+        // 3. ë‹¤ì‹œ ë“±ì¥
         // --------------------------------------------------------
 
         currentMoveSpeed = moveSpeed;
@@ -177,7 +177,7 @@ public class OperatorInfoWorldSpaceUIManager : MonoBehaviour, IOperatorInfoUI
     }
 
     // ============================================================
-    // Ä«¸Ş¶ó ±âÁØ World Position
+    // ì¹´ë©”ë¼ ê¸°ì¤€ World Position
     // ============================================================
 
     private Vector3 GetWorldPosition(Vector2 viewport)
@@ -193,7 +193,7 @@ public class OperatorInfoWorldSpaceUIManager : MonoBehaviour, IOperatorInfoUI
     }
 
     // ============================================================
-    // ¸Å ÇÁ·¹ÀÓ UI ÀÌµ¿
+    // ë§¤ í”„ë ˆì„ UI ì´ë™
     // ============================================================
 
     private void LateUpdate()
@@ -234,7 +234,7 @@ public class OperatorInfoWorldSpaceUIManager : MonoBehaviour, IOperatorInfoUI
         targetSprite.rotation =
             mainCamera.transform.rotation;
 
-        // Ç¥½Ã ¿Ï·á
+        // í‘œì‹œ ì™„ë£Œ
         if (state == UIState.Showing &&
             Vector3.Distance(
                 targetSprite.position,
@@ -244,7 +244,7 @@ public class OperatorInfoWorldSpaceUIManager : MonoBehaviour, IOperatorInfoUI
             state = UIState.Visible;
         }
 
-        // º¯°æ¿ë Áß°£ À§Ä¡ µµÂø
+        // ë³€ê²½ìš© ì¤‘ê°„ ìœ„ì¹˜ ë„ì°©
         if (state == UIState.Changing &&
             Vector3.Distance(
                 targetSprite.position,
@@ -253,7 +253,7 @@ public class OperatorInfoWorldSpaceUIManager : MonoBehaviour, IOperatorInfoUI
             targetSprite.position = targetPosition;
         }
 
-        // ¿ÏÀüÈ÷ ¼û±è
+        // ì™„ì „íˆ ìˆ¨ê¹€
         if (state == UIState.Hiding &&
             Vector3.Distance(
                 targetSprite.position,
@@ -265,7 +265,7 @@ public class OperatorInfoWorldSpaceUIManager : MonoBehaviour, IOperatorInfoUI
     }
 
     // ============================================================
-    // UI °»½Å
+    // UI ê°±ì‹ 
     // ============================================================
 
     private void RefreshUI()
@@ -284,14 +284,14 @@ public class OperatorInfoWorldSpaceUIManager : MonoBehaviour, IOperatorInfoUI
         if (data == null)
             return;
 
-        // ±âº» Á¤º¸
+        // ê¸°ë³¸ ì •ë³´
         if (operatorNameText != null)
             operatorNameText.text = data.OperatorName;
 
         if (operatorInfoText != null)
             operatorInfoText.text = data.Info;
 
-        // ½Ç½Ã°£ ½ºÅÈ
+        // ì‹¤ì‹œê°„ ìŠ¤íƒ¯
         if (hpText != null)
             hpText.text = $"{op.CurrentHP} / {op.MaxHP}";
 

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AttackCalculator : MonoBehaviour
 {
-    [Header("°ø½Ä ¸ÅÇÎ")]
+    [Header("ê³µì‹ ë§¤í•‘")]
     [SerializeField] private AttackFormulaSetting physicalFormula;
     [SerializeField] private AttackFormulaSetting artsFormula;
     [SerializeField] private AttackFormulaSetting burnFormula;
@@ -84,45 +84,45 @@ public class AttackCalculator : MonoBehaviour
         }
     }
 
-    private int Formula1(int secondNumber, int thirdNumber) //¹°¸® ÇÇÇØ
+    private int Formula1(int secondNumber, int thirdNumber) //ë¬¼ë¦¬ í”¼í•´
     {
-        int result = (secondNumber + thirdNumber) * 100; //¼öÄ¡ 2°³ÀÇ ÇÕ¿¡ °¡»êÄ¡(¿©±â¼­´Â 100)À» °öÇØ ¹İÈ¯ÇÔ
+        int result = (secondNumber + thirdNumber) * 100; //ìˆ˜ì¹˜ 2ê°œì˜ í•©ì— ê°€ì‚°ì¹˜(ì—¬ê¸°ì„œëŠ” 100)ì„ ê³±í•´ ë°˜í™˜í•¨
         return result;
     }
 
-    private int Formula2(int secondNumber, int thirdNumber) //ÀÏ¹İ ¾ÆÃ÷ ÇÇÇØ
+    private int Formula2(int secondNumber, int thirdNumber) //ì¼ë°˜ ì•„ì¸  í”¼í•´
     {
-        int result = (secondNumber + thirdNumber) * 80; //¼öÄ¡ 2°³ÀÇ ÇÕ¿¡ °¡»êÄ¡(¿©±â¼­´Â 80)À» °öÇØ ¹İÈ¯ÇÔ
+        int result = (secondNumber + thirdNumber) * 80; //ìˆ˜ì¹˜ 2ê°œì˜ í•©ì— ê°€ì‚°ì¹˜(ì—¬ê¸°ì„œëŠ” 80)ì„ ê³±í•´ ë°˜í™˜í•¨
         return result;
     }
 
-    private int Formula3(int secondNumber, int thirdNumber) //¼Ò°¢ ¾ÆÃ÷ ÇÇÇØ
+    private int Formula3(int secondNumber, int thirdNumber) //ì†Œê° ì•„ì¸  í”¼í•´
     {
-        int result = (secondNumber + thirdNumber) * 80; //¼öÄ¡ 2°³ÀÇ ÇÕ¿¡ °¡»êÄ¡(¿©±â¼­´Â 80)À» °öÇØ ¹İÈ¯ÇÔ
+        int result = (secondNumber + thirdNumber) * 80; //ìˆ˜ì¹˜ 2ê°œì˜ í•©ì— ê°€ì‚°ì¹˜(ì—¬ê¸°ì„œëŠ” 80)ì„ ê³±í•´ ë°˜í™˜í•¨
         return result;
     }
 
-    private int Formula4(int secondNumber, int thirdNumber) //½Å°æ ¾ÆÃ÷ ÇÇÇØ
+    private int Formula4(int secondNumber, int thirdNumber) //ì‹ ê²½ ì•„ì¸  í”¼í•´
     {
-        int result = (secondNumber + thirdNumber) * 80; //¼öÄ¡ 2°³ÀÇ ÇÕ¿¡ °¡»êÄ¡(¿©±â¼­´Â 80)À» °öÇØ ¹İÈ¯ÇÔ
+        int result = (secondNumber + thirdNumber) * 80; //ìˆ˜ì¹˜ 2ê°œì˜ í•©ì— ê°€ì‚°ì¹˜(ì—¬ê¸°ì„œëŠ” 80)ì„ ê³±í•´ ë°˜í™˜í•¨
         return result;
     }
 
-    private int Formula5(int secondNumber, int thirdNumber) //¼è¾à ¾ÆÃ÷ ÇÇÇØ
+    private int Formula5(int secondNumber, int thirdNumber) //ì‡ ì•½ ì•„ì¸  í”¼í•´
     {
-        int result = (secondNumber + thirdNumber) * 80; //¼öÄ¡ 2°³ÀÇ ÇÕ¿¡ °¡»êÄ¡(¿©±â¼­´Â 80)À» °öÇØ ¹İÈ¯ÇÔ
+        int result = (secondNumber + thirdNumber) * 80; //ìˆ˜ì¹˜ 2ê°œì˜ í•©ì— ê°€ì‚°ì¹˜(ì—¬ê¸°ì„œëŠ” 80)ì„ ê³±í•´ ë°˜í™˜í•¨
         return result;
     }
 
-    private int Formula6(int secondNumber, int thirdNumber) //Ä§½Ä ¾ÆÃ÷ ÇÇÇØ
+    private int Formula6(int secondNumber, int thirdNumber) //ì¹¨ì‹ ì•„ì¸  í”¼í•´
     {
-        int result = (secondNumber + thirdNumber) * 80; //¼öÄ¡ 2°³ÀÇ ÇÕ¿¡ °¡»êÄ¡(¿©±â¼­´Â 80)À» °öÇØ ¹İÈ¯ÇÔ
+        int result = (secondNumber + thirdNumber) * 80; //ìˆ˜ì¹˜ 2ê°œì˜ í•©ì— ê°€ì‚°ì¹˜(ì—¬ê¸°ì„œëŠ” 80)ì„ ê³±í•´ ë°˜í™˜í•¨
         return result;
     }
 
-    private int Formula7(int secondNumber, int thirdNumber) //Æ®·ç ÇÇÇØ
+    private int Formula7(int secondNumber, int thirdNumber) //íŠ¸ë£¨ í”¼í•´
     {
-        int result = (secondNumber + thirdNumber) * 80; //¼öÄ¡ 2°³ÀÇ ÇÕ¿¡ °¡»êÄ¡(¿©±â¼­´Â 80)À» °öÇØ ¹İÈ¯ÇÔ
+        int result = (secondNumber + thirdNumber) * 80; //ìˆ˜ì¹˜ 2ê°œì˜ í•©ì— ê°€ì‚°ì¹˜(ì—¬ê¸°ì„œëŠ” 80)ì„ ê³±í•´ ë°˜í™˜í•¨
         return result;
     }
 }

@@ -26,7 +26,7 @@ public class MapNodeRotation : MonoBehaviour
         {
             Debug.LogError(
                 "MapNodeRotation: " +
-                "MapOrbitCamera°¡ ÁöÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.",
+                "MapOrbitCameraê°€ ì§€ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.",
                 this
             );
 
@@ -59,7 +59,7 @@ public class MapNodeRotation : MonoBehaviour
 
 
         /*
-         * ¸¶¿ì½º ÀÌµ¿·® ¡æ ¸ñÇ¥ È¸Àü ¼Óµµ
+         * ë§ˆìš°ìŠ¤ ì´ë™ëŸ‰ â†’ ëª©í‘œ íšŒì „ ì†ë„
          */
         targetAngularVelocity =
             horizontal *
@@ -67,7 +67,7 @@ public class MapNodeRotation : MonoBehaviour
 
 
         /*
-         * ÃÖ°í È¸Àü ¼Óµµ Á¦ÇÑ
+         * ìµœê³  íšŒì „ ì†ë„ ì œí•œ
          */
         targetAngularVelocity =
             Mathf.Clamp(
@@ -81,7 +81,7 @@ public class MapNodeRotation : MonoBehaviour
     private void Update()
     {
         /*
-         * ¸ñÇ¥ ¼Óµµ¸¦ ÇâÇØ °¡¼Ó/°¨¼Ó
+         * ëª©í‘œ ì†ë„ë¥¼ í–¥í•´ ê°€ì†/ê°ì†
          */
         currentAngularVelocity =
             Mathf.MoveTowards(
@@ -93,7 +93,7 @@ public class MapNodeRotation : MonoBehaviour
 
 
         /*
-         * ¸¶¿ì½º¸¦ ¸ØÃß¸é ¼­¼­È÷ Á¤Áö
+         * ë§ˆìš°ìŠ¤ë¥¼ ë©ˆì¶”ë©´ ì„œì„œíˆ ì •ì§€
          */
         targetAngularVelocity =
             Mathf.MoveTowards(
@@ -105,7 +105,7 @@ public class MapNodeRotation : MonoBehaviour
 
 
         /*
-         * YÃà È¸Àü
+         * Yì¶• íšŒì „
          */
         transform.Rotate(
             0f,

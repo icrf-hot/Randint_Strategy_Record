@@ -5,35 +5,35 @@ using UnityEngine;
     menuName = "Game/Operator Data")]
 public class OperatorData : ScriptableObject
 {
-    [Header("±âº» Á¤º¸")]
+    [Header("ê¸°ë³¸ ì •ë³´")]
     [SerializeField] private string operatorName;
 
     [TextArea]
     [SerializeField] private string info;
 
-    [Header("¹èÄ¡ À§Ä¡")]
+    [Header("ë°°ì¹˜ ìœ„ì¹˜")]
     [SerializeField]
     private OperatorPosition position =
         OperatorPosition.Front;
 
-    [Header("¼¼ºÎ Á÷±º")]
+    [Header("ì„¸ë¶€ ì§êµ°")]
     [SerializeField]
     private OperatorClass detailedClass =
         OperatorClass.Defender;
 
-    [Header("Å¸°ÙÆÃ")]
-    [Tooltip("ÀüÅõ ½ÃÀÛ Àü¿¡ Àû ¸ñÇ¥¸¦ ¼±ÅÃÇØ¾ß ÇÏ´ÂÁö °áÁ¤ÇÕ´Ï´Ù.")]
+    [Header("íƒ€ê²ŸíŒ…")]
+    [Tooltip("ì „íˆ¬ ì‹œì‘ ì „ì— ì  ëª©í‘œë¥¼ ì„ íƒí•´ì•¼ í•˜ëŠ”ì§€ ê²°ì •í•©ë‹ˆë‹¤.")]
     [SerializeField]
     private bool requiresEnemyTarget;
 
-    [Header("±âº» ´É·ÂÄ¡")]
+    [Header("ê¸°ë³¸ ëŠ¥ë ¥ì¹˜")]
     [SerializeField] private int maxHP = 100;
     [SerializeField] private int attack = 20;
     [SerializeField] private int defense = 10;
     [SerializeField] private int artsResistance = 15;
     [SerializeField] private float attackSpeed = 1f;
 
-    [Header("½ºÅ³")]
+    [Header("ìŠ¤í‚¬")]
     [SerializeField] private SkillData[] skills;
 
     public string OperatorName => operatorName;
@@ -60,8 +60,8 @@ public class OperatorData : ScriptableObject
             GetDefaultClass(position);
 
         Debug.LogWarning(
-            $"{name}: {position} À§Ä¡¿¡¼­ »ç¿ëÇÒ ¼ö ¾ø´Â " +
-            $"¼¼ºÎ Á÷±ºÀÌ¹Ç·Î {detailedClass}(À¸)·Î º¯°æÇß½À´Ï´Ù.",
+            $"{name}: {position} ìœ„ì¹˜ì—ì„œ ì‚¬ìš©í•  ìˆ˜ ì—†ëŠ” " +
+            $"ì„¸ë¶€ ì§êµ°ì´ë¯€ë¡œ {detailedClass}(ìœ¼)ë¡œ ë³€ê²½í–ˆìŠµë‹ˆë‹¤.",
             this);
     }
 

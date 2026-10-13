@@ -6,7 +6,7 @@ public enum FrontActionType
     None,
     Attack,
     Defense
-    // ³ªÁß¿¡ È¸ÇÇ, ¹İ°İµµ Ãß°¡
+    // ë‚˜ì¤‘ì— íšŒí”¼, ë°˜ê²©ë„ ì¶”ê°€
 }
 
 public class FrontCardSelectionManager : CardSelectionManagerBase
@@ -107,11 +107,11 @@ public class FrontCardSelectionManager : CardSelectionManagerBase
             return;
         }
 
-        // Front´Â Á¶Ä¿ »ç¿ë ºÒ°¡
+        // FrontëŠ” ì¡°ì»¤ ì‚¬ìš© ë¶ˆê°€
         if (card.IsSpecialCard)
             return;
 
-        // °°Àº Ä«µå ´Ù½Ã Å¬¸¯
+        // ê°™ì€ ì¹´ë“œ ë‹¤ì‹œ í´ë¦­
         if (selectedCard == card)
         {
             selectedCard.SetSelected(false, null);
@@ -127,11 +127,11 @@ public class FrontCardSelectionManager : CardSelectionManagerBase
             return;
         }
 
-        // ±âÁ¸ Ä«µå ¼±ÅÃ ÇØÁ¦
+        // ê¸°ì¡´ ì¹´ë“œ ì„ íƒ í•´ì œ
         if (selectedCard != null)
             selectedCard.SetSelected(false, null);
 
-        // »õ·Î¿î Ä«µå ¼±ÅÃ
+        // ìƒˆë¡œìš´ ì¹´ë“œ ì„ íƒ
         selectedCard = card;
 
         selectedCard.SetSelected(
@@ -190,8 +190,8 @@ public class FrontCardSelectionManager : CardSelectionManagerBase
         {
             accessText.text =
                 IsAccess
-                    ? "½ÂÀÎµÊ"
-                    : "½ÂÀÎ ´ë±âÁß";
+                    ? "ìŠ¹ì¸ë¨"
+                    : "ìŠ¹ì¸ ëŒ€ê¸°ì¤‘";
         }
 
         if (BattleAccessManager.Instance != null)

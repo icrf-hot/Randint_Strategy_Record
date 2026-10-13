@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [Header("±âº» ½ºÅÈ")]
+    [Header("ê¸°ë³¸ ìŠ¤íƒ¯")]
 
     [SerializeField] private int maxHP = 100;
     [SerializeField] private int attack = 20;
@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
         currentHP -= finalDamage;
         currentHP = Mathf.Max(currentHP, 0);
 
-        Debug.Log($"{gameObject.name} ¹°¸® ÇÇÇØ : {finalDamage}");
+        Debug.Log($"{gameObject.name} ë¬¼ë¦¬ í”¼í•´ : {finalDamage}");
 
         if (currentHP <= 0)
             Die();
@@ -44,7 +44,7 @@ public class Enemy : MonoBehaviour
         currentHP -= finalDamage;
         currentHP = Mathf.Max(currentHP, 0);
 
-        Debug.Log($"{gameObject.name} ¾ÆÃ÷ ÇÇÇØ : {finalDamage}");
+        Debug.Log($"{gameObject.name} ì•„ì¸  í”¼í•´ : {finalDamage}");
 
         if (currentHP <= 0)
             Die();
@@ -52,7 +52,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log($"{gameObject.name} »ç¸Á");
+        Debug.Log($"{gameObject.name} ì‚¬ë§");
 
         Destroy(gameObject);
     }

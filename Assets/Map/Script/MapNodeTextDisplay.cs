@@ -35,7 +35,7 @@ public class MapNodeTextDisplay : MonoBehaviour
     private void Awake()
     {
         // -----------------------------------------------------
-        // ÀÚ½ÅÀÇ MapNode Ã£±â
+        // ìì‹ ì˜ MapNode ì°¾ê¸°
         // -----------------------------------------------------
 
         if (node == null)
@@ -55,7 +55,7 @@ public class MapNodeTextDisplay : MonoBehaviour
         {
             Debug.LogError(
                 "MapNodeTextDisplay: " +
-                "MapNode¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.",
+                "MapNodeë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.",
                 this
             );
 
@@ -65,14 +65,14 @@ public class MapNodeTextDisplay : MonoBehaviour
 
 
         // -----------------------------------------------------
-        // Orbit Camera È®ÀÎ
+        // Orbit Camera í™•ì¸
         // -----------------------------------------------------
 
         if (orbitCamera == null)
         {
             Debug.LogError(
                 "MapNodeTextDisplay: " +
-                "MapOrbitCamera°¡ ÁöÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.",
+                "MapOrbitCameraê°€ ì§€ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.",
                 this
             );
 
@@ -82,7 +82,7 @@ public class MapNodeTextDisplay : MonoBehaviour
 
 
         // -----------------------------------------------------
-        // TMP Ã£±â
+        // TMP ì°¾ê¸°
         // -----------------------------------------------------
 
         if (targetText == null)
@@ -101,7 +101,7 @@ public class MapNodeTextDisplay : MonoBehaviour
         {
             Debug.LogError(
                 "MapNodeTextDisplay: " +
-                "TMP_Text¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.",
+                "TMP_Textë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.",
                 this
             );
 
@@ -128,7 +128,7 @@ public class MapNodeTextDisplay : MonoBehaviour
 
 
         // =====================================================
-        // Focus º¹±Í ½ÃÀÛ
+        // Focus ë³µê·€ ì‹œì‘
         // =====================================================
 
         if (orbitCamera.IsReturningFromFocus)
@@ -144,7 +144,7 @@ public class MapNodeTextDisplay : MonoBehaviour
 
 
         // =====================================================
-        // FocusµÇÁö ¾ÊÀº »óÅÂ
+        // Focusë˜ì§€ ì•Šì€ ìƒíƒœ
         // =====================================================
 
         if (!orbitCamera.IsFocused)
@@ -160,7 +160,7 @@ public class MapNodeTextDisplay : MonoBehaviour
 
 
         // =====================================================
-        // ÇöÀç FocusµÈ Node
+        // í˜„ì¬ Focusëœ Node
         // =====================================================
 
         MapNode focusedNode =
@@ -168,14 +168,14 @@ public class MapNodeTextDisplay : MonoBehaviour
 
 
         // =====================================================
-        // ÀÚ½ÅÀÇ Node°¡ FocusµÊ
+        // ìì‹ ì˜ Nodeê°€ Focusë¨
         // =====================================================
 
         if (focusedNode == node)
         {
             /*
-             * »õ·Ó°Ô ÀÚ½ÅÀÇ Node°¡ FocusµÈ °æ¿ì¿¡¸¸
-             * ÅØ½ºÆ®¸¦ Ãâ·ÂÇÕ´Ï´Ù.
+             * ìƒˆë¡­ê²Œ ìì‹ ì˜ Nodeê°€ Focusëœ ê²½ìš°ì—ë§Œ
+             * í…ìŠ¤íŠ¸ë¥¼ ì¶œë ¥í•©ë‹ˆë‹¤.
              */
             if (currentNode != node)
             {
@@ -189,7 +189,7 @@ public class MapNodeTextDisplay : MonoBehaviour
 
 
         // =====================================================
-        // ´Ù¸¥ Node°¡ FocusµÊ
+        // ë‹¤ë¥¸ Nodeê°€ Focusë¨
         // =====================================================
 
         if (currentNode != null)
@@ -202,7 +202,7 @@ public class MapNodeTextDisplay : MonoBehaviour
 
 
     // =========================================================
-    // Text Ãâ·Â
+    // Text ì¶œë ¥
     // =========================================================
 
     public void ShowText()
@@ -217,7 +217,7 @@ public class MapNodeTextDisplay : MonoBehaviour
 
 
     // =========================================================
-    // Text Á÷Á¢ ÁöÁ¤
+    // Text ì§ì ‘ ì§€ì •
     // =========================================================
 
     public void ShowText(string text)
@@ -267,7 +267,7 @@ public class MapNodeTextDisplay : MonoBehaviour
 
 
         // -----------------------------------------------------
-        // Typing Á¾·á ¡æ Cursor Blink
+        // Typing ì¢…ë£Œ â†’ Cursor Blink
         // -----------------------------------------------------
 
         if (showCursor)
@@ -320,7 +320,7 @@ public class MapNodeTextDisplay : MonoBehaviour
 
 
     // =========================================================
-    // Áï½Ã Ãâ·Â
+    // ì¦‰ì‹œ ì¶œë ¥
     // =========================================================
 
     public void ShowTextImmediately()
@@ -343,7 +343,7 @@ public class MapNodeTextDisplay : MonoBehaviour
 
 
     // =========================================================
-    // Text Á¦°Å
+    // Text ì œê±°
     // =========================================================
 
     public void ClearText()
@@ -355,7 +355,7 @@ public class MapNodeTextDisplay : MonoBehaviour
 
 
     // =========================================================
-    // Coroutine Á¤¸®
+    // Coroutine ì •ë¦¬
     // =========================================================
 
     private void StopAllTextCoroutines()

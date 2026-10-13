@@ -37,7 +37,7 @@ public class MapNodeFocusObjects : MonoBehaviour
             orbitCamera.FocusedNode;
 
 
-        // Focus°¡ ÇØÁ¦µÊ
+        // Focusê°€ í•´ì œë¨
         if (!orbitCamera.IsFocused)
         {
             if (currentNode != null)
@@ -51,7 +51,7 @@ public class MapNodeFocusObjects : MonoBehaviour
         }
 
 
-        // »õ·Î¿î Node Focus
+        // ìƒˆë¡œìš´ Node Focus
         if (focusedNode != currentNode)
         {
             currentNode =
@@ -118,15 +118,15 @@ public class MapNodeFocusObjects : MonoBehaviour
 
 
         /*
-         * Ä«¸Ş¶ó ±âÁØ È­¸é ¿À¸¥ÂÊ ¹æÇâ
+         * ì¹´ë©”ë¼ ê¸°ì¤€ í™”ë©´ ì˜¤ë¥¸ìª½ ë°©í–¥
          */
         Vector3 right =
             camera.transform.right;
 
 
         /*
-         * °¢ ObjectÀÇ ½ÃÀÛ À§Ä¡¿Í
-         * ¸ñÇ¥ À§Ä¡
+         * ê° Objectì˜ ì‹œì‘ ìœ„ì¹˜ì™€
+         * ëª©í‘œ ìœ„ì¹˜
          */
         Vector3[] startPositions =
             new Vector3[choiceObjects.Length];
@@ -151,7 +151,7 @@ public class MapNodeFocusObjects : MonoBehaviour
 
 
             /*
-             * Node¸¦ ±âÁØÀ¸·Î ¿ŞÂÊ¿¡ ¹èÄ¡
+             * Nodeë¥¼ ê¸°ì¤€ìœ¼ë¡œ ì™¼ìª½ì— ë°°ì¹˜
              */
             Vector3 target =
                 nodePosition
@@ -164,7 +164,7 @@ public class MapNodeFocusObjects : MonoBehaviour
 
 
             /*
-             * ¿À¸¥ÂÊ¿¡¼­ ½ÃÀÛ
+             * ì˜¤ë¥¸ìª½ì—ì„œ ì‹œì‘
              */
             Vector3 start =
                 target
@@ -196,7 +196,7 @@ public class MapNodeFocusObjects : MonoBehaviour
 
 
             /*
-             * ºÎµå·¯¿î ¿òÁ÷ÀÓ
+             * ë¶€ë“œëŸ¬ìš´ ì›€ì§ì„
              */
             t =
                 t * t *
@@ -229,7 +229,7 @@ public class MapNodeFocusObjects : MonoBehaviour
 
 
         /*
-         * ¸¶Áö¸· À§Ä¡ º¸Á¤
+         * ë§ˆì§€ë§‰ ìœ„ì¹˜ ë³´ì •
          */
         for (int i = 0;
              i < choiceObjects.Length;
