@@ -100,7 +100,7 @@ public class OperatorFocusManager : MonoBehaviour
         if (currentOperator == null)
             return;
 
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             ExitFocus();
         }

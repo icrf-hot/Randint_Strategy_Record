@@ -2,7 +2,7 @@
 aliases: [Enemy_MakeShift]
 tags: [character/enemy]
 implementation: implemented
-updated: 2026-09-22
+updated: 2026-10-13
 ---
 
 # Enemy MakeShift
@@ -13,8 +13,8 @@ updated: 2026-09-22
 | 항목 | 프리팹 직렬화 값 |
 |---|---:|
 | 프리팹 | `Enemy_MakeShift.prefab` |
-| HP | 2000 |
-| 공격력 | 200 |
+| HP | 1000 |
+| 공격력 | 2000 |
 | 방어력 | 10 |
 | 마법 저항 | 15 |
 | 공격 속도 | 1 |
