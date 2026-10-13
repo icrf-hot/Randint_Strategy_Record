@@ -19,11 +19,22 @@ public static class MapBattleRoundTripVerification
 
     public static void Run()
     {
+        RunScenario("Victory");
+    }
+
+    public static void RunFailure() => RunScenario("Failure");
+    public static void RunFrontRetreat() => RunScenario("FrontRetreat");
+    public static void RunRedeployment() => RunScenario("Redeployment");
+
+    private static void RunScenario(string scenario)
+    {
         SessionState.SetBool(Prefix + "Running", true);
         SessionState.SetInt(Prefix + "Stage", 0);
         SessionState.SetBool(Prefix + "SawEntryBlock", false);
         SessionState.SetBool(Prefix + "SawResult", false);
         SessionState.SetString(Prefix + "RuntimeError", "");
+        SessionState.SetString(Prefix + "Scenario", scenario);
+        SessionState.SetBool(Prefix + "NoFailureCards", false);
         SessionState.SetString(Prefix + "Deadline", DateTime.UtcNow.AddSeconds(120).ToString("O"));
         EditorSceneManager.OpenScene("Assets/Scenes/Map_1F.unity");
         EditorApplication.EnterPlaymode();
@@ -75,6 +86,7 @@ public static class MapBattleRoundTripVerification
     {
         string sceneName = SceneManager.GetActiveScene().name;
         int stage = SessionState.GetInt(Prefix + "Stage", 0);
+        string scenario = SessionState.GetString(Prefix + "Scenario", "Victory");
 
         if (stage == 0 && sceneName == "Map_1F")
         {
@@ -111,6 +123,21 @@ public static class MapBattleRoundTripVerification
             if (access == null || access.MiddleOperator == null)
                 return;
 
+            if (scenario == "FrontRetreat" || scenario == "Redeployment")
+            {
+                access.FrontOperator.DebugDamage(int.MaxValue);
+                if (scenario == "Redeployment" && !access.FrontOperator.ScheduleRedeployment(1))
+                    throw new InvalidOperationException("Could not schedule Front redeployment.");
+            }
+            else if (scenario == "Failure")
+            {
+                foreach (Operator op in new[] { access.FrontOperator, access.MiddleOperator, access.BackOperator })
+                    op.DebugDamage(op.CurrentHP - 1);
+            }
+
+            access.FrontOperator.ApplyBattleBonus(7, 11, 13);
+            access.BackOperator.ApplyBattleBonus(17, 19, 23);
+
             Card attributeCard = cards.FirstOrDefault(card => card.IsSpecialCard) ?? cards[1];
             Card[] numberCards = cards.Where(card => card != attributeCard && !card.IsSpecialCard).ToArray();
             if (numberCards.Length != 5)
@@ -120,8 +147,11 @@ public static class MapBattleRoundTripVerification
             if (!attributeCard.IsSpecialCard)
                 attributeCard.SetNumber(1);
 
-            FrontCardSelectionManager.Instance.SelectCard(numberCards[0]);
-            FrontCardSelectionManager.Instance.SetDefense();
+            if (access.FrontOperator.IsCombatActive)
+            {
+                FrontCardSelectionManager.Instance.SelectCard(numberCards[0]);
+                FrontCardSelectionManager.Instance.SetDefense();
+            }
             MiddleCardSelectionManager middle = MiddleCardSelectionManager.Instance;
             middle.SelectCard(attributeCard);
             middle.SelectCard(numberCards[1]);
@@ -137,9 +167,17 @@ public static class MapBattleRoundTripVerification
 
             // Change runtime HP only, without editing prefab balance values.
             Enemy lastEnemy = enemies[0];
-            for (int i = 1; i < enemies.Length; i++)
-                enemies[i].TakePhysicalDamage(int.MaxValue);
-            lastEnemy.TakePhysicalDamage(lastEnemy.CurrentHP + lastEnemy.Defense - 1);
+            if (scenario == "Victory")
+            {
+                for (int i = 1; i < enemies.Length; i++)
+                    enemies[i].TakePhysicalDamage(int.MaxValue);
+                lastEnemy.TakePhysicalDamage(lastEnemy.CurrentHP + lastEnemy.Defense - 1);
+            }
+            else if (scenario == "FrontRetreat" || scenario == "Redeployment")
+            {
+                foreach (Enemy enemy in enemies)
+                    typeof(Enemy).GetField("attack", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(enemy, 0);
+            }
 
             EnemyTargetingManager.Instance.BeginTargeting(access.MiddleOperator);
             EnemyTargetingManager.Instance.SelectTarget(lastEnemy.GetComponent<EnemyTargetable>());
@@ -154,6 +192,25 @@ public static class MapBattleRoundTripVerification
         {
             if (sceneName == "Playing_Scene")
             {
+                if (scenario == "FrontRetreat" || scenario == "Redeployment")
+                {
+                    BattleExecuteManager manager = BattleExecuteManager.Instance;
+                    if (typeof(BattleExecuteManager).GetField("battleRoutine", BindingFlags.Instance | BindingFlags.NonPublic)
+                        .GetValue(manager) != null)
+                        return;
+
+                    BattleAccessManager access = BattleAccessManager.Instance;
+                    Operator[] operators = { access.FrontOperator, access.MiddleOperator, access.BackOperator };
+                    bool bonusesCleared = operators.All(op => op.AttackBonus == 0 && op.DefenseBonus == 0 && op.ArtsResistanceBonus == 0);
+                    bool correctState = scenario == "FrontRetreat"
+                        ? access.FrontOperator.IsRetreated
+                        : access.FrontOperator.IsCombatActive && access.FrontOperator.CurrentHP == access.FrontOperator.MaxHP;
+                    Finish(bonusesCleared && correctState,
+                        scenario + ": retained Front state and normal-round bonus reset " +
+                        (bonusesCleared && correctState ? "passed." : "failed."));
+                    return;
+                }
+
                 BattleResultPresenter presenter = UnityEngine.Object.FindFirstObjectByType<BattleResultPresenter>();
                 if (presenter != null)
                 {
@@ -161,7 +218,16 @@ public static class MapBattleRoundTripVerification
                         .GetField("resultCanvasGroup", BindingFlags.Instance | BindingFlags.NonPublic)
                         .GetValue(presenter);
                     if (result != null && result.alpha > 0.5f && result.blocksRaycasts)
+                    {
                         SessionState.SetBool(Prefix + "SawResult", true);
+                        if (scenario == "Failure")
+                        {
+                            bool allRetreated = UnityEngine.Object.FindObjectsByType<Operator>(FindObjectsSortMode.None)
+                                .All(op => op.IsRetreated);
+                            bool noCards = UnityEngine.Object.FindObjectsByType<Card>(FindObjectsSortMode.None).Length == 0;
+                            SessionState.SetBool(Prefix + "NoFailureCards", allRetreated && noCards);
+                        }
+                    }
                 }
                 return;
             }
@@ -178,8 +244,10 @@ public static class MapBattleRoundTripVerification
                           SessionState.GetBool(Prefix + "SawResult", false) &&
                           feedback.CurrentNode.NodeID == 5 && MapRunState.CurrentNodeID == 5 &&
                           !MapRunState.IsEnteringMapFromBattle && Mathf.Approximately(Time.timeScale, 1f);
+            if (scenario == "Failure")
+                passed &= SessionState.GetBool(Prefix + "NoFailureCards", false);
             Finish(passed, passed
-                ? "Map -> battle -> victory -> map passed: entry blocking, six-card approval, result screen, node 5 restore, time scale 1."
+                ? "Map -> battle -> " + scenario + " -> map passed: entry blocking, six-card approval, result screen, node 5 restore, time scale 1."
                 : "Round trip completed but input/result/position/time checks failed.");
         }
     }
