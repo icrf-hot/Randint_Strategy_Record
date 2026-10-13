@@ -72,6 +72,7 @@ public class BattleResultPresenter : MonoBehaviour
     private float fadeOutDuration = 0.35f;
 
     private bool isShowing;
+    public bool IsShowing => isShowing;
     private bool gameTimeRestored = true;
 
     private void Awake()

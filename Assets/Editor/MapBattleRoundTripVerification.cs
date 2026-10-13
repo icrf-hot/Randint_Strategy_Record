@@ -119,6 +119,11 @@ public static class MapBattleRoundTripVerification
             if (cards.Length != 6 || CardSpawner.Instance.IsDiscarding)
                 return;
 
+            RunProgressionHUD battleHud = UnityEngine.Object.FindFirstObjectByType<RunProgressionHUD>();
+            if (battleHud == null || battleHud.StatusText == null || battleHud.StatusText.font == null ||
+                battleHud.StatusText.raycastTarget || battleHud.StatusText.text != "Packet 30\nLayer 1\nEXP 0 / 16")
+                throw new InvalidOperationException("Battle progression HUD is missing or incorrect.");
+
             BattleAccessManager access = BattleAccessManager.Instance;
             if (access == null || access.MiddleOperator == null)
                 return;
@@ -250,6 +255,10 @@ public static class MapBattleRoundTripVerification
             int expectedExperience = scenario == "Failure" ? 0 : 12;
             passed &= MapRunState.Packets.Balance == expectedPackets &&
                       MapRunState.Progression.Layer == 1 && MapRunState.Progression.Experience == expectedExperience;
+            RunProgressionHUD mapHud = UnityEngine.Object.FindFirstObjectByType<RunProgressionHUD>();
+            passed &= mapHud != null && mapHud.StatusText != null && mapHud.StatusText.font != null &&
+                      !mapHud.StatusText.raycastTarget &&
+                      mapHud.StatusText.text == $"Packet {expectedPackets}\nLayer 1\nEXP {expectedExperience} / 16";
             Finish(passed, passed
                 ? "Map -> battle -> " + scenario + " -> map passed: entry blocking, six-card approval, result screen, node 5 restore, time scale 1."
                 : "Round trip completed but input/result/position/time checks failed.");

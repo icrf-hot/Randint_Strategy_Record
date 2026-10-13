@@ -4062,6 +4062,7 @@ GameObject:
   - component: {fileID: 1159467339}
   - component: {fileID: 1159467338}
   - component: {fileID: 1159467340}
+  - component: {fileID: 1159467341}
   m_Layer: 0
   m_Name: NodeClickManager
   m_TagString: Untagged
@@ -4117,6 +4118,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   raycastDistance: 1000
+--- !u!114 &1159467341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1159467337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 110ad2235cc84362a39885e96e8620e2, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::RunProgressionHUD
+  font: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
 --- !u!1001 &1217805762
 PrefabInstance:
   m_ObjectHideFlags: 0

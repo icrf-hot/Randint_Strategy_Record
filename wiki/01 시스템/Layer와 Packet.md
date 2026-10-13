@@ -31,18 +31,19 @@ Packet·Layer·경험치는 정수다. 요구 경험치는 `ceil(16 × 1.5^(현�
 - `MapRunState.Progression` / `Packets`: 정적 런 상태. 씬 전환 중 유지하며 디스크 저장은 아니다.
 - Title은 `StartNewRun(settings)`으로 기존 런을 비우고 30 Packet을 지급한다. 맵/전투 씬 직접 실행도 `EnsureStarted(settings)`으로 한 번 초기화한다. 맵 복귀마다 30 Packet을 다시 주지 않는다.
 - `BattleExecuteManager.FinishBattle(Success)`에서 보상을 한 번 지급한다. 기존 `isFinishingBattle` 중복 종료 차단을 사용한다. Failure 분기는 지급하지 않는다.
-- 승리 보상·현재 Layer·잔여 경험치는 Debug 로그로 확인한다. 별도 Packet/Layer HUD와 결과 TMP 보상 표시는 아직 없다.
+- `RunProgressionHUD`가 맵/전투 오른쪽 위에 Packet, Layer, 현재/요구 EXP를 TMP로 표시한다. 값이 변할 때만 텍스트를 갱신하며 로딩/결과 화면 동안 숨긴다. 입력 Raycast를 받지 않는다. 개별 승리 보상은 Debug 로그로 확인하며 결과 화면 보상 내역 표시는 아직 없다.
 
 ## 검증 상태
 
 - `RunProgressionVerification.Run`: 컴파일 및 지갑 경계값, 복리 올림, 초기 지급, 두 번 승리, 정확한 요구치, 다중 레벨업, 오버플로 실패 시 상태 보존, 새 런 초기화 통과.
 - 예: 두 번 승리 후 Layer 2 / 잔여 경험치 8 / Packet 56.
 - Title·성공·실패 실제 씬 연결의 제한 플레이 검증 모두 종료 코드 0. 새 런 30 Packet, 승리 후 38 Packet/EXP 12 유지, 패배 후 30 Packet/EXP 0을 확인했다.
+- `CodexRunHUD.log`: 맵/전투 한 번 왕복으로 TMP 내용·폰트 참조·입력 비차단·승리 후 표시값 검증 통과. 해상도별 픽셀/겹침 시각 QA는 미실시다.
 
 ## 남은 작업
 
 - Cache 구매·보유·강화 연결, Packet·EXP 획득량 버프 적용
-- Packet/Layer/경험치 TMP 표시
+- 결과 화면 보상 내역 표시와 해상도별 HUD 시각 QA
 - 지급/경험치/보유 Cache의 디스크 저장과 이어하기 정책
 - Cache 지속 범위 및 직군/세부직군 모델 확정
 
