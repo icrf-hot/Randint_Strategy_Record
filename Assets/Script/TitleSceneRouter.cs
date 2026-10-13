@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class TitleSceneRouter : MonoBehaviour
 {
     [SerializeField] private string mapScenePath = "Assets/Scenes/Map_1F.unity";
+    [SerializeField] private RunProgressionSettings progressionSettings;
 
     private bool isLoading;
 
@@ -19,6 +20,12 @@ public class TitleSceneRouter : MonoBehaviour
     {
         if (isLoading)
             return;
+
+        if (progressionSettings == null || !progressionSettings.IsValid)
+        {
+            Debug.LogError("[Title Router] Run progression settings are missing or invalid.", this);
+            return;
+        }
 
         int buildIndex = SceneUtility.GetBuildIndexByScenePath(mapScenePath);
         if (buildIndex < 0)
@@ -46,7 +53,7 @@ public class TitleSceneRouter : MonoBehaviour
 
         loadOperation.allowSceneActivation = false;
         isLoading = true;
-        MapRunState.Reset();
+        MapRunState.StartNewRun(progressionSettings);
         Time.timeScale = 1f;
         loadOperation.allowSceneActivation = true;
     }

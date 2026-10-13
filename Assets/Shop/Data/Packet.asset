@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PacketCurrencyData
   currencyId: packet
   displayName: Packet
-  description: "\uc0c1\uc810\uc5d0\uc11c Cache\ub97c \uad6c\ub9e4\ud560 \ub54c \uc0ac\uc6a9\ud558\ub294 \uc7ac\ud654. \ucd08\uae30 \uc9c0\uae09\ub7c9\uacfc \ud68d\ub4dd \uaddc\uce59\uc740 \ubbf8\ud655\uc815."
+  description: "\uc0c1\uc810\uc5d0\uc11c Cache\ub97c \uad6c\ub9e4\ud560 \ub54c \uc0ac\uc6a9\ud558\ub294 \uc7ac\ud654. \uc9c0\uae09 \uaddc\uce59\uc740 RunProgression \uc124\uc815\uc744 \ub530\ub978\ub2e4."
   icon: {fileID: 0}

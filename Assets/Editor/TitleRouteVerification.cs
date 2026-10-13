@@ -61,7 +61,8 @@ public static class TitleRouteVerification
                       feedback.CurrentNode.NodeID == 1 &&
                       MapRunState.CurrentNodeID == 1 &&
                       !MapRunState.IsEnteringMapFromBattle &&
-                      Mathf.Approximately(Time.timeScale, 1f);
+                      Mathf.Approximately(Time.timeScale, 1f) && MapRunState.Packets.Balance == 30 &&
+                      MapRunState.Progression.Layer == 1 && MapRunState.Progression.Experience == 0;
 
         Finish(passed, passed
             ? "Title -> Map_1F passed: previous run reset, start node 1, time scale 1."

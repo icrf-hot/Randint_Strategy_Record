@@ -4110,6 +4110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd1a7e9cdae199443b7662e293a85b8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapPlayerPositionFeedback
+  progressionSettings: {fileID: 11400000, guid: 9f99a3a6fdbb4bb7b0f411361642ad38, type: 2}
   mapCamera: {fileID: 316983480}
   startNode: {fileID: 766637535}
   nodeLayerMask:

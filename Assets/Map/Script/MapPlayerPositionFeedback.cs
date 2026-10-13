@@ -6,6 +6,7 @@ public class MapPlayerPositionFeedback : MonoBehaviour
     [Header("References")]
     [SerializeField] private Camera mapCamera;
     [SerializeField] private MapNode startNode;
+    [SerializeField] private RunProgressionSettings progressionSettings;
 
     [Header("Raycast")]
     [SerializeField] private LayerMask nodeLayerMask = ~0;
@@ -18,6 +19,9 @@ public class MapPlayerPositionFeedback : MonoBehaviour
 
     private void Awake()
     {
+        if (!MapRunState.EnsureStarted(progressionSettings))
+            Debug.LogError("[Map Run] Run progression settings are missing or invalid.", this);
+
         if (mapCamera == null)
         {
             mapCamera = Camera.main;

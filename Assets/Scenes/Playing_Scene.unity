@@ -12022,6 +12022,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cc18db0a900edd42856bfd209faa6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleExecuteManager
+  progressionSettings: {fileID: 11400000, guid: 9f99a3a6fdbb4bb7b0f411361642ad38, type: 2}
   focusBeforeActionDelay: 0.6
   actionInterval: 0.5
   backHealAmount: 50

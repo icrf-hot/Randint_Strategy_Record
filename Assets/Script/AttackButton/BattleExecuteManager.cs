@@ -25,6 +25,7 @@ public class BattleExecuteManager : MonoBehaviour
     private BattleToMapSceneLoader mapSceneLoader;
     [SerializeField]
     private BattleResultPresenter resultPresenter;
+    [SerializeField] private RunProgressionSettings progressionSettings;
 
     private bool isFinishingBattle;
 
@@ -65,6 +66,9 @@ public class BattleExecuteManager : MonoBehaviour
         }
 
         Instance = this;
+
+        if (!MapRunState.EnsureStarted(progressionSettings))
+            Debug.LogError("[Battle Run] Run progression settings are missing or invalid.", this);
     }
 
     public void ExecuteBattle()
@@ -271,6 +275,16 @@ public class BattleExecuteManager : MonoBehaviour
         switch (resultType)
         {
             case BattleResultType.Success:
+                if (MapRunState.Progression.TryGrantVictory(out int packetsGained, out int layersGained))
+                {
+                    Debug.Log($"[Run Reward] Packet +{packetsGained}, Layer +{layersGained}, " +
+                              $"Layer {MapRunState.Progression.Layer}, " +
+                              $"EXP {MapRunState.Progression.Experience}/{MapRunState.Progression.RequiredExperience}");
+                }
+                else
+                {
+                    Debug.LogError("[Run Reward] Victory reward could not be applied.", this);
+                }
                 Debug.Log("[Battle Result] Victory");
                 break;
 

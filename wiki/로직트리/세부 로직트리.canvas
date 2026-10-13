@@ -28,7 +28,8 @@
 		{"id":"map_doc","type":"file","file":"01 시스템/맵 시스템.md","x":950,"y":-2240,"width":1120,"height":1600,"color":"4"},
 		{"id":"risk_doc","type":"file","file":"03 개발 기록/미구현·주의사항.md","x":950,"y":650,"width":1120,"height":1710,"color":"1"},
 		{"id":"loading_doc","type":"file","file":"01 시스템/씬 전환 및 로딩.md","x":2150,"y":-2240,"width":2050,"height":1600,"color":"3"},
-		{"id":"shop_doc","type":"file","file":"01 시스템/상점 시스템.md","x":2150,"y":650,"width":760,"height":900,"color":"3"}
+		{"id":"shop_doc","type":"file","file":"01 시스템/상점 시스템.md","x":2150,"y":650,"width":760,"height":900,"color":"3"},
+		{"id":"progression_doc","type":"file","file":"01 시스템/Layer와 Packet.md","x":2950,"y":650,"width":760,"height":900,"color":"4"}
 	],
 	"edges":[
 		{"id":"e2","fromNode":"deal","fromSide":"right","toNode":"front","toSide":"left"},

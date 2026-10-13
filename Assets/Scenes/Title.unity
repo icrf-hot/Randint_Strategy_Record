@@ -225,6 +225,7 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::TitleSceneRouter
   mapScenePath: Assets/Scenes/Map_1F.unity
+  progressionSettings: {fileID: 11400000, guid: 9f99a3a6fdbb4bb7b0f411361642ad38, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -246,6 +246,10 @@ public static class MapBattleRoundTripVerification
                           !MapRunState.IsEnteringMapFromBattle && Mathf.Approximately(Time.timeScale, 1f);
             if (scenario == "Failure")
                 passed &= SessionState.GetBool(Prefix + "NoFailureCards", false);
+            int expectedPackets = scenario == "Failure" ? 30 : 38;
+            int expectedExperience = scenario == "Failure" ? 0 : 12;
+            passed &= MapRunState.Packets.Balance == expectedPackets &&
+                      MapRunState.Progression.Layer == 1 && MapRunState.Progression.Experience == expectedExperience;
             Finish(passed, passed
                 ? "Map -> battle -> " + scenario + " -> map passed: entry blocking, six-card approval, result screen, node 5 restore, time scale 1."
                 : "Round trip completed but input/result/position/time checks failed.");
