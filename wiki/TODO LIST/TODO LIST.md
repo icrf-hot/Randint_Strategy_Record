@@ -41,7 +41,7 @@ updated: 2026-10-13
 
 - [ ] 🟡 `Dorothy_Skill_1` 이름·설명·효과 작성
 - [ ] 🟡 대원별 스킬 배열 연결
-- [ ] 🟡 `BackCardSelectionManager.Instance` 초기화 정책 통일
+- [x] 🟢 `BackCardSelectionManager.Instance` 초기화 정책 통일 — Front/Middle과 같은 Awake 중복 방지·초기화, OnDestroy 참조 해제, 컴파일 검증
 - [ ] 🟡 싱글턴 중복 처리 정책 통일
 - [ ] 🟡 반복 `FindObjectsByType` 호출의 캐시 필요성 검토
 - [ ] 🟡 코드·주석 파일 인코딩 UTF-8 통일

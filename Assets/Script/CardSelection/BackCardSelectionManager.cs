@@ -20,48 +20,54 @@ public class BackCardSelectionManager : CardSelectionManagerBase
 
     public bool IsAccess { get; private set; }
 
-    //private void Awake()
-    //{
-    //    if (Instance != null && Instance != this)
-    //    {
-    //        Destroy(gameObject);
-    //        return;
-    //    }
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-    //    Instance = this;
-    //}
+        Instance = this;
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
+    }
 
     public override void SelectCard(Card card)
     {
         if (card == null)
             return;
 
-        // Á¶Ä¿ »ç¿ë ºÒ°¡
+        // ì¡°ì»¤ ì‚¬ìš© ë¶ˆê°€
         if (card.IsSpecialCard)
             return;
 
-        // Ã¹ ¹øÂ° Ä«µå ´Ù½Ã Å¬¸¯
+        // ì²« ë²ˆì§¸ ì¹´ë“œ ë‹¤ì‹œ í´ë¦­
         if (card == firstCard)
         {
             ClearFirstCard();
             return;
         }
 
-        // µÎ ¹øÂ° Ä«µå ´Ù½Ã Å¬¸¯
+        // ë‘ ë²ˆì§¸ ì¹´ë“œ ë‹¤ì‹œ í´ë¦­
         if (card == secondCard)
         {
             ClearSecondCard();
             return;
         }
 
-        // Ã¹ ¹øÂ° ½½·Ô
+        // ì²« ë²ˆì§¸ ìŠ¬ë¡¯
         if (firstCard == null)
         {
             SetFirstCard(card);
             return;
         }
 
-        // µÎ ¹øÂ° ½½·Ô
+        // ë‘ ë²ˆì§¸ ìŠ¬ë¡¯
         if (secondCard == null)
         {
             SetSecondCard(card);
@@ -137,7 +143,7 @@ public class BackCardSelectionManager : CardSelectionManagerBase
             secondCard != null;
 
         if (accessText != null)
-            accessText.text = IsAccess ? "½ÂÀÎµÊ" : "½ÂÀÎ ´ë±âÁß";
+            accessText.text = IsAccess ? "ìŠ¹ì¸ë¨" : "ìŠ¹ì¸ ëŒ€ê¸°ì¤‘";
 
         BattleAccessManager.Instance.Refresh();
     }
