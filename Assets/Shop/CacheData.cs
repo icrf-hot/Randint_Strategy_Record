@@ -1,5 +1,11 @@
 using UnityEngine;
 
+public enum CacheEffectKind
+{
+    GlobalOperatorStats = 0,
+    GlobalPacketAndExperience = 1
+}
+
 [CreateAssetMenu(fileName = "NewCache", menuName = "Game/Shop/Cache")]
 public class CacheData : ScriptableObject
 {
@@ -9,6 +15,11 @@ public class CacheData : ScriptableObject
     [TextArea(2, 5)]
     [SerializeField] private string description;
     [SerializeField] private Sprite icon;
+
+    [Header("Global Effect")]
+    [SerializeField] private CacheEffectKind effectKind;
+    [Tooltip("Pending items are definitions only. Their price and effect must not be used for purchases.")]
+    [SerializeField] private bool configurationPending;
 
     [Header("Packet Price")]
     [Min(0)]
@@ -30,6 +41,9 @@ public class CacheData : ScriptableObject
     public string DisplayName => displayName;
     public string Description => description;
     public Sprite Icon => icon;
+    public CacheEffectKind EffectKind => effectKind;
+    public bool IsConfigured => !configurationPending &&
+        effectKind == CacheEffectKind.GlobalOperatorStats;
     public int PacketPrice => packetPrice;
     public int MaxHPBonus => maxHPBonus;
     public int AttackBonus => attackBonus;
