@@ -211,8 +211,6 @@ public class BattleExecuteManager : MonoBehaviour
         bool isDefeated =
             AreAllOperatorsRetreated();
 
-        // 다음 라운드 또는 씬 전환 전에 임시 보정을 한 번만 제거합니다.
-
         if (isDefeated)
         {
             yield return FinishBattle(
@@ -221,6 +219,9 @@ public class BattleExecuteManager : MonoBehaviour
 
             yield break;
         }
+
+        // Clear round bonuses before dealing the next hand.
+        ResetOperatorBonuses();
 
         // 패배하지 않았을 때만 카드 회수 완료를 기다립니다.
         if (CardSpawner.Instance != null)
