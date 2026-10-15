@@ -46,6 +46,11 @@ public class MapChoice : MonoBehaviour
         {
             EnterBattle(targetNode);
         }
+        else if (targetNode.NodeType == MapNodeType.Shop)
+        {
+            if (!ShopSceneRouter.EnterShop(targetNode))
+                Debug.LogWarning("[Shop] Shop Scene could not be opened.", this);
+        }
     }
 
     private void EnterBattle(MapNode battleNode)
