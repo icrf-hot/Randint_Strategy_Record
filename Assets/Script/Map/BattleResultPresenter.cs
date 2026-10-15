@@ -177,7 +177,9 @@ public class BattleResultPresenter : MonoBehaviour
         if (resultMessageText != null)
         {
             resultMessageText.text =
-                selectedText != null
+                resultType == BattleResultType.Failure && MapRunState.IsEnded
+                    ? GameData.Text("battle.result.ejected.message")
+                    : selectedText != null
                     ? GameData.Text(selectedText.resultMessageKey)
                     : string.Empty;
         }

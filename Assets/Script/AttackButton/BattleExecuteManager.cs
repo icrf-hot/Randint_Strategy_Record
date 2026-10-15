@@ -73,6 +73,7 @@ public class BattleExecuteManager : MonoBehaviour
 
     public void ExecuteBattle()
     {
+        if (MapRunState.IsEnded) return;
         if (battleRoutine != null)
         {
             Debug.Log("[전투] 이미 전투가 실행 중입니다.");
@@ -290,6 +291,10 @@ public class BattleExecuteManager : MonoBehaviour
                 break;
 
             case BattleResultType.Failure:
+                int survivingEnemies = 0;
+                foreach (Enemy enemy in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
+                    if (enemy != null && enemy.CurrentHP > 0) survivingEnemies++;
+                RunRecordService.ApplyBattleDefeat(survivingEnemies);
                 Debug.Log("[Battle Result] Defeat");
                 break;
         }

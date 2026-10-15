@@ -98,6 +98,14 @@
       "value": "Integrity"
     },
     {
+      "key": "ui.map.integrity_value",
+      "value": "Integrity {0}%"
+    },
+    {
+      "key": "ui.map.consistency_value",
+      "value": "Consistency {0}%"
+    },
+    {
       "key": "ui.map.enter_battle",
       "value": "전투하기"
     },

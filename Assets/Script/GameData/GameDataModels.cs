@@ -70,6 +70,7 @@ namespace Randint.Data
         public int healerCardMultiplier, backFallbackHeal, naturalSpPerAttack;
         public int cardCount, cardNumberMin, cardNumberMax, specialRangeMin, specialRangeMax;
         public int frontAttackMultiplier, frontDefenseMultiplier;
+        public int defeatIntegrityLossPerEnemy;
     }
 
     [Serializable] public sealed class ShopDefinition

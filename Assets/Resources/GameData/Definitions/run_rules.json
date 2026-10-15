@@ -3,6 +3,7 @@
   "entries": [
     {
       "id": "default_run",
+      "defeatIntegrityLossPerEnemy": 10,
       "initialPackets": 30,
       "victoryPackets": 8,
       "victoryExperience": 12,

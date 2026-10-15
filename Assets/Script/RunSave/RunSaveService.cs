@@ -43,6 +43,9 @@ public static class RunSaveService
         if (saved.runId != MapRunState.RunId) { error = RunSaveError.None; return true; }
         saved.state = "Ended";
         saved.endReason = reason;
+        saved.schemaVersion = 2;
+        saved.integrity = MapRunState.RecordHealth.Integrity;
+        saved.consistency = MapRunState.RecordHealth.Consistency;
         saved.savedUtc = DateTimeOffset.UtcNow.ToString("O");
         return Repository.TryWrite(saved, out error);
     }

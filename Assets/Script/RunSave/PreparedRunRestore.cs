@@ -28,7 +28,7 @@ public sealed class PreparedRunRestore
     {
         prepared = null;
         error = RunSaveError.InvalidData;
-        if (source == null || source.schemaVersion != 1 || !Guid.TryParseExact(source.runId, "N", out _) ||
+        if (source == null || (source.schemaVersion != 1 && source.schemaVersion != 2) || !Guid.TryParseExact(source.runId, "N", out _) ||
             !DateTimeOffset.TryParseExact(source.savedUtc, "O", CultureInfo.InvariantCulture, DateTimeStyles.None, out _) ||
             (source.state != "Active" && source.state != "Ended") || source.operatorIds == null ||
             source.ownedCacheIds == null || source.purchasedCacheIds == null || source.visitedNodeIds == null ||
@@ -38,6 +38,10 @@ public sealed class PreparedRunRestore
         if (source.state == "Active" && !string.IsNullOrEmpty(source.endReason)) return false;
         if (source.state == "Ended" && !allowEnded) { error = RunSaveError.RunEnded; return false; }
         if (source.state == "Ended" && source.endReason != "Ending" && source.endReason != "Ejected") return false;
+        if (source.schemaVersion == 2 &&
+            (source.integrity < 0 || source.integrity > 100 || source.consistency < 0 || source.consistency > 100 ||
+             (source.state == "Active" && source.integrity == 0) ||
+             (source.endReason == "Ejected" && source.integrity != 0))) return false;
         error = RunSaveError.IncompatibleData;
         if (bindings == null || source.mapScenePath != bindings.MapScenePath || !bindings.HasNode(source.currentNodeId)) return false;
         var positions = new HashSet<OperatorPosition>();
@@ -69,6 +73,8 @@ public sealed class PreparedRunRestore
         caches.RestoreValidated(owned, source.purchasedCacheIds);
         // Detach from the caller before the asynchronous scene transition begins.
         var copy = JsonUtility.FromJson<RunSaveSnapshot>(JsonUtility.ToJson(source));
+        if (copy.schemaVersion == 1) { copy.integrity = 100; copy.consistency = 100; }
+        copy.schemaVersion = 2;
         prepared = new PreparedRunRestore(copy, run, caches);
         error = RunSaveError.None;
         return true;

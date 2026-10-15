@@ -8,6 +8,7 @@ public static class MapRunState
     public static RunProgression Progression { get; private set; } = new RunProgression();
     public static PacketWallet Packets => Progression.Packets;
     public static RunCacheInventory Caches { get; private set; } = new RunCacheInventory();
+    public static RunRecordHealth RecordHealth { get; } = new RunRecordHealth();
     private static readonly HashSet<int> visitedNodes = new HashSet<int>();
     private static readonly HashSet<int> completedNodes = new HashSet<int>();
     private static string[] partyIds = Array.Empty<string>();
@@ -30,10 +31,11 @@ public static class MapRunState
     {
         return new RunSaveSnapshot
         {
-            schemaVersion = 1, runId = RunId, savedUtc = DateTimeOffset.UtcNow.ToString("O"),
+            schemaVersion = 2, runId = RunId, savedUtc = DateTimeOffset.UtcNow.ToString("O"),
             state = IsEnded ? "Ended" : "Active", endReason = EndReason,
             mapScenePath = bindings.MapScenePath, currentNodeId = CurrentNodeID,
             packets = Packets.Balance, layer = Progression.Layer, experience = Progression.Experience,
+            integrity = RecordHealth.Integrity, consistency = RecordHealth.Consistency,
             operatorIds = (string[])partyIds.Clone(),
             ownedCacheIds = Caches.Owned.Select(cache => cache.CacheId).ToArray(),
             purchasedCacheIds = Caches.PurchasedIds.OrderBy(id => id, StringComparer.Ordinal).ToArray(),
@@ -47,6 +49,7 @@ public static class MapRunState
     {
         Progression = run;
         Caches = inventory;
+        RecordHealth.Restore(snapshot.integrity, snapshot.consistency);
         RunId = snapshot.runId;
         IsEnded = false;
         EndReason = "";
@@ -72,6 +75,7 @@ public static class MapRunState
 
     public static bool TryGrantVictory(out int packetsGained, out int layersGained)
     {
+        if (IsEnded) { packetsGained = 0; layersGained = 0; return false; }
         long packets = 0, experience = 0;
         foreach (CacheData cache in Caches.Owned)
         {
@@ -88,7 +92,7 @@ public static class MapRunState
 
     public static CachePurchaseResult TryPurchaseCache(ShopCatalogData catalog, string cacheId)
     {
-        if (!Progression.IsInitialized)
+        if (!Progression.IsInitialized || IsEnded)
             return CachePurchaseResult.RunNotStarted;
         return Caches.TryPurchase(Packets, catalog, cacheId);
     }
@@ -146,6 +150,7 @@ public static class MapRunState
     {
         Progression.Clear();
         Caches.Clear();
+        RecordHealth.Reset();
         CurrentNodeID = 0;
         HasCurrentNode = false;
         IsEnteringMapFromBattle = false;

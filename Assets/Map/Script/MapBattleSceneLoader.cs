@@ -82,7 +82,7 @@ public class MapBattleSceneLoader : MonoBehaviour
 
     public void LoadBattle(MapNode battleNode)
     {
-        if (isLoading)
+        if (isLoading || MapRunState.IsEnded)
             return;
 
         if (!ValidateRequest(battleNode))

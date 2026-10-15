@@ -13,6 +13,8 @@ public sealed class RunSaveSnapshot
     public int packets = -1;
     public int layer = -1;
     public int experience = -1;
+    public int integrity = -1;
+    public int consistency = -1;
     public string[] operatorIds;
     public string[] ownedCacheIds;
     public string[] purchasedCacheIds;

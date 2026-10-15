@@ -112,7 +112,8 @@ namespace Randint.Data
                     float.IsInfinity(rule.experienceGrowth) || rule.healerCardMultiplier <= 0 || rule.backFallbackHeal < 0 || rule.naturalSpPerAttack <= 0 ||
                     rule.cardCount <= 0 || rule.cardNumberMin < 1 || rule.cardNumberMax < rule.cardNumberMin || rule.cardNumberMax == int.MaxValue ||
                     rule.specialRangeMin < 1 || rule.specialRangeMax > 100 || rule.specialRangeMax < rule.specialRangeMin ||
-                    rule.frontAttackMultiplier < 0 || rule.frontDefenseMultiplier < 0)
+                    rule.frontAttackMultiplier < 0 || rule.frontDefenseMultiplier < 0 ||
+                    rule.defeatIntegrityLossPerEnemy <= 0 || rule.defeatIntegrityLossPerEnemy > 100)
                     errors.Add($"run_rules '{rule.id}': invalid progression/combat settings");
             foreach (ShopDefinition shop in catalog.shops.Values)
             {

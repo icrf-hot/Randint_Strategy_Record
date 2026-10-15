@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 65307190}
   - component: {fileID: 65307192}
   - component: {fileID: 65307191}
+  - component: {fileID: 2100000021}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -4993,6 +4994,7 @@ GameObject:
   - component: {fileID: 1524360759}
   - component: {fileID: 1524360761}
   - component: {fileID: 1524360760}
+  - component: {fileID: 2100000022}
   m_Layer: 5
   m_Name: Text (TMP) (1)
   m_TagString: Untagged
@@ -6851,6 +6853,34 @@ Transform:
   - {fileID: 1690680462}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2100000021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 65307189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aedca2f5d3b44971b4ab271b024b8213, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::RunRecordStatusText
+  targetText: {fileID: 65307191}
+  showIntegrity: 1
+--- !u!114 &2100000022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1524360758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aedca2f5d3b44971b4ab271b024b8213, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::RunRecordStatusText
+  targetText: {fileID: 1524360760}
+  showIntegrity: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

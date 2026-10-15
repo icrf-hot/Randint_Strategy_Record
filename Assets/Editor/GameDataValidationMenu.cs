@@ -65,6 +65,8 @@ public static class GameDataValidationMenu
                 CheckReferences(component, path, errors, "sceneLoader", "summaryText", "resumeButton", "deleteButton");
             if (component is MapSaveControls)
                 CheckReferences(component, path, errors, "font");
+            if (component is RunRecordStatusText)
+                CheckReferences(component, path, errors, "targetText");
             if (component is TitleSceneController)
             {
                 CheckReferences(component, path, errors, "sceneLoader", "enterButton");

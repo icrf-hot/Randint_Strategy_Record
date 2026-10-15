@@ -22,7 +22,7 @@ public class BattleToMapSceneLoader : MonoBehaviour
 
     [SerializeField]
     [GameTextKey] private string loadingMessageKey;
-    private string loadingMessage => GameData.Text(loadingMessageKey);
+    private string loadingMessage => GameData.Text(MapRunState.IsEnded ? "loading.run_ejected" : loadingMessageKey);
 
     [Header("Timing")]
     [Min(0f)]
@@ -64,7 +64,8 @@ public class BattleToMapSceneLoader : MonoBehaviour
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(mapSceneName))
+        string destination = MapRunState.IsEnded ? RunRecordService.LobbyScenePath : mapSceneName;
+        if (string.IsNullOrWhiteSpace(destination) || !Application.CanStreamedLevelBeLoaded(destination))
         {
             Debug.LogError(
                 "[Battle To Map] Map Scene 이름이 비어 있습니다.",
@@ -74,10 +75,10 @@ public class BattleToMapSceneLoader : MonoBehaviour
             return;
         }
 
-        StartCoroutine(LoadMapRoutine());
+        StartCoroutine(LoadMapRoutine(destination));
     }
 
-    private IEnumerator LoadMapRoutine()
+    private IEnumerator LoadMapRoutine(string destination)
     {
         isLoading = true;
 
@@ -115,7 +116,7 @@ public class BattleToMapSceneLoader : MonoBehaviour
 
         AsyncOperation operation =
             SceneManager.LoadSceneAsync(
-                mapSceneName,
+                destination,
                 LoadSceneMode.Single
             );
 
@@ -149,7 +150,7 @@ public class BattleToMapSceneLoader : MonoBehaviour
         );
 
         // 새 Map Scene의 Awake보다 먼저 설정해야 합니다.
-        MapRunState.BeginMapEntry();
+        if (!MapRunState.IsEnded) MapRunState.BeginMapEntry();
 
         // MapSceneFadeIn이 다시 0으로 설정하므로
         // 우선 정상 배율로 복원합니다.
