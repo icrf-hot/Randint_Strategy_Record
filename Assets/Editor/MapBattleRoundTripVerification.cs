@@ -25,6 +25,7 @@ public static class MapBattleRoundTripVerification
     public static void RunFailure() => RunScenario("Failure");
     public static void RunFrontRetreat() => RunScenario("FrontRetreat");
     public static void RunRedeployment() => RunScenario("Redeployment");
+    public static void RunWithCaches() => RunScenario("CacheVictory");
 
     private static void RunScenario(string scenario)
     {
@@ -95,6 +96,13 @@ public static class MapBattleRoundTripVerification
                 return;
 
             MapNode[] nodes = UnityEngine.Object.FindObjectsByType<MapNode>(FindObjectsSortMode.None);
+            if (scenario == "CacheVictory")
+            {
+                ShopCatalogData catalog = AssetDatabase.LoadAssetAtPath<ShopCatalogData>("Assets/Shop/Data/PrototypeShopCatalog.asset");
+                if (MapRunState.TryPurchaseCache(catalog, "cache_hp") != CachePurchaseResult.Success ||
+                    MapRunState.TryPurchaseCache(catalog, "cache_attack") != CachePurchaseResult.Success)
+                    throw new InvalidOperationException("Could not buy Cache fixtures before battle.");
+            }
             feedback.MoveToNode(nodes.Single(node => node.NodeID == 2));
             feedback.MoveToNode(nodes.Single(node => node.NodeID == 5));
             if (feedback.CurrentNode.NodeID != 5)
@@ -121,12 +129,21 @@ public static class MapBattleRoundTripVerification
 
             RunProgressionHUD battleHud = UnityEngine.Object.FindFirstObjectByType<RunProgressionHUD>();
             if (battleHud == null || battleHud.StatusText == null || battleHud.StatusText.font == null ||
-                battleHud.StatusText.raycastTarget || battleHud.StatusText.text != "Packet 30\nLayer 1\nEXP 0 / 16")
+                battleHud.StatusText.raycastTarget || battleHud.StatusText.text !=
+                $"Packet {(scenario == "CacheVictory" ? 10 : 30)}\nLayer 1\nEXP 0 / 16")
                 throw new InvalidOperationException("Battle progression HUD is missing or incorrect.");
 
             BattleAccessManager access = BattleAccessManager.Instance;
             if (access == null || access.MiddleOperator == null)
                 return;
+
+            if (scenario == "CacheVictory")
+            {
+                foreach (Operator op in new[] { access.FrontOperator, access.MiddleOperator, access.BackOperator })
+                    if (op.MaxHP != op.BaseMaxHP + 100 || op.CurrentHP != op.MaxHP ||
+                        op.Attack != op.Data.Attack + 10 || op.CacheBonuses.MaxHP != 100)
+                        throw new InvalidOperationException("Cache did not apply to all battle operators.");
+            }
 
             if (scenario == "FrontRetreat" || scenario == "Redeployment")
             {
@@ -172,7 +189,7 @@ public static class MapBattleRoundTripVerification
 
             // Change runtime HP only, without editing prefab balance values.
             Enemy lastEnemy = enemies[0];
-            if (scenario == "Victory")
+            if (scenario == "Victory" || scenario == "CacheVictory")
             {
                 for (int i = 1; i < enemies.Length; i++)
                     enemies[i].TakePhysicalDamage(int.MaxValue);
@@ -251,10 +268,13 @@ public static class MapBattleRoundTripVerification
                           !MapRunState.IsEnteringMapFromBattle && Mathf.Approximately(Time.timeScale, 1f);
             if (scenario == "Failure")
                 passed &= SessionState.GetBool(Prefix + "NoFailureCards", false);
-            int expectedPackets = scenario == "Failure" ? 30 : 38;
+            int expectedPackets = scenario == "Failure" ? 30 : scenario == "CacheVictory" ? 18 : 38;
             int expectedExperience = scenario == "Failure" ? 0 : 12;
             passed &= MapRunState.Packets.Balance == expectedPackets &&
                       MapRunState.Progression.Layer == 1 && MapRunState.Progression.Experience == expectedExperience;
+            if (scenario == "CacheVictory")
+                passed &= MapRunState.Caches.Owned.Count == 2 && MapRunState.Caches.HasPurchased("cache_hp") &&
+                          MapRunState.Caches.HasPurchased("cache_attack");
             RunProgressionHUD mapHud = UnityEngine.Object.FindFirstObjectByType<RunProgressionHUD>();
             passed &= mapHud != null && mapHud.StatusText != null && mapHud.StatusText.font != null &&
                       !mapHud.StatusText.raycastTarget &&

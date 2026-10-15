@@ -15,6 +15,8 @@ public class Operator : MonoBehaviour
     private int currentDefense;
     private int currentArtsResistance;
     private float currentAttackSpeed;
+    private int effectiveMaxHP;
+    private CacheStatBonuses cacheBonuses;
 
     // =========================================================
     // 이번 전투의 임시 보정값
@@ -78,23 +80,24 @@ public class Operator : MonoBehaviour
     // 기본 스탯
     // =========================================================
 
-    public int MaxHP => data.MaxHP;
+    public int BaseMaxHP => data != null ? data.MaxHP : 0;
+    public int MaxHP => effectiveMaxHP;
+    public CacheStatBonuses CacheBonuses => cacheBonuses;
 
     // 현재 전투에서 사용하는 실제 공격력
     public int Attack =>
-        currentAttack + battleAttackBonus;
+        CacheStatBonuses.Add(currentAttack, cacheBonuses.Attack, battleAttackBonus);
 
     // 현재 전투에서 사용하는 실제 방어력
     public int Defense =>
-        currentDefense + battleDefenseBonus;
+        CacheStatBonuses.Add(currentDefense, cacheBonuses.Defense, battleDefenseBonus);
 
     // 현재 전투에서 사용하는 실제 아츠 저항
     public int ArtsResistance =>
-        currentArtsResistance +
-        battleArtsResistanceBonus;
+        CacheStatBonuses.Add(currentArtsResistance, cacheBonuses.ArtsResistance, battleArtsResistanceBonus);
 
     public float AttackSpeed =>
-        currentAttackSpeed;
+        (float)Math.Min(float.MaxValue, (double)currentAttackSpeed + cacheBonuses.AttackSpeed);
 
     // =========================================================
     // 원래 스탯
@@ -233,8 +236,10 @@ public class Operator : MonoBehaviour
         // 기본 스탯 초기화
         // -----------------------------------------------------
 
-        currentHP =
-            data.MaxHP;
+        // Snapshot run bonuses once at battle creation; round resets never remove them.
+        cacheBonuses = new CacheStatBonuses(MapRunState.Caches.Owned);
+        effectiveMaxHP = CacheStatBonuses.Add(data.MaxHP, cacheBonuses.MaxHP);
+        currentHP = effectiveMaxHP;
 
         currentAttack =
             data.Attack;
