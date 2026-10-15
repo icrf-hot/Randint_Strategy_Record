@@ -69,10 +69,13 @@ public static class RunSavePlayVerification
                 MapRunState.TryGrantVictory(out _, out _);
                 MapRunState.RecordBattleResult(true);
                 controls.SaveButton.onClick.Invoke();
+                controls.ConfirmButton.onClick.Invoke();
                 Require(repository.TryRead(out RunSaveSnapshot data, out _) && data.packets == 26 && data.currentNodeId == 5,
                     "Map Save button did not persist snapshot.");
                 SessionState.SetString(Key + "RunId", data.runId);
                 controls.LobbyButton.onClick.Invoke();
+                controls.ConfirmButton.onClick.Invoke();
+                controls.ConfirmButton.onClick.Invoke();
                 SessionState.SetInt(Key + "Stage", 1);
             }
             else if ((stage == 1 || stage == 5) && scene == "Lobby")
@@ -125,6 +128,8 @@ public static class RunSavePlayVerification
                 else
                 {
                     controls.LobbyButton.onClick.Invoke();
+                    controls.ConfirmButton.onClick.Invoke();
+                    controls.ConfirmButton.onClick.Invoke();
                     SessionState.SetInt(Key + "Stage", 5);
                 }
             }

@@ -6,8 +6,17 @@ using UnityEngine.SceneManagement;
 public static class RunSaveService
 {
     private static RunSaveRepository defaultRepository;
-    public static RunSaveRepository Repository => defaultRepository ??
+    private static RunSaveRepository Root => defaultRepository ??
         (defaultRepository = new RunSaveRepository(Path.Combine(Application.persistentDataPath, "Saves"), RunSaveBindings.Instance));
+    public static int SelectedSlot { get; private set; } = 1;
+    public static RunSaveSlots Slots => new RunSaveSlots(Root);
+    public static RunSaveRepository Repository => Slots.At(SelectedSlot);
+    public static bool SelectSlot(int slot)
+    {
+        if (!Slots.TryPageCount(out int pages, out _) || slot < 1 || slot > pages * RunSaveSlots.SlotsPerPage) return false;
+        SelectedSlot = slot;
+        return true;
+    }
 
     public static bool CanSave
     {
@@ -34,28 +43,40 @@ public static class RunSaveService
     {
         if (reason != "Ending" && reason != "Ejected") throw new ArgumentException(nameof(reason));
         MapRunState.MarkEnded(reason);
-        if (!Repository.TryRead(out RunSaveSnapshot saved, out error, true))
+        error = RunSaveError.None;
+        int[] ids;
+        try { ids = Slots.ExistingSlotIds(); }
+        catch (IOException) { error = RunSaveError.IoError; return false; }
+        catch (UnauthorizedAccessException) { error = RunSaveError.IoError; return false; }
+        foreach (int id in ids)
         {
-            if (error != RunSaveError.NotFound) return false;
-            error = RunSaveError.None;
-            return true;
+            RunSaveRepository repository = Slots.At(id);
+            if (!repository.TryRead(out RunSaveSnapshot saved, out RunSaveError readError, true))
+            {
+                if (readError == RunSaveError.IoError) error = readError;
+                continue;
+            }
+            if (saved.runId != MapRunState.RunId) continue;
+            saved.state = "Ended";
+            saved.endReason = reason;
+            saved.schemaVersion = 2;
+            saved.integrity = MapRunState.RecordHealth.Integrity;
+            saved.consistency = MapRunState.RecordHealth.Consistency;
+            saved.savedUtc = DateTimeOffset.UtcNow.ToString("O");
+            if (!repository.TryWrite(saved, out RunSaveError failure) && !repository.TryDelete(out failure))
+                error = failure;
         }
-        if (saved.runId != MapRunState.RunId) { error = RunSaveError.None; return true; }
-        saved.state = "Ended";
-        saved.endReason = reason;
-        saved.schemaVersion = 2;
-        saved.integrity = MapRunState.RecordHealth.Integrity;
-        saved.consistency = MapRunState.RecordHealth.Consistency;
-        saved.savedUtc = DateTimeOffset.UtcNow.ToString("O");
-        return Repository.TryWrite(saved, out error);
+        return error == RunSaveError.None;
     }
 
     // Keeps tests isolated from a user's actual slot. Runtime UI never changes this.
     public static IDisposable UseRepositoryForVerification(RunSaveRepository repository)
     {
         var previous = defaultRepository;
+        int previousSlot = SelectedSlot;
         defaultRepository = repository;
-        return new RepositoryScope(() => defaultRepository = previous);
+        SelectedSlot = repository.SlotId;
+        return new RepositoryScope(() => { defaultRepository = previous; SelectedSlot = previousSlot; });
     }
 
     private sealed class RepositoryScope : IDisposable

@@ -1,6 +1,15 @@
 {
   "schemaVersion": 1,
   "entries": [
+    { "key": "save.choose_slot", "value": "저장 슬롯 선택" },
+    { "key": "save.slot", "value": "슬롯 {0}" },
+    { "key": "save.slot_empty", "value": "빈 슬롯" },
+    { "key": "save.slot_unavailable", "value": "계속할 수 없는 기록" },
+    { "key": "save.slot_brief", "value": "Layer {0} · Packet {1} · {2}" },
+    { "key": "save.slot_details", "value": "슬롯 {0} · {1}\nLayer {2} · Packet {3} · 노드 {4} · Cache {5}개\n아군: {6}" },
+    { "key": "save.confirm_delete_slot", "value": "슬롯 {0}의 기록을 삭제하시겠습니까?\n삭제 확인을 누르면 이 슬롯의 저장·복구 파일만 삭제됩니다." },
+    { "key": "save.confirm_overwrite", "value": "슬롯 {0}의 기존 기록을 덮어쓰시겠습니까?" },
+    { "key": "save.overwrite", "value": "덮어쓰기 확인" },
     {
       "key": "save.save",
       "value": "저장"

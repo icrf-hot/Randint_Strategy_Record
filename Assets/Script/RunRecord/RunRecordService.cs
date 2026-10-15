@@ -28,8 +28,6 @@ public static class RunRecordService
         if (!RunSaveService.MarkRunEnded("Ejected", out RunSaveError error))
         {
             Debug.LogWarning("[Run Record] Could not mark the saved run ended: " + error);
-            if (!RunSaveService.Repository.TryDelete(out RunSaveError deleteError))
-                Debug.LogError("[Run Record] Could not invalidate the saved run: " + deleteError);
         }
         if (!deferLobby) ReturnToLobby();
         return true;

@@ -18,11 +18,16 @@ public sealed class RunSaveRepository
     private readonly string file;
     private readonly RunSaveBindings bindings;
     public string FilePath => file;
+    public string DirectoryPath => Path.GetDirectoryName(file);
+    public RunSaveBindings Bindings => bindings;
+    public int SlotId { get; }
     public bool HasFiles => File.Exists(file) || File.Exists(file + ".bak") || File.Exists(file + ".tmp");
 
-    public RunSaveRepository(string directory, RunSaveBindings bindings)
+    public RunSaveRepository(string directory, RunSaveBindings bindings, int slotId = 1)
     {
-        file = Path.Combine(Path.GetFullPath(directory), "run.json");
+        if (slotId < 1) throw new ArgumentOutOfRangeException(nameof(slotId));
+        SlotId = slotId;
+        file = Path.Combine(Path.GetFullPath(directory), slotId == 1 ? "run.json" : "slot_" + slotId.ToString("D4", System.Globalization.CultureInfo.InvariantCulture) + ".json");
         this.bindings = bindings;
     }
 

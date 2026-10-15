@@ -12,8 +12,16 @@ public sealed class MapSaveControls : MonoBehaviour
     private Button saveButton;
     private Button lobbyButton;
     private bool isLeaving;
+    private GameObject picker;
+    private SaveSlotBrowser browser;
+    private TMP_Text pickerSummary;
+    private Button confirmButton;
+    private bool returnAfterSave;
+    private bool confirmingOverwrite;
     public Button SaveButton => saveButton;
     public Button LobbyButton => lobbyButton;
+    public SaveSlotBrowser Browser => browser;
+    public Button ConfirmButton => confirmButton;
 
     private void Start()
     {
@@ -28,8 +36,8 @@ public sealed class MapSaveControls : MonoBehaviour
         scaler.matchWidthOrHeight = 0.5f;
         saveButton = Button("Save", "save.save", new Vector2(24, 24), new Vector2(130, 46));
         lobbyButton = Button("SaveAndLobby", "save.save_lobby", new Vector2(166, 24), new Vector2(210, 46));
-        saveButton.onClick.AddListener(() => Save(false));
-        lobbyButton.onClick.AddListener(() => Save(true));
+        saveButton.onClick.AddListener(() => OpenSlotPicker(false));
+        lobbyButton.onClick.AddListener(() => OpenSlotPicker(true));
         statusText = Label("Status", canvasObject.transform);
         RectTransform rect = statusText.rectTransform;
         rect.anchorMin = rect.anchorMax = rect.pivot = Vector2.zero;
@@ -41,27 +49,89 @@ public sealed class MapSaveControls : MonoBehaviour
     {
         if (saveButton == null) return;
         bool allowed = !isLeaving && RunSaveService.CanSave;
-        saveButton.interactable = allowed;
-        lobbyButton.interactable = allowed;
+        saveButton.interactable = allowed && (picker == null || !picker.activeSelf);
+        lobbyButton.interactable = saveButton.interactable;
+        if (picker != null && picker.activeSelf)
+        {
+            browser.SetInteractable(allowed);
+            confirmButton.interactable = allowed && browser.Error == RunSaveError.None;
+        }
         MapSceneFadeIn fade = FindFirstObjectByType<MapSceneFadeIn>();
         canvasObject.SetActive(fade == null || fade.IsFadeComplete);
     }
 
-    public bool Save(bool returnToLobby)
+    public void OpenSlotPicker(bool returnToLobby)
     {
-        if (isLeaving) return false;
-        if (returnToLobby && !Application.CanStreamedLevelBeLoaded("Assets/Scenes/Lobby.unity"))
-        { statusText.text = RunSaveMessages.Error(RunSaveError.NotAllowed); return false; }
+        if (isLeaving || !RunSaveService.CanSave) return;
+        EnsurePicker();
+        returnAfterSave = returnToLobby;
+        confirmingOverwrite = false;
+        picker.SetActive(true);
+        browser.SetInteractable(true);
+        browser.Open(RunSaveService.SelectedSlot);
+    }
+
+    private void EnsurePicker()
+    {
+        if (picker != null) return;
+        picker = new GameObject("SaveSlotPicker", typeof(RectTransform), typeof(Image));
+        picker.transform.SetParent(canvasObject.transform, false);
+        var rect = (RectTransform)picker.transform;
+        rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.one;
+        rect.offsetMin = rect.offsetMax = Vector2.zero;
+        picker.GetComponent<Image>().color = new Color(0, 0, 0, 0.65f);
+        var panel = new GameObject("Dialog", typeof(RectTransform), typeof(Image));
+        panel.transform.SetParent(picker.transform, false);
+        SlotUI.Place((RectTransform)panel.transform, Vector2.zero, new Vector2(960, 640));
+        panel.GetComponent<Image>().color = new Color(0.98f, 0.98f, 0.99f);
+        var title = SlotUI.Label(panel.transform, "Title", font, new Vector2(0, 290), new Vector2(900, 40), 24);
+        title.text = GameData.Text("save.choose_slot");
+        pickerSummary = SlotUI.Label(panel.transform, "Summary", font, new Vector2(0, -211), new Vector2(900, 72));
+        confirmButton = SlotUI.Button(panel.transform, "Confirm", font, GameData.Text("save.save"),
+            new Vector2(-200, -280), new Vector2(180, 44));
+        var close = SlotUI.Button(panel.transform, "Cancel", font, GameData.Text("menu.window.close"),
+            new Vector2(200, -280), new Vector2(180, 44));
+        close.onClick.AddListener(() => { confirmingOverwrite = false; picker.SetActive(false); });
+        confirmButton.onClick.AddListener(ConfirmSave);
+        browser = SaveSlotBrowser.Create(panel.transform, font, _ =>
+        {
+            confirmingOverwrite = false;
+            confirmButton.GetComponentInChildren<TMP_Text>().text = GameData.Text("save.save");
+            pickerSummary.text = browser.Error == RunSaveError.None ? SlotUI.Summary(browser.SelectedSlot) : RunSaveMessages.Error(browser.Error);
+        });
+    }
+
+    public void ConfirmSave()
+    {
+        if (isLeaving || picker == null || !picker.activeSelf || !RunSaveService.CanSave) return;
+        if (browser.Error != RunSaveError.None) return;
+        if (!confirmingOverwrite && RunSaveService.Slots.At(browser.SelectedSlot).HasFiles)
+        {
+            confirmingOverwrite = true;
+            pickerSummary.text = string.Format(GameData.Text("save.confirm_overwrite"), browser.SelectedSlot);
+            confirmButton.GetComponentInChildren<TMP_Text>().text = GameData.Text("save.overwrite");
+            return;
+        }
+        if (returnAfterSave && !Application.CanStreamedLevelBeLoaded("Assets/Scenes/Lobby.unity"))
+        { pickerSummary.text = RunSaveMessages.Error(RunSaveError.NotAllowed); return; }
+        int previous = RunSaveService.SelectedSlot;
+        if (!RunSaveService.SelectSlot(browser.SelectedSlot)) return;
         if (!RunSaveService.Save(out RunSaveError error))
-        { statusText.text = RunSaveMessages.Error(error); return false; }
+        {
+            RunSaveService.SelectSlot(previous);
+            confirmingOverwrite = false;
+            confirmButton.GetComponentInChildren<TMP_Text>().text = GameData.Text("save.save");
+            pickerSummary.text = RunSaveMessages.Error(error);
+            return;
+        }
+        picker.SetActive(false);
         statusText.text = GameData.Text("save.saved");
-        if (returnToLobby)
+        if (returnAfterSave)
         {
             isLeaving = true;
             Time.timeScale = 1;
             SceneManager.LoadSceneAsync("Assets/Scenes/Lobby.unity");
         }
-        return true;
     }
 
     private Button Button(string name, string key, Vector2 position, Vector2 size)

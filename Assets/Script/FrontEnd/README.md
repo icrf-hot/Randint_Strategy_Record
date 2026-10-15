@@ -4,7 +4,7 @@
 
 `Assets/Scenes/Title.unity`를 열고 Play하면 타이틀이 유지되며 내부 데이터 접근 버튼으로 Lobby에 진입합니다. Build Settings는 기존 인덱스를 보존하여 Title(0), Map_1F(1), Playing_Scene(2), Shop(3), Lobby(4)입니다. 실제 흐름은 Title → Lobby → 새 게임 → Map입니다.
 
-UI는 저장된 Scene의 Canvas/TMP/단색 Image입니다. 런타임에 새 UI를 생성하지 않으므로 Hierarchy와 Inspector에서 위치·크기·색상을 직접 수정할 수 있습니다. 이미지 아이콘은 아직 사용하지 않습니다. Canvas 기준 해상도는 1280×720이며 CanvasScaler가 화면 크기에 맞춥니다.
+기본 메뉴 UI는 저장된 Scene의 Canvas/TMP/단색 Image입니다. 슬롯 그리드와 Map 저장 선택 모달은 런타임에 생성합니다. 기본 메뉴는 Hierarchy/Inspector에서, 슬롯 배치는 SaveSlotBrowser/SaveSlotWindow/MapSaveControls에서 수정합니다. Canvas 기준 해상도는 1280×720이며 CanvasScaler가 화면 크기에 맞춥니다.
 
 표시 문구는 `Assets/Resources/GameData/Localization/ko-KR/menu.json`에서 수정합니다. `MenuCanvas`의 TMP는 Play 시작 시 `LocalizedSceneTexts`가 JSON으로 채웁니다. Scene 편집 화면에서 TMP가 빈 것은 의도된 동작입니다. 숫자/문구를 Scene에 직접 입력해도 Play에서 JSON 값으로 교체됩니다.
 
@@ -19,11 +19,11 @@ UI는 저장된 Scene의 Canvas/TMP/단색 Image입니다. 런타임에 새 UI�
 
 설정은 안내 창만 존재합니다. 설정 항목/적용 방식은 확정되지 않아 실제 환경 설정을 추가하지 않았습니다.
 
-이어하기 폴더는 `SaveSlotWindow`가 실제 저장 파일을 읽어 저장 시각·Layer·Packet·현재 노드·아군·Cache 수를 표시합니다. 계속하기는 검증한 데이터를 Map 진입 전에 복원합니다. 삭제는 두 번 눌러 확인하며 창을 닫으면 확인을 취소합니다.
+이어하기 폴더는 `SaveSlotWindow`와 공통 `SaveSlotBrowser`가 페이지당 10개 슬롯을 표시합니다. <, >로 이동하고 +로 10개짜리 페이지를 추가하며 빈 페이지도 유지합니다. 선택한 슬롯의 정보를 보고 계속하기/삭제합니다. 삭제는 두 번 확인하며 슬롯·페이지 변경이나 창 닫기는 확인을 취소합니다.
 
 새 게임은 `MapRunState.StartNewRun(progressionSettings)`으로 Packet 30, Layer 1/EXP 0, 빈 Cache 보유/구매 이력과 맵 위치를 초기화합니다. Title·Lobby 방문만으로는 초기화하지 않습니다. 새 게임만으로 기존 디스크 슬롯을 삭제하지 않으며 다음 명시적 저장에서 덮어씁니다.
 
-Map에는 저장 및 저장 후 로비 버튼이 있습니다. 단일 슬롯은 `Application.persistentDataPath/Saves/run.json`입니다. 전투·전환 중 저장은 금지합니다. 상세는 `wiki/01 시스템/저장과 이어하기.md`를 참고하십시오. 설정과 Battle 일시정지는 별도입니다.
+Map의 저장/저장 후 로비는 슬롯 선택 창을 엽니다. 기존 기록 덮어쓰기는 두 번 확인합니다. `Application.persistentDataPath/Saves/`에서 1번은 기존 `run.json`, 이후는 `slot_0011.json` 같은 파일이고 페이지 수는 `pages.json`입니다. 전투·전환 중 저장 금지는 유지합니다. 상세는 `wiki/01 시스템/저장과 이어하기.md`를 참고하십시오.
 
 ## 검증
 
