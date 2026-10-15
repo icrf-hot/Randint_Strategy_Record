@@ -5,7 +5,7 @@ using System.Globalization;
 namespace Randint.Data
 {
     // JsonUtility가 조용히 덮어쓸 수 있는 중복 JSON 속성도 역직렬화 전에 차단합니다.
-    internal sealed class JsonSyntaxGuard
+    public sealed class JsonSyntaxGuard
     {
         private readonly string json;
         private int index;

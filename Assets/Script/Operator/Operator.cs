@@ -192,6 +192,16 @@ public class Operator : MonoBehaviour
         // -----------------------------------------------------
         CacheVisualRenderers();
 
+        RunSaveBindings bindings = RunSaveBindings.Instance;
+        if (data != null && bindings != null && gameObject.scene.path == bindings.BattleScenePath)
+        {
+            foreach (string id in MapRunState.PartyIds)
+            {
+                OperatorData member = bindings.Operator(id);
+                if (member != null && member.Position == data.Position) { data = member; break; }
+            }
+        }
+
         battleState = OperatorBattleState.Active;
         redeployTurnsRemaining = -1;
 

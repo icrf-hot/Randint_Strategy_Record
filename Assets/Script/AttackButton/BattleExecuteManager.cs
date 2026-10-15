@@ -264,6 +264,7 @@ public class BattleExecuteManager : MonoBehaviour
             yield break;
 
         isFinishingBattle = true;
+        MapRunState.RecordBattleResult(resultType == BattleResultType.Success);
 
         if (OperatorFocusManager.Instance != null)
         {

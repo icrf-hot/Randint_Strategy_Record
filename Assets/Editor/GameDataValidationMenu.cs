@@ -61,6 +61,10 @@ public static class GameDataValidationMenu
             CheckFields(component, path + "/" + component.name, catalog, errors);
             if (component is MenuSceneLoader)
                 CheckReferences(component, path, errors, "transitionCanvas", "transitionText");
+            if (component is SaveSlotWindow)
+                CheckReferences(component, path, errors, "sceneLoader", "summaryText", "resumeButton", "deleteButton");
+            if (component is MapSaveControls)
+                CheckReferences(component, path, errors, "font");
             if (component is TitleSceneController)
             {
                 CheckReferences(component, path, errors, "sceneLoader", "enterButton");

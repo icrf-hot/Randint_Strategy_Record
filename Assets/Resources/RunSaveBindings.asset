@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0da23d3bdcdf45a5a7d16c81d7dc79ad, type: 3}
+  m_Name: RunSaveBindings
+  m_EditorClassIdentifier: Assembly-CSharp::RunSaveBindings
+  progression: {fileID: 11400000, guid: 9f99a3a6fdbb4bb7b0f411361642ad38, type: 2}
+  shop: {fileID: 11400000, guid: 5401c481764a46a996f3ed1fb87132de, type: 2}
+  operators:
+  - {fileID: 11400000, guid: ad8e671e2b6f1ef41847f198d6b73c64, type: 2}
+  - {fileID: 11400000, guid: 61f79f5bf0f801045a4f6cccee710f86, type: 2}
+  - {fileID: 11400000, guid: 08437f706e494514184cf8764d1d7e2d, type: 2}
+  defaultPartyIds:
+  - saria
+  - dorothy
+  - ptilopsis
+  mapNodeIds: 0100000002000000030000000400000005000000060000000700000008000000
+  mapScenePath: Assets/Scenes/Map_1F.unity
+  battleScenePath: Assets/Scenes/Playing_Scene.unity

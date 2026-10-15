@@ -67,4 +67,16 @@ public sealed class RunProgression
         Layer = 1;
         Experience = 0;
     }
+
+    public bool TryRestore(RunProgressionSettings restoredSettings, int packets, int layer, int experience)
+    {
+        if (restoredSettings == null || !restoredSettings.IsValid || packets < 0 || layer < 1 ||
+            experience < 0 || experience >= restoredSettings.RequiredExperience(layer)) return false;
+        Clear();
+        settings = restoredSettings;
+        Packets.TryAdd(packets);
+        Layer = layer;
+        Experience = experience;
+        return true;
+    }
 }

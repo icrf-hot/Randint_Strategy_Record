@@ -145,6 +145,16 @@ public static class FrontEndSceneBuilder
             ("settingsWindow", settingsModal), ("continueWindow", continueModal),
             ("settingsButton", settings), ("continueButton", resume), ("newGameButton", newGame),
             ("settingsCloseButton", settingsClose), ("continueCloseButton", continueClose));
+        Transform dialog = continueModal.transform.Find("Dialog");
+        Button resumeSaved = Button("ResumeSavedRun", dialog, "save.continue", new Vector2(-200, -116), new Vector2(145, 44));
+        Button deleteSaved = Button("DeleteSavedRun", dialog, "save.delete", new Vector2(0, -116), new Vector2(145, 44));
+        continueClose.GetComponent<RectTransform>().anchoredPosition = new Vector2(200, -116);
+        TMP_Text summary = dialog.Find("Message").GetComponent<TMP_Text>();
+        summary.enableAutoSizing = true;
+        summary.fontSizeMin = 14;
+        summary.fontSizeMax = 23;
+        SaveSlotWindow slot = continueModal.AddComponent<SaveSlotWindow>();
+        SetReferences(slot, ("sceneLoader", loader), ("summaryText", summary), ("resumeButton", resumeSaved), ("deleteButton", deleteSaved));
     }
 
     private static Button Tile(Transform parent, string name, string prefix, float x)

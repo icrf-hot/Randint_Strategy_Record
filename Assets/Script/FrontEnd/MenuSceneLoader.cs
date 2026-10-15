@@ -45,6 +45,17 @@ public sealed class MenuSceneLoader : MonoBehaviour
         return true;
     }
 
+    public bool TryContinue(RunSaveSnapshot snapshot)
+    {
+        RunSaveBindings bindings = RunSaveBindings.Instance;
+        if (IsLoading || SceneManager.GetActiveScene().name != "Lobby" || bindings == null ||
+            !Application.CanStreamedLevelBeLoaded(bindings.MapScenePath) ||
+            !PreparedRunRestore.TryPrepare(snapshot, bindings, out PreparedRunRestore prepared, out _)) return false;
+        IsLoading = true;
+        StartCoroutine(LoadRoutine(bindings.MapScenePath, false, prepared));
+        return true;
+    }
+
     private IEnumerator ShowLoadError()
     {
         IsLoading = true;
@@ -59,7 +70,7 @@ public sealed class MenuSceneLoader : MonoBehaviour
         IsLoading = false;
     }
 
-    private IEnumerator LoadRoutine(string scenePath, bool resetMapRun)
+    private IEnumerator LoadRoutine(string scenePath, bool resetMapRun, PreparedRunRestore prepared = null)
     {
         transitionCanvas.gameObject.SetActive(true);
         transitionCanvas.alpha = 0f;
@@ -84,6 +95,7 @@ public sealed class MenuSceneLoader : MonoBehaviour
         // 새 Scene의 Awake/Start보다 먼저 설정합니다. 디스크 파일은 변경하지 않습니다.
         operation.allowSceneActivation = false;
         if (resetMapRun) MapRunState.StartNewRun(progressionSettings);
+        prepared?.Apply();
         Time.timeScale = 1f;
         while (operation.progress < 0.9f) yield return null;
         operation.allowSceneActivation = true;

@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "key": "save.save",
+      "value": "저장"
+    },
+    {
+      "key": "save.save_lobby",
+      "value": "저장 후 로비"
+    },
+    {
+      "key": "save.saved",
+      "value": "저장했습니다."
+    },
+    {
+      "key": "save.continue",
+      "value": "계속하기"
+    },
+    {
+      "key": "save.delete",
+      "value": "삭제"
+    },
+    {
+      "key": "save.delete_confirm",
+      "value": "삭제 확인"
+    },
+    {
+      "key": "save.confirm_delete",
+      "value": "저장된 작전기록을 삭제하시겠습니까?\n삭제 확인을 누르면 저장 파일과 복구 파일을 삭제합니다.\n취소하려면 창을 닫아주십시오."
+    },
+    {
+      "key": "save.deleted",
+      "value": "저장된 작전기록을 삭제했습니다."
+    },
+    {
+      "key": "save.summary",
+      "value": "저장: {0}\nLayer {1} · Packet {2}\n현재 노드: {3}\n아군: {4}\nCache: {5}개"
+    },
+    {
+      "key": "save.error.none",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "save.error.notfound",
+      "value": "저장된 작전기록이 없습니다."
+    },
+    {
+      "key": "save.error.notallowed",
+      "value": "지금은 이 작업을 할 수 없습니다."
+    },
+    {
+      "key": "save.error.invaliddata",
+      "value": "저장 파일이 손상되었거나 형식이 올바르지 않습니다."
+    },
+    {
+      "key": "save.error.incompatibledata",
+      "value": "현재 게임 데이터와 호환되지 않는 저장입니다."
+    },
+    {
+      "key": "save.error.runended",
+      "value": "이미 종료된 판입니다. 계속할 수 없습니다."
+    },
+    {
+      "key": "save.error.ioerror",
+      "value": "저장 파일을 읽거나 변경하지 못했습니다."
+    }
+  ]
+}

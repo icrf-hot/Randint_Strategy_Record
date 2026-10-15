@@ -50,6 +50,7 @@
     { "kind": "cache", "path": "GameData/Definitions/caches" },
     { "kind": "run_rules", "path": "GameData/Definitions/run_rules" },
     { "kind": "shop", "path": "GameData/Definitions/shops" },
+    { "kind": "text", "path": "GameData/Localization/ko-KR/save" },
     { "kind": "text", "path": "GameData/Localization/ko-KR/shop"
     }
   ]

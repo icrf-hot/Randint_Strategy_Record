@@ -29,6 +29,15 @@ public sealed class RunCacheInventory
         return !string.IsNullOrWhiteSpace(cacheId) && purchasedIds.Contains(cacheId);
     }
 
+    public string[] PurchasedIds => new List<string>(purchasedIds).ToArray();
+
+    public void RestoreValidated(IReadOnlyList<CacheData> ownedCaches, IReadOnlyList<string> purchased)
+    {
+        Clear();
+        foreach (CacheData cache in ownedCaches) owned.Add(cache);
+        foreach (string id in purchased) purchasedIds.Add(id);
+    }
+
     internal CachePurchaseResult TryPurchase(PacketWallet wallet, ShopCatalogData catalog, string cacheId)
     {
         if (catalog == null || catalog.Currency == null ||

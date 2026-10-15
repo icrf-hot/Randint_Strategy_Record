@@ -15,15 +15,15 @@ UI는 저장된 Scene의 Canvas/TMP/단색 Image입니다. 런타임에 새 UI�
 - `MenuSceneLoader`: 독립된 전환 Canvas를 통한 페이드, 중복 로드 차단, 비동기 씬 로드. 시간 배율과 무관하게 페이드가 진행되며 다음 씬 진입 전 정상 배율을 복원합니다.
 - `Assets/Editor/FrontEndSceneBuilder.cs`: 초기 씬을 생성한 Editor 도구. **Tools → Randint → Front End → Rebuild Title and Lobby Scenes**는 두 씬의 수동 UI 변경을 덮어쓰므로 필요할 때만 사용합니다. 런타임에는 호출되지 않습니다.
 
-## 의도적으로 미구현한 정책
+## 저장과 미확정 정책
 
 설정은 안내 창만 존재합니다. 설정 항목/적용 방식은 확정되지 않아 실제 환경 설정을 추가하지 않았습니다.
 
-이어하기 폴더는 디스크 저장 기능이 미구현임을 안내합니다. `MapRunState`의 임시 메모리 위치를 저장 파일처럼 표시하거나 이어하기로 사용하지 않습니다.
+이어하기 폴더는 `SaveSlotWindow`가 실제 저장 파일을 읽어 저장 시각·Layer·Packet·현재 노드·아군·Cache 수를 표시합니다. 계속하기는 검증한 데이터를 Map 진입 전에 복원합니다. 삭제는 두 번 눌러 확인하며 창을 닫으면 확인을 취소합니다.
 
-새 게임은 `MapRunState.StartNewRun(progressionSettings)`으로 Packet 30, Layer 1/EXP 0, 빈 Cache 보유/구매 이력과 맵 위치를 초기화합니다. Title·Lobby 방문만으로는 초기화하지 않습니다. JSON 정의나 디스크 세이브는 변경하지 않습니다. 저장·이어하기는 아직 미구현입니다.
+새 게임은 `MapRunState.StartNewRun(progressionSettings)`으로 Packet 30, Layer 1/EXP 0, 빈 Cache 보유/구매 이력과 맵 위치를 초기화합니다. Title·Lobby 방문만으로는 초기화하지 않습니다. 새 게임만으로 기존 디스크 슬롯을 삭제하지 않으며 다음 명시적 저장에서 덮어씁니다.
 
-Map의 창 모드/로비 복귀, Battle 일시정지, 디스크 저장 정책은 이번 Title/Lobby 구현에 포함하지 않았습니다.
+Map에는 저장 및 저장 후 로비 버튼이 있습니다. 단일 슬롯은 `Application.persistentDataPath/Saves/run.json`입니다. 전투·전환 중 저장은 금지합니다. 상세는 `wiki/01 시스템/저장과 이어하기.md`를 참고하십시오. 설정과 Battle 일시정지는 별도입니다.
 
 ## 검증
 
