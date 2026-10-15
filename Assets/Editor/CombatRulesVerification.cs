@@ -11,18 +11,24 @@ public static class CombatRulesVerification
         List<GameObject> objects = new List<GameObject>();
         SkillData skill = ScriptableObject.CreateInstance<SkillData>();
         OperatorData data = ScriptableObject.CreateInstance<OperatorData>();
+        var operatorDefinition = Randint.Data.GameData.Catalog.Operator("saria");
+        var skillDefinition = Randint.Data.GameData.Catalog.Skill("dorothy_skill_1");
+        using var operatorScope = new JsonDefinitionScope(operatorDefinition);
+        using var skillScope = new JsonDefinitionScope(skillDefinition);
         try
         {
             Require(BackCardSelectionManager.CalculateHealing(1, 9) == 1000 &&
                 BackCardSelectionManager.CalculateHealing(9, 9) == 1800, "Healer formula is incorrect.");
             SerializedObject skillData = new SerializedObject(skill);
-            skillData.FindProperty("maxSP").intValue = 100;
-            skillData.FindProperty("chargeType").intValue = (int)SkillChargeType.Natural;
+            skillData.FindProperty("dataId").stringValue = "dorothy_skill_1";
+            skillDefinition.maxSP = 100;
+            skillDefinition.chargeType = "Natural";
+            skillDefinition.chargeAmount = 1;
             skillData.ApplyModifiedPropertiesWithoutUndo();
             SerializedObject source = new SerializedObject(data);
-            source.FindProperty("maxHP").intValue = 10000;
-            source.FindProperty("skills").arraySize = 1;
-            source.FindProperty("skills").GetArrayElementAtIndex(0).objectReferenceValue = skill;
+            source.FindProperty("dataId").stringValue = "saria";
+            operatorDefinition.maxHP = 10000;
+            operatorDefinition.skillIds = new[] { "dorothy_skill_1" };
             source.ApplyModifiedPropertiesWithoutUndo();
             BattleExecuteManager manager = Create<BattleExecuteManager>(objects);
             Operator[] allies = new Operator[3];
@@ -36,6 +42,7 @@ public static class CombatRulesVerification
             }
             for (int i = 0; i < 3; i++) Invoke(manager, "NotifyAttackPerformed");
             Enemy enemy = Create<Enemy>(objects);
+            Set(enemy, "dataId", "makeshift");
             Invoke(enemy, "Awake");
             for (int i = 0; i < 4; i++) Invoke(manager, "ExecuteEnemyAction", enemy);
             foreach (Operator op in allies)

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "makeshift",
+      "maxHP": 1000,
+      "attack": 2000,
+      "defense": 10,
+      "artsResistance": 15,
+      "attackSpeed": 1
+    }
+  ]
+}

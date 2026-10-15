@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using Randint.Data;
 
 public class BackCardSelectionManager : CardSelectionManagerBase
 {
@@ -23,7 +24,8 @@ public class BackCardSelectionManager : CardSelectionManagerBase
 
     public static int CalculateHealing(int a, int b)
     {
-        return (int)System.Math.Max(0, System.Math.Min(int.MaxValue, ((long)a + b) * 100));
+        return (int)System.Math.Max(0, System.Math.Min(int.MaxValue, ((long)a + b) *
+            Randint.Data.GameData.Catalog.Rules("default_run").healerCardMultiplier));
     }
 
     private void Awake()
@@ -149,7 +151,7 @@ public class BackCardSelectionManager : CardSelectionManagerBase
             secondCard != null;
 
         if (accessText != null)
-            accessText.text = IsAccess ? "승인됨" : "승인 대기중";
+            accessText.text = GameData.Text(IsAccess ? "ui.battle.access.approved" : "ui.battle.access.waiting");
 
         BattleAccessManager.Instance.Refresh();
     }

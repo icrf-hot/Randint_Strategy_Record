@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "key": "operator.dorothy.name",
+      "value": "도로시 프랭크스"
+    },
+    {
+      "key": "operator.dorothy.info",
+      "value": "컬럼비아에 라인랩 오리지늄 아츠 응용과 주임이자\n이상주의자였던, 하지만 현실에 의해 끌어내려진\n추락한 선지자 중 하나입니다. "
+    },
+    {
+      "key": "operator.ptilopsis.name",
+      "value": "조이스 무어"
+    },
+    {
+      "key": "operator.ptilopsis.info",
+      "value": "라인랩의 데이터 관리자로서 매우 훌륭한 대처 능력과\n높은 수준의 치료 아츠 능률을 가지고 있습니다.\n일각에서는 이것이 문명의 존속 열화판이 아닌ㄱ\n\n뭘 하는건가 박사? 드디어 콧구멍에 라면을 처박은겐가?"
+    },
+    {
+      "key": "operator.saria.name",
+      "value": "사리아"
+    },
+    {
+      "key": "operator.saria.info",
+      "value": "컬럼비아 라인랩 방위과 주임이자 라인랩 내 마지막 저지선이라\n평가받는 사실상의 최후의 저지선으로 사내 문제들과 여러\n사고를 방지하고 수습하는 역할을 대부분 맡았습니다.\n특히 매우 월등한 전투 및 신체능력, 우수한 전략전술로\n문제가 되는 모든 일들을 해결하고 다닙니다."
+    }
+  ]
+}

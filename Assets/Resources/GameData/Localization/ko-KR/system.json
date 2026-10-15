@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "key": "loading.battle_in",
+      "value": "PSR - 01"
+    },
+    {
+      "key": "loading.battle_out",
+      "value": "검사 완료됨. 재압축중"
+    },
+    {
+      "key": "loading.map_out",
+      "value": "작전 기록 압축 해제중..."
+    },
+    {
+      "key": "loading.map_in",
+      "value": "작전 기록 압축 해제 완료"
+    },
+    {
+      "key": "battle.result.fallback_map_name",
+      "value": "NaN 작전"
+    },
+    {
+      "key": "battle.result.success.title",
+      "value": "데이터 통과됨"
+    },
+    {
+      "key": "battle.result.failure.title",
+      "value": "데이터 파괴됨"
+    },
+    {
+      "key": "battle.result.success.message",
+      "value": "기록이 성공적으로 번역되었습니다.\n다음 프로세스 실행합니다."
+    },
+    {
+      "key": "battle.result.failure.message",
+      "value": "더이상 기록을 열람할 수 없습니다.\nBOM이 파괴되었습니다. 안전모드로 전환합니다."
+    }
+  ]
+}

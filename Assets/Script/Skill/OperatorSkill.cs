@@ -1,59 +1,63 @@
 using UnityEngine;
+using Randint.Data;
 
 public class OperatorSkill
 {
-    private SkillData data;
+    private readonly SkillDefinition data;
 
     private int currentSP;
 
-    public SkillData Data => data;
+    public SkillDefinition Data => data;
 
     public int CurrentSP => currentSP;
-    public int MaxSP => data.MaxSP;
+    public int MaxSP => data.maxSP;
 
     public bool IsReady =>
-        currentSP >= data.MaxSP;
+        currentSP >= data.maxSP;
 
-    public OperatorSkill(SkillData skillData)
+    // 기본 정의는 JSON에서 조회하고 현재 SP는 이 전투 인스턴스에만 저장합니다.
+    public OperatorSkill(string skillId)
     {
-        data = skillData;
+        data = GameData.Catalog.Skill(skillId);
         currentSP = 0;
     }
+
+    public OperatorSkill(SkillData skillData) : this(skillData.DataId) { }
 
     public void AddSP(int amount)
     {
         if (IsReady || amount <= 0)
             return;
 
-        currentSP = (int)System.Math.Min(data.MaxSP, (long)currentSP + amount);
+        currentSP = (int)System.Math.Min(data.maxSP, (long)currentSP + amount);
     }
 
     // 자연회복
     public void OnNaturalRecovery(int attackCount)
     {
-        if (data.ChargeType != SkillChargeType.Natural)
+        if (data.chargeType != "Natural")
             return;
 
-        if (attackCount > 0 && data.ChargeAmount > 0)
-            AddSP((int)System.Math.Min(int.MaxValue, (long)attackCount * data.ChargeAmount));
+        if (attackCount > 0 && data.chargeAmount > 0)
+            AddSP((int)System.Math.Min(int.MaxValue, (long)attackCount * data.chargeAmount));
     }
 
     // 공격회복
     public void OnAttack()
     {
-        if (data.ChargeType != SkillChargeType.Attack)
+        if (data.chargeType != "Attack")
             return;
 
-        AddSP(data.ChargeAmount);
+        AddSP(data.chargeAmount);
     }
 
     // 피격회복
     public void OnDamageTaken()
     {
-        if (data.ChargeType != SkillChargeType.DamageTaken)
+        if (data.chargeType != "DamageTaken")
             return;
 
-        AddSP(data.ChargeAmount);
+        AddSP(data.chargeAmount);
     }
 
     public void ResetSP()
@@ -67,7 +71,7 @@ public class OperatorSkill
             return;
 
         Debug.Log(
-            $"{owner.name} : {data.SkillName} 발동");
+            $"{owner.name} : {GameData.Text(data.nameKey)} 발동");
 
         // 실제 SkillEffect는 나중에 구현
 

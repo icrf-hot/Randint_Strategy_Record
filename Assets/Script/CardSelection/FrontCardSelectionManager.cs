@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using Randint.Data;
 
 public enum FrontActionType
 {
@@ -43,6 +44,8 @@ public class FrontCardSelectionManager : CardSelectionManagerBase
         }
 
         Instance = this;
+        defenseMultiplier = GameData.Catalog.Rules("default_run").frontDefenseMultiplier;
+        attackMultiplier = GameData.Catalog.Rules("default_run").frontAttackMultiplier;
     }
 
     private void OnDestroy()
@@ -196,8 +199,8 @@ public class FrontCardSelectionManager : CardSelectionManagerBase
         {
             accessText.text =
                 IsAccess
-                    ? "승인됨"
-                    : "승인 대기중";
+                    ? GameData.Text("ui.battle.access.approved")
+                    : GameData.Text("ui.battle.access.waiting");
         }
 
         if (BattleAccessManager.Instance != null)

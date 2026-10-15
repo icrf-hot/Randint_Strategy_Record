@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    { "key": "run.ui.status", "value": "Packet {0}\nLayer {1}\nEXP {2} / {3}" },
+    {
+      "key": "shop.hp.name",
+      "value": "생명력 Cache"
+    },
+    {
+      "key": "shop.hp.description",
+      "value": "전체 아군의 고정 능력치 강화. 임시 개발용 밸런스."
+    },
+    {
+      "key": "shop.attack.name",
+      "value": "공격력 Cache"
+    },
+    {
+      "key": "shop.attack.description",
+      "value": "전체 아군의 고정 능력치 강화. 임시 개발용 밸런스."
+    },
+    {
+      "key": "shop.defense.name",
+      "value": "방어력 Cache"
+    },
+    {
+      "key": "shop.defense.description",
+      "value": "전체 아군의 고정 능력치 강화. 임시 개발용 밸런스."
+    },
+    {
+      "key": "shop.arts_resistance.name",
+      "value": "아츠 저항 Cache"
+    },
+    {
+      "key": "shop.arts_resistance.description",
+      "value": "전체 아군의 고정 능력치 강화. 임시 개발용 밸런스."
+    },
+    {
+      "key": "shop.attack_speed.name",
+      "value": "공격 속도 Cache"
+    },
+    {
+      "key": "shop.attack_speed.description",
+      "value": "전체 아군의 고정 능력치 강화. 임시 개발용 밸런스."
+    },
+    {
+      "key": "shop.all_stats.name",
+      "value": "종합 강화 Cache"
+    },
+    {
+      "key": "shop.all_stats.description",
+      "value": "전체 아군의 고정 능력치 강화. 임시 개발용 밸런스."
+    },
+    {
+      "key": "shop.rewards.name",
+      "value": "Packet / EXP Cache"
+    },
+    {
+      "key": "shop.rewards.description",
+      "value": "승리 Packet과 획득 EXP +50%. Layer 상승 Packet과 요구 경험치는 바꾸지 않는다."
+    },
+    {
+      "key": "shop.ui.title",
+      "value": "CACHE 상점"
+    },
+    {
+      "key": "shop.ui.return",
+      "value": "맵으로"
+    },
+    {
+      "key": "shop.ui.success",
+      "value": "구매 완료"
+    },
+    {
+      "key": "shop.ui.duplicate",
+      "value": "이번 판에서 이미 구매했습니다"
+    },
+    {
+      "key": "shop.ui.insufficient",
+      "value": "Packet이 부족합니다"
+    },
+    {
+      "key": "shop.ui.unavailable",
+      "value": "구매할 수 없습니다"
+    },
+    {
+      "key": "shop.ui.sold",
+      "value": "판매 완료"
+    },
+    {
+      "key": "shop.ui.pending",
+      "value": "준비 중"
+    },
+    {
+      "key": "shop.ui.buy",
+      "value": "구매 · {0} Packet"
+    },
+    {
+      "key": "shop.ui.lack",
+      "value": "{0} Packet\n잔액 부족"
+    },
+    {
+      "key": "shop.ui.balance",
+      "value": "Packet {0}   |   Layer {1}"
+    },
+    {
+      "key": "shop.ui.reward",
+      "value": "승리 Packet +{0}% · EXP +{1}%"
+    }
+  ]
+}

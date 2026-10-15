@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using TMPro;
 using UnityEngine;
+using Randint.Data;
 
 public class MapSceneFadeIn : MonoBehaviour
 {
@@ -11,7 +12,8 @@ public class MapSceneFadeIn : MonoBehaviour
 
     [Header("Text")]
     [SerializeField]
-    private string loadingMessage = "작전 기록 복원 완료";
+    [GameTextKey] private string loadingMessageKey;
+    private string loadingMessage => GameData.Text(loadingMessageKey);
 
     [Header("Timing")]
     [Min(0f)]

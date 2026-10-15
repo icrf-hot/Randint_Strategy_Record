@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using Randint.Data;
 
 public class BattleSceneFadeIn : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class BattleSceneFadeIn : MonoBehaviour
     [SerializeField] private TMP_Text loadingText;
 
     [Header("Text")]
-    [SerializeField] private string loadingMessage = "작전 준비 완료";
+    [SerializeField, Randint.Data.GameTextKey] private string loadingMessageKey;
+    private string loadingMessage => Randint.Data.GameData.Text(loadingMessageKey);
 
     [Min(0.1f)]
     [SerializeField] private float dotInterval = 0.35f;

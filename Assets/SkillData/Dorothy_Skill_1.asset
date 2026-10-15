@@ -12,8 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7575c95341a10747980cb8d8b3fcb08, type: 3}
   m_Name: Dorothy_Skill_1
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: 
-  description: 
-  maxSP: 2
-  chargeType: 0
-  chargeAmount: 1
+  dataId: dorothy_skill_1

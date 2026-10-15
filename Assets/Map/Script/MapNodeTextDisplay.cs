@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using Randint.Data;
 
 public class MapNodeTextDisplay : MonoBehaviour
 {
@@ -10,8 +11,10 @@ public class MapNodeTextDisplay : MonoBehaviour
     [SerializeField] private TMP_Text targetText;
 
     [Header("Text")]
-    [TextArea(3, 10)]
-    [SerializeField] private string displayText;
+    [SerializeField, GameTextKey] private string displayTextKey;
+    // 직접 전달된 문장은 해당 객체의 표시 상태이며 JSON 원본을 변경하지 않습니다.
+    private string displayTextOverride;
+    private string displayText => displayTextOverride ?? GameData.Text(displayTextKey);
 
     [Header("Typing")]
     [SerializeField] private float characterInterval = 0.03f;
@@ -222,7 +225,7 @@ public class MapNodeTextDisplay : MonoBehaviour
 
     public void ShowText(string text)
     {
-        displayText = text;
+        displayTextOverride = text;
 
         ShowText();
     }

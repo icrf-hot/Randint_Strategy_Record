@@ -10,11 +10,7 @@ public class TitleSceneRouter : MonoBehaviour
 
     private bool isLoading;
 
-    private IEnumerator Start()
-    {
-        yield return null;
-        StartNewRun();
-    }
+    // Legacy manual entry point. Title/Lobby now use MenuSceneLoader button actions.
 
     public void StartNewRun()
     {

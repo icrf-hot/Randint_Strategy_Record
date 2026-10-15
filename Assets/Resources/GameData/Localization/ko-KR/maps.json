@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "key": "map.map_1f.node_2.name",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.node_2.description",
+      "value": "비숍 노드\n시작은 쉬울지 몰라도\n끝은 항상 비극이었습니다."
+    },
+    {
+      "key": "map.map_1f.choice_621905972",
+      "value": "다가간다"
+    },
+    {
+      "key": "map.map_1f.choice_621905973",
+      "value": "무시한다"
+    },
+    {
+      "key": "map.map_1f.choice_621905974",
+      "value": "경계한다"
+    },
+    {
+      "key": "map.map_1f.node_1.name",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.node_1.description",
+      "value": "시작 노드\n아무일도 없습니다.\n그리고 아무일도 없을것 입니다."
+    },
+    {
+      "key": "map.map_1f.choice_766637538",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.choice_766637539",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.choice_766637540",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.node_4.name",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.node_4.description",
+      "value": "룩 노드\n앞과 뒤를 주의하십시오.\n희생은 당연한 수순입니다.\n"
+    },
+    {
+      "key": "map.map_1f.choice_1148619776",
+      "value": "다가간다"
+    },
+    {
+      "key": "map.map_1f.choice_1148619777",
+      "value": "무시한다"
+    },
+    {
+      "key": "map.map_1f.choice_1148619778",
+      "value": "경계한다"
+    },
+    {
+      "key": "map.map_1f.node_6.name",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.node_6.description",
+      "value": "전투 노드\n멈출수 없는\n마지막 선택"
+    },
+    {
+      "key": "map.map_1f.choice_1475734772",
+      "value": "맞선다"
+    },
+    {
+      "key": "map.map_1f.choice_1475734773",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.choice_1475734774",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.node_3.name",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.node_3.description",
+      "value": "나이트 노드\n기병은 항상 전투의 중심이었고,\n전투의 끝을 알렸습니다."
+    },
+    {
+      "key": "map.map_1f.choice_1568378347",
+      "value": "다가간다"
+    },
+    {
+      "key": "map.map_1f.choice_1568378348",
+      "value": "무시한다"
+    },
+    {
+      "key": "map.map_1f.choice_1568378349",
+      "value": "경계한다"
+    },
+    {
+      "key": "map.map_1f.node_5.name",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.node_5.description",
+      "value": "전투 노드\n멈출수 없는\n마지막 선택"
+    },
+    {
+      "key": "map.map_1f.choice_1670722697",
+      "value": "맞선다"
+    },
+    {
+      "key": "map.map_1f.choice_1670722698",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.choice_1670722699",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.node_8.name",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.node_8.description",
+      "value": "상점 노드\n구매와 신뢰는 결코\n이어지지 못한다."
+    },
+    {
+      "key": "map.map_1f.choice_1903569412",
+      "value": "인사한다"
+    },
+    {
+      "key": "map.map_1f.choice_1903569413",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.choice_1903569414",
+      "value": "도망친다 "
+    },
+    {
+      "key": "map.map_1f.node_7.name",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.node_7.description",
+      "value": "전투 노드\n멈출수 없는\n마지막 선택"
+    },
+    {
+      "key": "map.map_1f.choice_1907453448",
+      "value": "맞선다"
+    },
+    {
+      "key": "map.map_1f.choice_1907453449",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.choice_1907453450",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "map.map_1f.node_label_621905971",
+      "value": "우연"
+    },
+    {
+      "key": "map.map_1f.node_label_766637537",
+      "value": "초점"
+    },
+    {
+      "key": "map.map_1f.node_label_1148619775",
+      "value": "우연"
+    },
+    {
+      "key": "map.map_1f.node_label_1475734771",
+      "value": "충돌"
+    },
+    {
+      "key": "map.map_1f.node_label_1568378346",
+      "value": "우연"
+    },
+    {
+      "key": "map.map_1f.node_label_1670722696",
+      "value": "충돌"
+    },
+    {
+      "key": "map.map_1f.node_label_1903569411",
+      "value": "거래"
+    },
+    {
+      "key": "map.map_1f.node_label_1907453447",
+      "value": "충돌"
+    }
+  ]
+}

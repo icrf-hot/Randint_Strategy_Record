@@ -32,6 +32,7 @@ public static class RunProgressionVerification
         try
         {
             SerializedObject serialized = new SerializedObject(testSettings);
+            serialized.FindProperty("definitionId").stringValue = "";
             serialized.FindProperty("victoryPackets").intValue = 3;
             serialized.FindProperty("victoryExperience").intValue = 1;
             serialized.ApplyModifiedPropertiesWithoutUndo();

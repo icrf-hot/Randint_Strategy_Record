@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Cache_Rewards
   m_EditorClassIdentifier: Assembly-CSharp::CacheData
   cacheId: cache_rewards
+  definitionId: cache_rewards
   displayName: Packet / EXP Cache
   description: "Victory Packet and EXP +50%. Layer-up Packet and EXP thresholds are unchanged."
   icon: {fileID: 0}

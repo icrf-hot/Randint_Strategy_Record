@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "key": "dialogue.battle_result.success",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "dialogue.battle_result.failure",
+      "value": "",
+      "allowEmpty": true
+    }
+  ]
+}

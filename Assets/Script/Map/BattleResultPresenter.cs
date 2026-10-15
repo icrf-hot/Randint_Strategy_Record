@@ -2,15 +2,14 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using Randint.Data;
 
 [Serializable]
 public class BattleResultTextSet
 {
-    [TextArea(2, 5)]
-    public string characterDialogue;
+    [GameTextKey] public string characterDialogueKey;
 
-    [TextArea(2, 5)]
-    public string resultMessage;
+    [GameTextKey] public string resultMessageKey;
 }
 
 public class BattleResultPresenter : MonoBehaviour
@@ -34,11 +33,11 @@ public class BattleResultPresenter : MonoBehaviour
 
     [Header("Map Name")]
     [SerializeField]
-    private string fallbackMapName = "알 수 없는 작전";
+    [GameTextKey] private string fallbackMapNameKey;
 
     [Header("Success")]
     [SerializeField]
-    private string successTitle = "성공";
+    [GameTextKey] private string successTitleKey;
 
     [SerializeField]
     private Color successTitleColor =
@@ -49,7 +48,7 @@ public class BattleResultPresenter : MonoBehaviour
 
     [Header("Failure")]
     [SerializeField]
-    private string failureTitle = "실패";
+    [GameTextKey] private string failureTitleKey;
 
     [SerializeField]
     private Color failureTitleColor =
@@ -147,8 +146,8 @@ public class BattleResultPresenter : MonoBehaviour
         {
             resultTitleText.text =
                 isSuccess
-                    ? successTitle
-                    : failureTitle;
+                    ? GameData.Text(successTitleKey)
+                    : GameData.Text(failureTitleKey);
 
             resultTitleText.color =
                 isSuccess
@@ -163,7 +162,7 @@ public class BattleResultPresenter : MonoBehaviour
 
             mapNameText.text =
                 string.IsNullOrWhiteSpace(currentMapName)
-                    ? fallbackMapName
+                    ? GameData.Text(fallbackMapNameKey)
                     : currentMapName;
         }
 
@@ -171,7 +170,7 @@ public class BattleResultPresenter : MonoBehaviour
         {
             characterDialogueText.text =
                 selectedText != null
-                    ? selectedText.characterDialogue
+                    ? GameData.Text(selectedText.characterDialogueKey)
                     : string.Empty;
         }
 
@@ -179,7 +178,7 @@ public class BattleResultPresenter : MonoBehaviour
         {
             resultMessageText.text =
                 selectedText != null
-                    ? selectedText.resultMessage
+                    ? GameData.Text(selectedText.resultMessageKey)
                     : string.Empty;
         }
     }

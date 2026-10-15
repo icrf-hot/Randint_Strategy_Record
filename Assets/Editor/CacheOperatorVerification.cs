@@ -10,6 +10,14 @@ public static class CacheOperatorVerification
         ShopCatalogData catalog = AssetDatabase.LoadAssetAtPath<ShopCatalogData>("Assets/Shop/Data/PrototypeShopCatalog.asset");
         RunProgressionSettings settings = AssetDatabase.LoadAssetAtPath<RunProgressionSettings>("Assets/Shop/Data/RunProgression.asset");
         OperatorData data = ScriptableObject.CreateInstance<OperatorData>();
+        var definition = Randint.Data.GameData.Catalog.Operator("saria");
+        using var scope = new JsonDefinitionScope(definition);
+        definition.maxHP = 100; definition.attack = 20; definition.defense = 10;
+        definition.artsResistance = 15; definition.attackSpeed = 1;
+        definition.skillIds = Array.Empty<string>();
+        SerializedObject dataAsset = new SerializedObject(data);
+        dataAsset.FindProperty("dataId").stringValue = "saria";
+        dataAsset.ApplyModifiedPropertiesWithoutUndo();
         try
         {
             Require(MapRunState.StartNewRun(settings) && MapRunState.Packets.TryAdd(70), "Fixture initialization failed.");
@@ -19,9 +27,8 @@ public static class CacheOperatorVerification
             Require(MapRunState.Caches.Owned.Count == 6, "Expected six owned stat Caches.");
             foreach (OperatorPosition position in Enum.GetValues(typeof(OperatorPosition)))
             {
-                SerializedObject source = new SerializedObject(data);
-                source.FindProperty("position").intValue = (int)position;
-                source.ApplyModifiedPropertiesWithoutUndo();
+                definition.position = position.ToString();
+                definition.classId = position == OperatorPosition.Front ? "Defender" : position == OperatorPosition.Middle ? "Caster" : "Healer";
                 VerifyOperator(data, true);
             }
             Require(data.MaxHP == 100 && data.Attack == 20 && data.Defense == 10 &&

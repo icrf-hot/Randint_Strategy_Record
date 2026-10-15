@@ -1,14 +1,18 @@
 using UnityEngine;
+using Randint.Data;
 
 public class Enemy : MonoBehaviour
 {
-    [Header("기본 스탯")]
-
-    [SerializeField] private int maxHP = 100;
-    [SerializeField] private int attack = 20;
-    [SerializeField] private int defense = 10;
-    [SerializeField] private int artsResistance = 15;
-    [SerializeField] private float attackSpeed = 1.0f;
+    [Header("JSON Definition")]
+    [SerializeField, GameDefinitionId("enemy")] private string dataId;
+    public string DataId => dataId;
+    // 기본값은 공유 데이터에서 조회하며, 현재 HP는 생성된 전투 객체에만 저장합니다.
+    private EnemyDefinition Definition => GameData.Catalog.Enemy(dataId);
+    private int maxHP;
+    private int attack;
+    private int defense;
+    private int artsResistance;
+    private float attackSpeed;
 
     private int currentHP;
 
@@ -21,6 +25,12 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
+        EnemyDefinition source = Definition;
+        maxHP = source.maxHP;
+        attack = source.attack;
+        defense = source.defense;
+        artsResistance = source.artsResistance;
+        attackSpeed = source.attackSpeed;
         currentHP = maxHP;
     }
 

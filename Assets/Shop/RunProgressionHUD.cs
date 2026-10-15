@@ -81,7 +81,8 @@ public class RunProgressionHUD : MonoBehaviour
         lastLayer = run.Layer;
         lastExperience = run.Experience;
         lastRequired = run.RequiredExperience;
-        statusText.text = $"Packet {lastPackets}\nLayer {lastLayer}\nEXP {lastExperience} / {lastRequired}";
+        statusText.text = string.Format(Randint.Data.GameData.Text("run.ui.status"),
+            lastPackets, lastLayer, lastExperience, lastRequired);
     }
 
     private void OnDisable()

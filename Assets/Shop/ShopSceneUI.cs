@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
+using Randint.Data;
 
 public class ShopSceneUI : MonoBehaviour
 {
@@ -38,7 +39,7 @@ public class ShopSceneUI : MonoBehaviour
         root.gameObject.AddComponent<GraphicRaycaster>();
         Image background = root.gameObject.AddComponent<Image>();
         background.color = new Color(0.075f, 0.08f, 0.09f);
-        Text(root, "ShopTitle", "CACHE 상점", new Vector2(0, 1), Vector2.one,
+        Text(root, "ShopTitle", L("title"), new Vector2(0, 1), Vector2.one,
             new Vector2(28, -72), new Vector2(-28, -20), 28);
         balanceText = Text(root, "Balance", "", new Vector2(0, 1), Vector2.one,
             new Vector2(28, -110), new Vector2(-28, -76), 20);
@@ -66,7 +67,7 @@ public class ShopSceneUI : MonoBehaviour
             foreach (CacheData item in catalog.Items) AddItem(content, item);
         messageText = Text(root, "Message", "", Vector2.zero, new Vector2(0.72f, 0),
             new Vector2(28, 24), new Vector2(-12, 80), 18);
-        ReturnButton = MakeButton(root, "ReturnToMap", "맵으로", new Vector2(0.75f, 0), new Vector2(1, 0),
+        ReturnButton = MakeButton(root, "ReturnToMap", L("return"), new Vector2(0.75f, 0), new Vector2(1, 0),
             new Vector2(0, 24), new Vector2(-28, 80));
         ReturnButton.onClick.AddListener(() =>
         {
@@ -99,9 +100,9 @@ public class ShopSceneUI : MonoBehaviour
     {
         if (ShopSceneRouter.IsTransitioning) return CachePurchaseResult.RunNotStarted;
         CachePurchaseResult result = MapRunState.TryPurchaseCache(catalog, id);
-        messageText.text = result == CachePurchaseResult.Success ? "구매 완료" :
-            result == CachePurchaseResult.AlreadyPurchased ? "이번 판에서 이미 구매했습니다" :
-            result == CachePurchaseResult.InsufficientPackets ? "Packet이 부족합니다" : "구매할 수 없습니다";
+        messageText.text = L(result == CachePurchaseResult.Success ? "success" :
+            result == CachePurchaseResult.AlreadyPurchased ? "duplicate" :
+            result == CachePurchaseResult.InsufficientPackets ? "insufficient" : "unavailable");
         Refresh();
         return result;
     }
@@ -109,7 +110,7 @@ public class ShopSceneUI : MonoBehaviour
     private void Refresh()
     {
         lastBalance = MapRunState.Packets.Balance;
-        balanceText.text = $"Packet {lastBalance}   |   Layer {MapRunState.Progression.Layer}";
+        balanceText.text = L("balance", lastBalance, MapRunState.Progression.Layer);
         if (catalog == null) return;
         foreach (CacheData item in catalog.Items)
         {
@@ -117,15 +118,15 @@ public class ShopSceneUI : MonoBehaviour
             bool purchased = MapRunState.Caches.HasPurchased(item.CacheId);
             bool affordable = MapRunState.Packets.CanAfford(item.PacketPrice);
             button.interactable = !ShopSceneRouter.IsTransitioning && item.IsConfigured && !purchased && affordable;
-            buttonTexts[item.CacheId].text = purchased ? "판매 완료" : !item.IsConfigured ? "준비 중" :
-                affordable ? $"구매 · {item.PacketPrice} Packet" : $"{item.PacketPrice} Packet\n잔액 부족";
+            buttonTexts[item.CacheId].text = purchased ? L("sold") : !item.IsConfigured ? L("pending") :
+                L(affordable ? "buy" : "lack", item.PacketPrice);
         }
     }
 
     private static string Describe(CacheData item)
     {
         if (item.EffectKind == CacheEffectKind.GlobalPacketAndExperience)
-            return $"승리 Packet +{item.PacketGainPercent}% · EXP +{item.ExperienceGainPercent}%";
+            return L("reward", item.PacketGainPercent, item.ExperienceGainPercent);
         List<string> values = new List<string>();
         if (item.MaxHPBonus > 0) values.Add($"HP +{item.MaxHPBonus}");
         if (item.AttackBonus > 0) values.Add($"ATK +{item.AttackBonus}");
@@ -162,6 +163,9 @@ public class ShopSceneUI : MonoBehaviour
         label.alignment = TextAlignmentOptions.MidlineLeft;
         return label;
     }
+
+    private static string L(string key, params object[] values) =>
+        string.Format(GameData.Text("shop.ui." + key), values);
 
     private static RectTransform Rect(string name, Transform parent)
     {

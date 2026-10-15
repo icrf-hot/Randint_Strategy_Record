@@ -19,11 +19,7 @@ public static class TitleRouteVerification
     // Run in batchmode without -quit; the verification exits Unity itself.
     public static void Run()
     {
-        SessionState.SetBool(RunningKey, true);
-        SessionState.SetBool(SeededKey, false);
-        SessionState.SetString(DeadlineKey, DateTime.UtcNow.AddSeconds(90).ToString("O"));
-        EditorSceneManager.OpenScene("Assets/Scenes/Title.unity");
-        EditorApplication.EnterPlaymode();
+        FrontEndMergeVerification.Run();
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]

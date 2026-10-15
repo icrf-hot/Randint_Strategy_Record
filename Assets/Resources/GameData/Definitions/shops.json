@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "prototype_shop",
+      "currencyId": "packet",
+      "cacheIds": [
+        "cache_hp",
+        "cache_attack",
+        "cache_defense",
+        "cache_arts_resistance",
+        "cache_attack_speed",
+        "cache_all_stats",
+        "cache_rewards"
+      ]
+    }
+  ]
+}

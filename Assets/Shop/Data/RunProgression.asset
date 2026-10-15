@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: RunProgression
   m_EditorClassIdentifier: Assembly-CSharp::RunProgressionSettings
   initialPackets: 30
+  definitionId: default_run
   victoryPackets: 8
   victoryExperience: 12
   firstLayerExperience: 16

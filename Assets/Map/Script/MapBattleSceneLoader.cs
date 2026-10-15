@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using Randint.Data;
 using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
@@ -24,7 +25,8 @@ public class MapBattleSceneLoader : MonoBehaviour
     [SerializeField] private CanvasGroup exitCanvasGroup;
     [SerializeField] private CanvasGroup loadingTextCanvasGroup;
     [SerializeField] private TMP_Text loadingText;
-    [SerializeField] private string loadingMessage = "작전 기록 압축 해제 중";
+    [SerializeField, Randint.Data.GameTextKey] private string loadingMessageKey;
+    private string loadingMessage => Randint.Data.GameData.Text(loadingMessageKey);
 
     [Header("Timing")]
     [Min(0f)]

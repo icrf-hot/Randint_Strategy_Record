@@ -11,6 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97222a4685d54b1ba7e5d25c4e91db12, type: 3}
   m_Name: PrototypeShopCatalog
+  definitionId: prototype_shop
   m_EditorClassIdentifier: Assembly-CSharp::ShopCatalogData
   currency: {fileID: 11400000, guid: 203c0d5ce81547b88471a65c33e19f52, type: 2}
   items:

@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "cache_hp",
+      "nameKey": "shop.hp.name",
+      "descriptionKey": "shop.hp.description",
+      "effectKind": "GlobalOperatorStats",
+      "packetPrice": 12,
+      "maxHPBonus": 100,
+      "attackBonus": 0,
+      "defenseBonus": 0,
+      "artsResistanceBonus": 0,
+      "attackSpeedBonus": 0,
+      "packetGainPercent": 0,
+      "experienceGainPercent": 0
+    },
+    {
+      "id": "cache_attack",
+      "nameKey": "shop.attack.name",
+      "descriptionKey": "shop.attack.description",
+      "effectKind": "GlobalOperatorStats",
+      "packetPrice": 16,
+      "maxHPBonus": 0,
+      "attackBonus": 10,
+      "defenseBonus": 0,
+      "artsResistanceBonus": 0,
+      "attackSpeedBonus": 0,
+      "packetGainPercent": 0,
+      "experienceGainPercent": 0
+    },
+    {
+      "id": "cache_defense",
+      "nameKey": "shop.defense.name",
+      "descriptionKey": "shop.defense.description",
+      "effectKind": "GlobalOperatorStats",
+      "packetPrice": 12,
+      "maxHPBonus": 0,
+      "attackBonus": 0,
+      "defenseBonus": 10,
+      "artsResistanceBonus": 0,
+      "attackSpeedBonus": 0,
+      "packetGainPercent": 0,
+      "experienceGainPercent": 0
+    },
+    {
+      "id": "cache_arts_resistance",
+      "nameKey": "shop.arts_resistance.name",
+      "descriptionKey": "shop.arts_resistance.description",
+      "effectKind": "GlobalOperatorStats",
+      "packetPrice": 8,
+      "maxHPBonus": 0,
+      "attackBonus": 0,
+      "defenseBonus": 0,
+      "artsResistanceBonus": 5,
+      "attackSpeedBonus": 0,
+      "packetGainPercent": 0,
+      "experienceGainPercent": 0
+    },
+    {
+      "id": "cache_attack_speed",
+      "nameKey": "shop.attack_speed.name",
+      "descriptionKey": "shop.attack_speed.description",
+      "effectKind": "GlobalOperatorStats",
+      "packetPrice": 20,
+      "maxHPBonus": 0,
+      "attackBonus": 0,
+      "defenseBonus": 0,
+      "artsResistanceBonus": 0,
+      "attackSpeedBonus": 1,
+      "packetGainPercent": 0,
+      "experienceGainPercent": 0
+    },
+    {
+      "id": "cache_all_stats",
+      "nameKey": "shop.all_stats.name",
+      "descriptionKey": "shop.all_stats.description",
+      "effectKind": "GlobalOperatorStats",
+      "packetPrice": 32,
+      "maxHPBonus": 50,
+      "attackBonus": 5,
+      "defenseBonus": 5,
+      "artsResistanceBonus": 2,
+      "attackSpeedBonus": 0.5,
+      "packetGainPercent": 0,
+      "experienceGainPercent": 0
+    },
+    {
+      "id": "cache_rewards",
+      "nameKey": "shop.rewards.name",
+      "descriptionKey": "shop.rewards.description",
+      "effectKind": "GlobalPacketAndExperience",
+      "packetPrice": 24,
+      "maxHPBonus": 0,
+      "attackBonus": 0,
+      "defenseBonus": 0,
+      "artsResistanceBonus": 0,
+      "attackSpeedBonus": 0,
+      "packetGainPercent": 50,
+      "experienceGainPercent": 50
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "default_run",
+      "initialPackets": 30,
+      "victoryPackets": 8,
+      "victoryExperience": 12,
+      "firstLayerExperience": 16,
+      "experienceGrowth": 1.5,
+      "levelUpPackets": 10,
+      "healerCardMultiplier": 100,
+      "backFallbackHeal": 50,
+      "naturalSpPerAttack": 1,
+      "cardCount": 6,
+      "cardNumberMin": 1,
+      "cardNumberMax": 10,
+      "specialRangeMin": 1,
+      "specialRangeMax": 5,
+      "frontAttackMultiplier": 100,
+      "frontDefenseMultiplier": 5
+    }
+  ]
+}

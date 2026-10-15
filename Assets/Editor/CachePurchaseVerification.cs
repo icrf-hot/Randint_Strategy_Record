@@ -37,9 +37,11 @@ public static class CachePurchaseVerification
             Expect(CachePurchaseResult.Success, catalog, "cache_hp", 18, 1);
 
             SerializedObject itemData = new SerializedObject(invalidItem);
+            itemData.FindProperty("definitionId").stringValue = "";
             itemData.FindProperty("packetPrice").intValue = -1;
             itemData.ApplyModifiedPropertiesWithoutUndo();
             SerializedObject catalogData = new SerializedObject(otherCatalog);
+            catalogData.FindProperty("definitionId").stringValue = "";
             SerializedProperty items = catalogData.FindProperty("items");
             items.arraySize = 1;
             items.GetArrayElementAtIndex(0).objectReferenceValue = invalidItem;

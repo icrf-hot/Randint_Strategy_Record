@@ -544,7 +544,7 @@ public class BattleExecuteManager : MonoBehaviour
         if (backOperator == null)
             return;
 
-        int healAmount = backHealAmount;
+        int healAmount = Randint.Data.GameData.Catalog.Rules("default_run").backFallbackHeal;
         if (backOperator.Class == OperatorClass.Healer)
         {
             BackCardSelectionManager cards = BackCardSelectionManager.Instance;
@@ -617,7 +617,7 @@ public class BattleExecuteManager : MonoBehaviour
             if (op == null || !op.IsCombatActive || op.Skills == null)
                 continue;
             foreach (OperatorSkill skill in op.Skills)
-                skill?.OnNaturalRecovery(1);
+                skill?.OnNaturalRecovery(Randint.Data.GameData.Catalog.Rules("default_run").naturalSpPerAttack);
         }
     }
 

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "key": "skill.dorothy_skill_1.name",
+      "value": "",
+      "allowEmpty": true
+    },
+    {
+      "key": "skill.dorothy_skill_1.description",
+      "value": "",
+      "allowEmpty": true
+    }
+  ]
+}

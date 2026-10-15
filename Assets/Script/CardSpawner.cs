@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Randint.Data;
 
 public class CardSpawner : MonoBehaviour
 {
@@ -22,7 +23,8 @@ public class CardSpawner : MonoBehaviour
     [Header("특별 카드 범위")]
     [SerializeField] private int specialRangeMin = 1;
     [SerializeField] private int specialRangeMax = 5;
-    [SerializeField] private string specialCardText = "JK";
+    [SerializeField, GameTextKey] private string specialCardTextKey;
+    private string specialCardText => GameData.Text(specialCardTextKey);
 
     [Header("카드 생성 간격")]
     [SerializeField] private float spawnDelay = 0.2f;
@@ -50,6 +52,10 @@ public class CardSpawner : MonoBehaviour
         }
 
         Instance = this;
+        var rules = GameData.Catalog.Rules("default_run");
+        cardCount = rules.cardCount;
+        specialRangeMin = rules.specialRangeMin;
+        specialRangeMax = rules.specialRangeMax;
     }
 
     private IEnumerator Start()
@@ -335,7 +341,8 @@ public class CardSpawner : MonoBehaviour
             else
             {
                 int cardNumber =
-                    Random.Range(1, 11);
+                    Random.Range(GameData.Catalog.Rules("default_run").cardNumberMin,
+                        GameData.Catalog.Rules("default_run").cardNumberMax + 1);
 
                 card.SetNumber(cardNumber);
             }
