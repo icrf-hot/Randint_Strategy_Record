@@ -19,6 +19,12 @@ public class BackCardSelectionManager : CardSelectionManagerBase
     public static BackCardSelectionManager Instance { get; private set; }
 
     public bool IsAccess { get; private set; }
+    public int HealingAmount => IsAccess ? CalculateHealing(firstNumber, secondNumber) : 0;
+
+    public static int CalculateHealing(int a, int b)
+    {
+        return (int)System.Math.Max(0, System.Math.Min(int.MaxValue, ((long)a + b) * 100));
+    }
 
     private void Awake()
     {

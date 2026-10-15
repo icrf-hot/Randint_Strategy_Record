@@ -22,13 +22,10 @@ public class OperatorSkill
 
     public void AddSP(int amount)
     {
-        if (IsReady)
+        if (IsReady || amount <= 0)
             return;
 
-        currentSP += amount;
-
-        currentSP =
-            Mathf.Min(currentSP, data.MaxSP);
+        currentSP = (int)System.Math.Min(data.MaxSP, (long)currentSP + amount);
     }
 
     // 자연회복
@@ -37,8 +34,8 @@ public class OperatorSkill
         if (data.ChargeType != SkillChargeType.Natural)
             return;
 
-        AddSP(
-            attackCount * data.ChargeAmount);
+        if (attackCount > 0 && data.ChargeAmount > 0)
+            AddSP((int)System.Math.Min(int.MaxValue, (long)attackCount * data.ChargeAmount));
     }
 
     // 공격회복

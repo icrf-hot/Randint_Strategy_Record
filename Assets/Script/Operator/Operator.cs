@@ -393,7 +393,7 @@ public class Operator : MonoBehaviour
 
         int previousHP = currentHP;
 
-        currentHP += amount;
+        currentHP = CacheStatBonuses.Add(currentHP, amount);
 
         currentHP =
             Mathf.Min(

@@ -492,6 +492,7 @@ public class BattleExecuteManager : MonoBehaviour
             $"| 물리 공격력: {frontOperator.Attack}");
 
         target.TakePhysicalDamage(frontOperator.Attack);
+        NotifyAttackPerformed();
     }
 
     private void ExecuteMiddleAction()
@@ -535,12 +536,22 @@ public class BattleExecuteManager : MonoBehaviour
         {
             target.TakeArtsDamage(middleOperator.Attack);
         }
+        NotifyAttackPerformed();
     }
 
     private void ExecuteBackAction()
     {
         if (backOperator == null)
             return;
+
+        int healAmount = backHealAmount;
+        if (backOperator.Class == OperatorClass.Healer)
+        {
+            BackCardSelectionManager cards = BackCardSelectionManager.Instance;
+            if (cards == null || !cards.IsAccess)
+                return;
+            healAmount = cards.HealingAmount;
+        }
 
         if (AllyTargetingManager.Instance == null)
         {
@@ -568,9 +579,9 @@ public class BattleExecuteManager : MonoBehaviour
             Debug.Log(
                 $"[Back 회복] {backOperator.gameObject.name} → " +
                 $"{target.gameObject.name} " +
-                $"| 회복량: {backHealAmount}");
+                $"| 회복량: {healAmount}");
 
-            target.Heal(backHealAmount);
+            target.Heal(healAmount);
         }
     }
 
@@ -596,6 +607,18 @@ public class BattleExecuteManager : MonoBehaviour
             $"| 물리 공격력: {enemy.Attack}");
 
         target.TakePhysicalDamage(enemy.Attack);
+        NotifyAttackPerformed();
+    }
+
+    private void NotifyAttackPerformed()
+    {
+        foreach (Operator op in new[] { frontOperator, middleOperator, backOperator })
+        {
+            if (op == null || !op.IsCombatActive || op.Skills == null)
+                continue;
+            foreach (OperatorSkill skill in op.Skills)
+                skill?.OnNaturalRecovery(1);
+        }
     }
 
     private Enemy GetSelectedEnemy(Operator op)
