@@ -68,6 +68,7 @@ public static class RunSavePlayVerification
                 Require(MapRunState.TryPurchaseCache(catalog, "cache_hp") == CachePurchaseResult.Success, "Fixture Cache purchase failed.");
                 MapRunState.TryGrantVictory(out _, out _);
                 MapRunState.RecordBattleResult(true);
+                controls.SettingsButton.onClick.Invoke();
                 controls.SaveButton.onClick.Invoke();
                 controls.ConfirmButton.onClick.Invoke();
                 Require(repository.TryRead(out RunSaveSnapshot data, out _) && data.packets == 26 && data.currentNodeId == 5,
@@ -127,6 +128,7 @@ public static class RunSavePlayVerification
                 }
                 else
                 {
+                    controls.SettingsButton.onClick.Invoke();
                     controls.LobbyButton.onClick.Invoke();
                     controls.ConfirmButton.onClick.Invoke();
                     controls.ConfirmButton.onClick.Invoke();

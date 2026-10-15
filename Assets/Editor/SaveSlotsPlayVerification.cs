@@ -62,6 +62,22 @@ public static class SaveSlotsPlayVerification
                 if (!RunSaveService.CanSave) return;
                 var controls = UnityEngine.Object.FindFirstObjectByType<MapSaveControls>();
                 if (controls == null || controls.SaveButton == null) return;
+                Require(!controls.IsSettingsOpen && !controls.SaveButton.gameObject.activeInHierarchy &&
+                    !controls.LobbyButton.gameObject.activeInHierarchy, "Save actions are still always visible.");
+                RectTransform settingsRect = (RectTransform)controls.SettingsButton.transform;
+                Require(settingsRect.anchorMin == new Vector2(0, 1) && settingsRect.anchoredPosition == new Vector2(24, -24),
+                    "Settings button is not in the top-left corner.");
+                controls.SettingsButton.onClick.Invoke();
+                Require(controls.IsSettingsOpen && controls.SettingsBackdrop.color == new Color(0, 0, 0, 0.5f) &&
+                    controls.SettingsBackdrop.raycastTarget && controls.SaveButton.gameObject.activeInHierarchy,
+                    "Settings overlay is not 50% black or actions are missing.");
+                controls.CloseSettings();
+                Require(!controls.IsSettingsOpen, "Settings did not close.");
+                controls.SettingsButton.onClick.Invoke();
+                controls.SaveButton.onClick.Invoke();
+                Require(!controls.IsSettingsOpen, "Settings and picker overlays are stacked.");
+                controls.CancelSlotPicker();
+                Require(controls.IsSettingsOpen, "Cancelling slot selection did not return to settings.");
                 controls.SaveButton.onClick.Invoke();
                 if (stage == 0)
                 {
@@ -69,6 +85,7 @@ public static class SaveSlotsPlayVerification
                     CheckGrid(controls.Browser);
                     controls.ConfirmButton.onClick.Invoke();
                     Require(root.HasFiles, "Slot 1 save failed.");
+                    Require(controls.IsSettingsOpen, "Saving did not return to settings.");
                     controls.SaveButton.onClick.Invoke();
                     controls.Browser.AddButton.onClick.Invoke();
                     Require(controls.Browser.PageCount == 2 && controls.Browser.SelectedSlot == 11, "+ did not add ten slots.");
@@ -129,7 +146,7 @@ public static class SaveSlotsPlayVerification
                         "Deleted slot actions remain enabled.");
                     Require(new RunSaveSlots(root).TryPageCount(out int pages, out _) && pages == 3,
                         "Empty added page was not retained.");
-                    Finish(true, "Ten-slot grid, +ten pages, overwrite confirmation, selected-slot continue, selection cancels delete and slot-only deletion passed.");
+                    Finish(true, "Hidden save actions, top-left settings, 50% overlay/close, picker cancel/save return, save-and-exit plus paged save/continue/delete passed.");
                 }
             }
         }

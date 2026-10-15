@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "entries": [
     { "key": "save.choose_slot", "value": "저장 슬롯 선택" },
+    { "key": "save.save_exit", "value": "저장 후 나가기" },
     { "key": "save.slot", "value": "슬롯 {0}" },
     { "key": "save.slot_empty", "value": "빈 슬롯" },
     { "key": "save.slot_unavailable", "value": "계속할 수 없는 기록" },

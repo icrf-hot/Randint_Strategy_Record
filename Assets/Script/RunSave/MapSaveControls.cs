@@ -11,6 +11,8 @@ public sealed class MapSaveControls : MonoBehaviour
     private TMP_Text statusText;
     private Button saveButton;
     private Button lobbyButton;
+    private Button settingsButton;
+    private GameObject settingsOverlay;
     private bool isLeaving;
     private GameObject picker;
     private SaveSlotBrowser browser;
@@ -20,6 +22,9 @@ public sealed class MapSaveControls : MonoBehaviour
     private bool confirmingOverwrite;
     public Button SaveButton => saveButton;
     public Button LobbyButton => lobbyButton;
+    public Button SettingsButton => settingsButton;
+    public bool IsSettingsOpen => settingsOverlay != null && settingsOverlay.activeSelf;
+    public Image SettingsBackdrop => settingsOverlay.GetComponent<Image>();
     public SaveSlotBrowser Browser => browser;
     public Button ConfirmButton => confirmButton;
 
@@ -34,22 +39,37 @@ public sealed class MapSaveControls : MonoBehaviour
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1280, 720);
         scaler.matchWidthOrHeight = 0.5f;
-        saveButton = Button("Save", "save.save", new Vector2(24, 24), new Vector2(130, 46));
-        lobbyButton = Button("SaveAndLobby", "save.save_lobby", new Vector2(166, 24), new Vector2(210, 46));
+        settingsButton = Button("Settings", "menu.settings.label", new Vector2(24, -24), new Vector2(104, 44));
+        RectTransform settingsRect = (RectTransform)settingsButton.transform;
+        settingsRect.anchorMin = settingsRect.anchorMax = settingsRect.pivot = new Vector2(0, 1);
+        settingsButton.onClick.AddListener(OpenSettings);
+        settingsOverlay = new GameObject("MapSettingsOverlay", typeof(RectTransform), typeof(Image));
+        settingsOverlay.transform.SetParent(canvasObject.transform, false);
+        RectTransform overlayRect = (RectTransform)settingsOverlay.transform;
+        overlayRect.anchorMin = Vector2.zero; overlayRect.anchorMax = Vector2.one;
+        overlayRect.offsetMin = overlayRect.offsetMax = Vector2.zero;
+        settingsOverlay.GetComponent<Image>().color = new Color(0, 0, 0, 0.5f);
+        saveButton = Button("Save", "save.save", new Vector2(0, 40), new Vector2(240, 48), settingsOverlay.transform);
+        lobbyButton = Button("SaveAndLobby", "save.save_exit", new Vector2(0, -24), new Vector2(240, 48), settingsOverlay.transform);
+        Button closeSettings = Button("CloseSettings", "menu.window.close", new Vector2(0, -100), new Vector2(160, 44), settingsOverlay.transform);
+        closeSettings.onClick.AddListener(CloseSettings);
         saveButton.onClick.AddListener(() => OpenSlotPicker(false));
         lobbyButton.onClick.AddListener(() => OpenSlotPicker(true));
-        statusText = Label("Status", canvasObject.transform);
+        statusText = Label("Status", settingsOverlay.transform);
         RectTransform rect = statusText.rectTransform;
-        rect.anchorMin = rect.anchorMax = rect.pivot = Vector2.zero;
-        rect.anchoredPosition = new Vector2(24, 80);
+        rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = new Vector2(0, 116);
         rect.sizeDelta = new Vector2(520, 42);
+        statusText.alignment = TextAlignmentOptions.Center;
+        settingsOverlay.SetActive(false);
     }
 
     private void Update()
     {
         if (saveButton == null) return;
         bool allowed = !isLeaving && RunSaveService.CanSave;
-        saveButton.interactable = allowed && (picker == null || !picker.activeSelf);
+        settingsButton.interactable = allowed && !IsSettingsOpen && (picker == null || !picker.activeSelf);
+        saveButton.interactable = allowed && IsSettingsOpen && (picker == null || !picker.activeSelf);
         lobbyButton.interactable = saveButton.interactable;
         if (picker != null && picker.activeSelf)
         {
@@ -60,12 +80,31 @@ public sealed class MapSaveControls : MonoBehaviour
         canvasObject.SetActive(fade == null || fade.IsFadeComplete);
     }
 
+    public void OpenSettings()
+    {
+        if (isLeaving || !RunSaveService.CanSave || (picker != null && picker.activeSelf)) return;
+        settingsOverlay.SetActive(true);
+    }
+
+    public void CloseSettings()
+    {
+        settingsOverlay.SetActive(false);
+    }
+
+    public void CancelSlotPicker()
+    {
+        confirmingOverwrite = false;
+        if (picker != null) picker.SetActive(false);
+        if (!isLeaving) settingsOverlay.SetActive(true);
+    }
+
     public void OpenSlotPicker(bool returnToLobby)
     {
-        if (isLeaving || !RunSaveService.CanSave) return;
+        if (isLeaving || !IsSettingsOpen || !RunSaveService.CanSave) return;
         EnsurePicker();
         returnAfterSave = returnToLobby;
         confirmingOverwrite = false;
+        settingsOverlay.SetActive(false);
         picker.SetActive(true);
         browser.SetInteractable(true);
         browser.Open(RunSaveService.SelectedSlot);
@@ -79,7 +118,7 @@ public sealed class MapSaveControls : MonoBehaviour
         var rect = (RectTransform)picker.transform;
         rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.one;
         rect.offsetMin = rect.offsetMax = Vector2.zero;
-        picker.GetComponent<Image>().color = new Color(0, 0, 0, 0.65f);
+        picker.GetComponent<Image>().color = new Color(0, 0, 0, 0.5f);
         var panel = new GameObject("Dialog", typeof(RectTransform), typeof(Image));
         panel.transform.SetParent(picker.transform, false);
         SlotUI.Place((RectTransform)panel.transform, Vector2.zero, new Vector2(960, 640));
@@ -91,7 +130,7 @@ public sealed class MapSaveControls : MonoBehaviour
             new Vector2(-200, -280), new Vector2(180, 44));
         var close = SlotUI.Button(panel.transform, "Cancel", font, GameData.Text("menu.window.close"),
             new Vector2(200, -280), new Vector2(180, 44));
-        close.onClick.AddListener(() => { confirmingOverwrite = false; picker.SetActive(false); });
+        close.onClick.AddListener(CancelSlotPicker);
         confirmButton.onClick.AddListener(ConfirmSave);
         browser = SaveSlotBrowser.Create(panel.transform, font, _ =>
         {
@@ -125,6 +164,7 @@ public sealed class MapSaveControls : MonoBehaviour
             return;
         }
         picker.SetActive(false);
+        settingsOverlay.SetActive(!returnAfterSave);
         statusText.text = GameData.Text("save.saved");
         if (returnAfterSave)
         {
@@ -134,12 +174,12 @@ public sealed class MapSaveControls : MonoBehaviour
         }
     }
 
-    private Button Button(string name, string key, Vector2 position, Vector2 size)
+    private Button Button(string name, string key, Vector2 position, Vector2 size, Transform parent = null)
     {
         GameObject go = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Button));
-        go.transform.SetParent(canvasObject.transform, false);
+        go.transform.SetParent(parent != null ? parent : canvasObject.transform, false);
         RectTransform rect = go.GetComponent<RectTransform>();
-        rect.anchorMin = rect.anchorMax = rect.pivot = Vector2.zero;
+        rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0.5f, 0.5f);
         rect.anchoredPosition = position;
         rect.sizeDelta = size;
         go.GetComponent<Image>().color = new Color(0.12f, 0.35f, 0.29f);

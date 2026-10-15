@@ -23,7 +23,7 @@
 
 새 게임은 `MapRunState.StartNewRun(progressionSettings)`으로 Packet 30, Layer 1/EXP 0, 빈 Cache 보유/구매 이력과 맵 위치를 초기화합니다. Title·Lobby 방문만으로는 초기화하지 않습니다. 새 게임만으로 기존 디스크 슬롯을 삭제하지 않으며 다음 명시적 저장에서 덮어씁니다.
 
-Map의 저장/저장 후 로비는 슬롯 선택 창을 엽니다. 기존 기록 덮어쓰기는 두 번 확인합니다. `Application.persistentDataPath/Saves/`에서 1번은 기존 `run.json`, 이후는 `slot_0011.json` 같은 파일이고 페이지 수는 `pages.json`입니다. 전투·전환 중 저장 금지는 유지합니다. 상세는 `wiki/01 시스템/저장과 이어하기.md`를 참고하십시오.
+Map은 좌측 상단 설정 버튼만 상시 표시합니다. 클릭하면 화면 전체에 50% 검정 오버레이와 저장/저장 후 나가기/닫기가 나타납니다. 저장 명령은 기존 슬롯 선택 창으로 이어지며 취소/저장 완료 시 설정으로 돌아옵니다. 저장 후 나가기는 성공 시에만 Lobby로 갑니다. 기존 기록 덮어쓰기는 두 번 확인합니다. `Application.persistentDataPath/Saves/`에서 1번은 기존 `run.json`, 이후는 `slot_0011.json` 같은 파일이고 페이지 수는 `pages.json`입니다. 전투·전환 중 저장 금지는 유지합니다.
 
 ## 검증
 
