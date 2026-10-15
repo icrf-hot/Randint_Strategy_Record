@@ -43,7 +43,13 @@ public class CacheData : ScriptableObject
     public Sprite Icon => icon;
     public CacheEffectKind EffectKind => effectKind;
     public bool IsConfigured => !configurationPending &&
-        effectKind == CacheEffectKind.GlobalOperatorStats;
+        effectKind == CacheEffectKind.GlobalOperatorStats &&
+        !string.IsNullOrWhiteSpace(cacheId) && packetPrice >= 0 &&
+        maxHPBonus >= 0 && attackBonus >= 0 && defenseBonus >= 0 &&
+        artsResistanceBonus >= 0 && attackSpeedBonus >= 0f &&
+        !float.IsInfinity(attackSpeedBonus) &&
+        (maxHPBonus > 0 || attackBonus > 0 || defenseBonus > 0 ||
+         artsResistanceBonus > 0 || attackSpeedBonus > 0f);
     public int PacketPrice => packetPrice;
     public int MaxHPBonus => maxHPBonus;
     public int AttackBonus => attackBonus;

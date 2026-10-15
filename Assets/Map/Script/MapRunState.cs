@@ -3,6 +3,14 @@ public static class MapRunState
 {
     public static RunProgression Progression { get; } = new RunProgression();
     public static PacketWallet Packets => Progression.Packets;
+    public static RunCacheInventory Caches { get; } = new RunCacheInventory();
+
+    public static CachePurchaseResult TryPurchaseCache(ShopCatalogData catalog, string cacheId)
+    {
+        if (!Progression.IsInitialized)
+            return CachePurchaseResult.RunNotStarted;
+        return Caches.TryPurchase(Packets, catalog, cacheId);
+    }
 
     public static bool EnsureStarted(RunProgressionSettings settings)
     {
@@ -53,6 +61,7 @@ public static class MapRunState
     public static void Reset()
     {
         Progression.Clear();
+        Caches.Clear();
         CurrentNodeID = 0;
         HasCurrentNode = false;
         IsEnteringMapFromBattle = false;
