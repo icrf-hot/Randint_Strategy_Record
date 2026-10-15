@@ -37,19 +37,26 @@ public class CacheData : ScriptableObject
     [Min(0f)]
     [SerializeField] private float attackSpeedBonus;
 
+    [Header("Victory Reward Bonus (%)")]
+    [Min(0)] [SerializeField] private int packetGainPercent;
+    [Min(0)] [SerializeField] private int experienceGainPercent;
+
     public string CacheId => cacheId;
     public string DisplayName => displayName;
     public string Description => description;
     public Sprite Icon => icon;
     public CacheEffectKind EffectKind => effectKind;
     public bool IsConfigured => !configurationPending &&
-        effectKind == CacheEffectKind.GlobalOperatorStats &&
         !string.IsNullOrWhiteSpace(cacheId) && packetPrice >= 0 &&
         maxHPBonus >= 0 && attackBonus >= 0 && defenseBonus >= 0 &&
         artsResistanceBonus >= 0 && attackSpeedBonus >= 0f &&
         !float.IsInfinity(attackSpeedBonus) &&
-        (maxHPBonus > 0 || attackBonus > 0 || defenseBonus > 0 ||
-         artsResistanceBonus > 0 || attackSpeedBonus > 0f);
+        ((effectKind == CacheEffectKind.GlobalOperatorStats &&
+          (maxHPBonus > 0 || attackBonus > 0 || defenseBonus > 0 || artsResistanceBonus > 0 || attackSpeedBonus > 0f)) ||
+         (effectKind == CacheEffectKind.GlobalPacketAndExperience && packetGainPercent >= 0 &&
+          experienceGainPercent >= 0 && (packetGainPercent > 0 || experienceGainPercent > 0)));
+    public int PacketGainPercent => packetGainPercent;
+    public int ExperienceGainPercent => experienceGainPercent;
     public int PacketPrice => packetPrice;
     public int MaxHPBonus => maxHPBonus;
     public int AttackBonus => attackBonus;

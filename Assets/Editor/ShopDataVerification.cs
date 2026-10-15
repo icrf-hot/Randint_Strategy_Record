@@ -25,7 +25,7 @@ public static class ShopDataVerification
                 !ids.Add(item.CacheId) || string.IsNullOrWhiteSpace(item.DisplayName))
                 throw new InvalidOperationException("Cache reference, ID, or display name is invalid.");
 
-            if (item.PacketPrice < 0 || item.MaxHPBonus < 0 || item.AttackBonus < 0 ||
+            if (item.PacketPrice < 8 || item.PacketPrice > 32 || item.MaxHPBonus < 0 || item.AttackBonus < 0 ||
                 item.DefenseBonus < 0 || item.ArtsResistanceBonus < 0 || item.AttackSpeedBonus < 0f)
                 throw new InvalidOperationException("Prices and enhancement values must be nonnegative.");
 
@@ -39,11 +39,8 @@ public static class ShopDataVerification
                     statItems++;
                     break;
                 case CacheEffectKind.GlobalPacketAndExperience:
-                    if (item.IsConfigured || item.PacketPrice != 0 || hasStats)
-                        throw new InvalidOperationException("Reward Cache must remain unconfigured pending Q-C06.");
-                    SerializedObject serialized = new SerializedObject(item);
-                    if (!serialized.FindProperty("configurationPending").boolValue)
-                        throw new InvalidOperationException("Reward Cache must explicitly declare pending configuration.");
+                    if (!item.IsConfigured || hasStats || item.PacketGainPercent != 50 || item.ExperienceGainPercent != 50)
+                        throw new InvalidOperationException("Reward Cache must grant 50% Packet and EXP.");
                     rewardItems++;
                     break;
                 default:
@@ -52,8 +49,8 @@ public static class ShopDataVerification
         }
 
         if (statItems != 6 || rewardItems != 1)
-            throw new InvalidOperationException("Expected six global stat Caches and one pending reward Cache.");
+            throw new InvalidOperationException("Expected six global stat Caches and one reward Cache.");
 
-        Debug.Log("[Shop Data Verification] Six global stat Caches, one pending reward Cache and Packet references passed.");
+        Debug.Log("[Shop Data Verification] Seven configured Caches, prices 8-32 and 50% victory reward bonuses passed.");
     }
 }

@@ -12,9 +12,9 @@ public static class CacheOperatorVerification
         OperatorData data = ScriptableObject.CreateInstance<OperatorData>();
         try
         {
-            Require(MapRunState.StartNewRun(settings) && MapRunState.Packets.TryAdd(30), "Fixture initialization failed.");
+            Require(MapRunState.StartNewRun(settings) && MapRunState.Packets.TryAdd(70), "Fixture initialization failed.");
             foreach (CacheData item in catalog.Items)
-                if (item.IsConfigured)
+                if (item.IsConfigured && item.EffectKind == CacheEffectKind.GlobalOperatorStats)
                     Require(MapRunState.TryPurchaseCache(catalog, item.CacheId) == CachePurchaseResult.Success, "Fixture purchase failed.");
             Require(MapRunState.Caches.Owned.Count == 6, "Expected six owned stat Caches.");
             foreach (OperatorPosition position in Enum.GetValues(typeof(OperatorPosition)))

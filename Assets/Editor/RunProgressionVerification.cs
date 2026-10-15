@@ -32,6 +32,12 @@ public static class RunProgressionVerification
         try
         {
             SerializedObject serialized = new SerializedObject(testSettings);
+            serialized.FindProperty("victoryPackets").intValue = 3;
+            serialized.FindProperty("victoryExperience").intValue = 1;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+            Require(run.Start(testSettings) && run.TryGrantVictory(out int rounded, out _, 50, 50) &&
+                rounded == 5 && run.Experience == 2, "Half values must round away from zero.");
+            serialized.FindProperty("victoryPackets").intValue = 8;
             serialized.FindProperty("victoryExperience").intValue = 100;
             serialized.ApplyModifiedPropertiesWithoutUndo();
             Require(run.Start(testSettings) && run.TryGrantVictory(out int reward, out int levels) &&

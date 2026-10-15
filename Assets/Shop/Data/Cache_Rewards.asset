@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CacheData
   cacheId: cache_rewards
   displayName: Packet / EXP Cache
-  description: "Global Packet and experience gain Cache. Price and effect values are pending Q-C06; not available for purchase."
+  description: "Victory Packet and EXP +50%. Layer-up Packet and EXP thresholds are unchanged."
   icon: {fileID: 0}
   effectKind: 1
-  configurationPending: 1
-  packetPrice: 0
+  configurationPending: 0
+  packetPrice: 24
+  packetGainPercent: 50
+  experienceGainPercent: 50
   maxHPBonus: 0
   attackBonus: 0
   defenseBonus: 0

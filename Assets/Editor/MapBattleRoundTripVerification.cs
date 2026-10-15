@@ -130,7 +130,7 @@ public static class MapBattleRoundTripVerification
             RunProgressionHUD battleHud = UnityEngine.Object.FindFirstObjectByType<RunProgressionHUD>();
             if (battleHud == null || battleHud.StatusText == null || battleHud.StatusText.font == null ||
                 battleHud.StatusText.raycastTarget || battleHud.StatusText.text !=
-                $"Packet {(scenario == "CacheVictory" ? 10 : 30)}\nLayer 1\nEXP 0 / 16")
+                $"Packet {(scenario == "CacheVictory" ? 2 : 30)}\nLayer 1\nEXP 0 / 16")
                 throw new InvalidOperationException("Battle progression HUD is missing or incorrect.");
 
             BattleAccessManager access = BattleAccessManager.Instance;
@@ -268,7 +268,7 @@ public static class MapBattleRoundTripVerification
                           !MapRunState.IsEnteringMapFromBattle && Mathf.Approximately(Time.timeScale, 1f);
             if (scenario == "Failure")
                 passed &= SessionState.GetBool(Prefix + "NoFailureCards", false);
-            int expectedPackets = scenario == "Failure" ? 30 : scenario == "CacheVictory" ? 18 : 38;
+            int expectedPackets = scenario == "Failure" ? 30 : scenario == "CacheVictory" ? 10 : 38;
             int expectedExperience = scenario == "Failure" ? 0 : 12;
             passed &= MapRunState.Packets.Balance == expectedPackets &&
                       MapRunState.Progression.Layer == 1 && MapRunState.Progression.Experience == expectedExperience;

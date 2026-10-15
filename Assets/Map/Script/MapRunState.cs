@@ -5,6 +5,22 @@ public static class MapRunState
     public static PacketWallet Packets => Progression.Packets;
     public static RunCacheInventory Caches { get; } = new RunCacheInventory();
 
+    public static bool TryGrantVictory(out int packetsGained, out int layersGained)
+    {
+        long packets = 0, experience = 0;
+        foreach (CacheData cache in Caches.Owned)
+        {
+            if (cache == null || !cache.IsConfigured || cache.EffectKind != CacheEffectKind.GlobalPacketAndExperience)
+                continue;
+            packets += cache.PacketGainPercent;
+            experience += cache.ExperienceGainPercent;
+        }
+        packetsGained = 0;
+        layersGained = 0;
+        return packets <= int.MaxValue && experience <= int.MaxValue &&
+            Progression.TryGrantVictory(out packetsGained, out layersGained, (int)packets, (int)experience);
+    }
+
     public static CachePurchaseResult TryPurchaseCache(ShopCatalogData catalog, string cacheId)
     {
         if (!Progression.IsInitialized)

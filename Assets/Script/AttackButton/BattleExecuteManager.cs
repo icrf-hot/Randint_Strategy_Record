@@ -275,7 +275,7 @@ public class BattleExecuteManager : MonoBehaviour
         switch (resultType)
         {
             case BattleResultType.Success:
-                if (MapRunState.Progression.TryGrantVictory(out int packetsGained, out int layersGained))
+                if (MapRunState.TryGrantVictory(out int packetsGained, out int layersGained))
                 {
                     Debug.Log($"[Run Reward] Packet +{packetsGained}, Layer +{layersGained}, " +
                               $"Layer {MapRunState.Progression.Layer}, " +
