@@ -291,7 +291,6 @@ public class Operator : MonoBehaviour
                 damage - Defense);
 
         currentHP -= finalDamage;
-        TerminalWorld.Hit(transform.position, currentHP <= 0);
 
         currentHP =
             Mathf.Max(
@@ -319,7 +318,6 @@ public class Operator : MonoBehaviour
                 damage - ArtsResistance);
 
         currentHP -= finalDamage;
-        TerminalWorld.Hit(transform.position, currentHP <= 0);
 
         currentHP =
             Mathf.Max(

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +7,7 @@ using UnityEngine;
 public class BattleExecuteManager : MonoBehaviour
 {
     public static BattleExecuteManager Instance { get; private set; }
+    public static bool IsExecuting => Instance != null && Instance.battleRoutine != null;
 
     //[Header("Operators")]
     private Operator frontOperator;
@@ -32,6 +33,10 @@ public class BattleExecuteManager : MonoBehaviour
     private bool isReturningToMap;
 
     private Coroutine battleRoutine;
+    private BattleFeedbackDirector feedback;
+    public BattleFeedbackDirector Feedback => feedback;
+    private AttackPresentationRequest pendingPresentation;
+    private readonly Dictionary<OperatorPosition, AttackCardSnapshot[]> cardSnapshots = new Dictionary<OperatorPosition, AttackCardSnapshot[]>();
 
     private sealed class TurnAction
     {
@@ -66,6 +71,7 @@ public class BattleExecuteManager : MonoBehaviour
         }
 
         Instance = this;
+        feedback = GetComponent<BattleFeedbackDirector>() ?? gameObject.AddComponent<BattleFeedbackDirector>();
 
         if (!MapRunState.EnsureStarted(progressionSettings))
             Debug.LogError("[Battle Run] Run progression settings are missing or invalid.", this);
@@ -102,10 +108,24 @@ public class BattleExecuteManager : MonoBehaviour
 
     private IEnumerator ExecuteBattleRoutine()
     {
+        try { yield return ExecuteBattleCore(); }
+        finally {
+            if (feedback != null) feedback.EndTurn();
+            if (BattleAccessManager.Instance != null) BattleAccessManager.Instance.SetBattleRunning(false);
+            battleRoutine = null;
+        }
+    }
+
+    private IEnumerator ExecuteBattleCore()
+    {
         if (BattleAccessManager.Instance != null)
         {
             BattleAccessManager.Instance.SetBattleRunning(true);
         }
+
+        SnapshotCards();
+        feedback.BeginTurn();
+        OperatorFocusManager.Instance?.ExitFocus();
 
         // 기다리지 않고 카드 연출 코루틴만 시작함
         // 이후 전투 순서 계산과 행동 처리가 바로 이어짐
@@ -149,7 +169,7 @@ public class BattleExecuteManager : MonoBehaviour
             }
 
             // 오퍼레이터 행동 전 자동 Focus
-            if (action.Operator != null)
+            if (action.Operator != null && feedback.library != null && feedback.library.automaticFocus)
             {
                 if (OperatorFocusManager.Instance != null)
                 {
@@ -161,8 +181,7 @@ public class BattleExecuteManager : MonoBehaviour
 
                     if (focusBeforeActionDelay > 0f)
                     {
-                        yield return new WaitForSecondsRealtime(
-                            focusBeforeActionDelay);
+                        yield return feedback.Wait(Mathf.Min(focusBeforeActionDelay, feedback.library.maxFocusDelay));
                     }
                 }
                 else
@@ -177,7 +196,10 @@ public class BattleExecuteManager : MonoBehaviour
                 $"[행동 시작] {i + 1}. {action.Name} " +
                 $"| 공격속도: {action.Speed:0.##}");
 
+            pendingPresentation = null;
             action.Execute?.Invoke();
+            if (pendingPresentation != null)
+                yield return feedback.Play(pendingPresentation);
 
             Debug.Log($"[행동 종료] {action.Name}");
 
@@ -196,8 +218,7 @@ public class BattleExecuteManager : MonoBehaviour
 
             if (actionInterval > 0f)
             {
-                yield return new WaitForSecondsRealtime(
-                    actionInterval);
+                yield return feedback.Wait(Mathf.Min(actionInterval, feedback.library != null ? feedback.library.maxActionGap : actionInterval));
             }
             else
             {
@@ -255,6 +276,7 @@ public class BattleExecuteManager : MonoBehaviour
                 .SetBattleRunning(false);
         }
 
+        feedback.EndTurn();
         battleRoutine = null;
     }
 
@@ -265,6 +287,8 @@ public class BattleExecuteManager : MonoBehaviour
             yield break;
 
         isFinishingBattle = true;
+        if (resultType == BattleResultType.Success) yield return feedback.Victory();
+        feedback.EndTurn();
         MapRunState.RecordBattleResult(resultType == BattleResultType.Success);
 
         if (OperatorFocusManager.Instance != null)
@@ -277,8 +301,14 @@ public class BattleExecuteManager : MonoBehaviour
         switch (resultType)
         {
             case BattleResultType.Success:
+                int previousExperience = MapRunState.Progression.Experience;
+                int previousLayer = MapRunState.Progression.Layer;
                 if (MapRunState.TryGrantVictory(out int packetsGained, out int layersGained))
                 {
+                    long gainedExperience = MapRunState.Progression.Experience - previousExperience;
+                    var settings = progressionSettings != null ? progressionSettings : RunSaveBindings.Instance.Progression;
+                    for (int layer = previousLayer; layer < MapRunState.Progression.Layer; layer++) gainedExperience += settings.RequiredExperience(layer);
+                    yield return feedback.RewardGranted((int)Math.Min(int.MaxValue, gainedExperience));
                     Debug.Log($"[Run Reward] Packet +{packetsGained}, Layer +{layersGained}, " +
                               $"Layer {MapRunState.Progression.Layer}, " +
                               $"EXP {MapRunState.Progression.Experience}/{MapRunState.Progression.RequiredExperience}");
@@ -497,8 +527,12 @@ public class BattleExecuteManager : MonoBehaviour
             $"{target.gameObject.name} " +
             $"| 물리 공격력: {frontOperator.Attack}");
 
-        target.TakePhysicalDamage(frontOperator.Attack);
-        NotifyAttackPerformed();
+        QueueAction(frontOperator.gameObject, target.gameObject, OperatorPosition.Front, () => {
+            var hit = CaptureHit(frontOperator.gameObject, target.gameObject, frontOperator.Attack, AttackDamageType.PHYS, OperatorPosition.Front,
+                () => target.TakePhysicalDamage(frontOperator.Attack));
+            NotifyAttackPerformed();
+            return new[] { hit };
+        });
     }
 
     private void ExecuteMiddleAction()
@@ -534,15 +568,16 @@ public class BattleExecuteManager : MonoBehaviour
             $"{target.gameObject.name} " +
             $"| {damageType} 공격력: {middleOperator.Attack}");
 
-        if (middle.IsPhysicalMode)
-        {
-            target.TakePhysicalDamage(middleOperator.Attack);
-        }
-        else
-        {
-            target.TakeArtsDamage(middleOperator.Attack);
-        }
-        NotifyAttackPerformed();
+        bool physical = middle.IsPhysicalMode;
+        QueueAction(middleOperator.gameObject, target.gameObject, OperatorPosition.Middle, () => {
+            var hit = CaptureHit(middleOperator.gameObject, target.gameObject, middleOperator.Attack,
+                physical ? AttackDamageType.PHYS : AttackDamageType.ARTS, OperatorPosition.Middle, () => {
+                    if (physical) target.TakePhysicalDamage(middleOperator.Attack);
+                    else target.TakeArtsDamage(middleOperator.Attack);
+                });
+            NotifyAttackPerformed();
+            return new[] { hit };
+        });
     }
 
     private void ExecuteBackAction()
@@ -577,18 +612,15 @@ public class BattleExecuteManager : MonoBehaviour
             return;
         }
 
-        foreach (Operator target in targets)
-        {
-            if (target == null || target.CurrentHP <= 0)
-                continue;
-
-            Debug.Log(
-                $"[Back 회복] {backOperator.gameObject.name} → " +
-                $"{target.gameObject.name} " +
-                $"| 회복량: {healAmount}");
-
-            target.Heal(healAmount);
-        }
+        QueueAction(backOperator.gameObject, targets[0].gameObject, OperatorPosition.Back, () => {
+            var hits = new List<AttackHitInfo>();
+            foreach (Operator target in targets) {
+                if (target == null || target.CurrentHP <= 0) continue;
+                hits.Add(CaptureHit(backOperator.gameObject, target.gameObject, healAmount, AttackDamageType.HEAL, OperatorPosition.Back,
+                    () => target.Heal(healAmount)));
+            }
+            return hits.ToArray();
+        }, healAmount);
     }
 
     private void ExecuteEnemyAction(Enemy enemy)
@@ -612,8 +644,63 @@ public class BattleExecuteManager : MonoBehaviour
             $"{target.gameObject.name} " +
             $"| 물리 공격력: {enemy.Attack}");
 
-        target.TakePhysicalDamage(enemy.Attack);
-        NotifyAttackPerformed();
+        QueueAction(enemy.gameObject, target.gameObject, OperatorPosition.Front, () => {
+            var hit = CaptureHit(enemy.gameObject, target.gameObject, enemy.Attack, AttackDamageType.PHYS, OperatorPosition.Front,
+                () => target.TakePhysicalDamage(enemy.Attack));
+            NotifyAttackPerformed();
+            return new[] { hit };
+        });
+    }
+
+    private void SnapshotCards()
+    {
+        cardSnapshots.Clear();
+        Save(OperatorPosition.Front, FrontCardSelectionManager.Instance);
+        Save(OperatorPosition.Middle, MiddleCardSelectionManager.Instance);
+        Save(OperatorPosition.Back, BackCardSelectionManager.Instance);
+        void Save(OperatorPosition slot, CardSelectionManagerBase manager)
+        {
+            var cards = new List<AttackCardSnapshot>();
+            if (manager != null) {
+                var selected = manager.FeedbackCards;
+                for (int i = 0; i < selected.Length; i++) {
+                    Card card = selected[i]; if (card == null) continue;
+                    cards.Add(new AttackCardSnapshot { value = card.CardNumber,
+                        label = card.IsSpecialCard ? "JK" : card.CardNumber.ToString(),
+                        role = slot == OperatorPosition.Middle ? new[] { "SPECIAL", "ATTRIBUTE", "VALUE_A", "VALUE_B" }[i] : slot == OperatorPosition.Front ? "ACTION" : "HEAL_VALUE",
+                        worldOrigin = card.transform.position });
+                }
+            }
+            cardSnapshots[slot] = cards.ToArray();
+        }
+    }
+
+    private void QueueAction(GameObject attacker, GameObject target, OperatorPosition slot, Func<AttackHitInfo[]> commit, int? displayValue = null)
+    {
+        pendingPresentation = new AttackPresentationRequest { attacker = attacker, target = target, slot = slot,
+            cards = attacker.GetComponent<Operator>() != null && cardSnapshots.TryGetValue(slot, out var cards) ? cards : Array.Empty<AttackCardSnapshot>(),
+            inputValue = displayValue ?? (attacker.GetComponent<Operator>() != null ? attacker.GetComponent<Operator>().Attack : attacker.GetComponent<Enemy>().Attack),
+            damageType = target.GetComponent<Operator>() != null && attacker.GetComponent<Operator>() != null ? AttackDamageType.HEAL :
+                slot == OperatorPosition.Middle && attacker.GetComponent<Operator>() != null && !MiddleCardSelectionManager.Instance.IsPhysicalMode ? AttackDamageType.ARTS : AttackDamageType.PHYS,
+            commit = commit };
+    }
+
+    private AttackHitInfo CaptureHit(GameObject attacker, GameObject target, int input, AttackDamageType type, OperatorPosition slot, Action apply)
+    {
+        var op = target.GetComponent<Operator>(); var enemy = target.GetComponent<Enemy>();
+        int before = op != null ? op.CurrentHP : enemy.CurrentHP;
+        var info = new AttackHitInfo { attacker = attacker, target = target, attackValue = input, damageType = type,
+            hpBefore = before, maxHP = op != null ? op.MaxHP : enemy.MaxHP, targetIsAlly = op != null,
+            position = target.transform.position, direction = (target.transform.position - attacker.transform.position).normalized,
+            attackerSlot = attacker.GetComponent<Operator>() != null ? slot.ToString().ToUpperInvariant() : attacker.GetComponent<EnemyTargetable>()?.Position.ToString(),
+            targetSlot = op != null ? op.Position.ToString().ToUpperInvariant() : target.GetComponent<EnemyTargetable>()?.Position.ToString(),
+            cards = pendingPresentation.cards, logicalHitIndex = 0,
+            presentationHitCount = feedback.library != null && feedback.library.For(attacker, slot) != null ? feedback.library.For(attacker, slot).visualHits : 1 };
+        apply();
+        info.hpAfter = op != null ? op.CurrentHP : enemy.CurrentHP;
+        info.damage = Mathf.Abs(info.hpAfter - before);
+        info.isKill = type != AttackDamageType.HEAL && before > 0 && info.hpAfter <= 0;
+        return info;
     }
 
     private void NotifyAttackPerformed()

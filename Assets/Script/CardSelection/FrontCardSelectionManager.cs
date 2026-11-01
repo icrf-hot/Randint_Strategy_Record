@@ -21,6 +21,7 @@ public class FrontCardSelectionManager : CardSelectionManagerBase
     [SerializeField] private TMP_Text accessText;
 
     private Card selectedCard;
+    public override Card[] FeedbackCards => new[] { selectedCard };
 
     private int selectedNumber;
 
@@ -44,6 +45,7 @@ public class FrontCardSelectionManager : CardSelectionManagerBase
         }
 
         Instance = this;
+        if (frontNumberText != null) frontNumberText.text = "";
         defenseMultiplier = GameData.Catalog.Rules("default_run").frontDefenseMultiplier;
         attackMultiplier = GameData.Catalog.Rules("default_run").frontAttackMultiplier;
     }
@@ -213,6 +215,7 @@ public class FrontCardSelectionManager : CardSelectionManagerBase
 
     public void SetAttack()
     {
+        if (BattleExecuteManager.IsExecuting) return;
         if (actionType == FrontActionType.Attack)
             return;
 
@@ -228,6 +231,7 @@ public class FrontCardSelectionManager : CardSelectionManagerBase
 
     public void SetDefense()
     {
+        if (BattleExecuteManager.IsExecuting) return;
         if (actionType == FrontActionType.Defense)
             return;
 

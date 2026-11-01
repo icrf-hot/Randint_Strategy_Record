@@ -135,6 +135,7 @@ public class EnemyTargetingManager : MonoBehaviour
 
     public void SelectTarget(EnemyTargetable target)
     {
+        if (BattleExecuteManager.IsExecuting) return;
         if (currentOperator == null)
             return;
 

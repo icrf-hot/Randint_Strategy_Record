@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f5c8957c455c3f47b8df2fe25fc89cc, type: 3}
+  m_Name: Back
+  m_EditorClassIdentifier: Assembly-CSharp::AttackFeedbackProfile
+  travel: 2
+  animationDrivenImpact: 0
+  anticipation: 0.1
+  dash: 0.18
+  impact: 0.03
+  recovery: 0.1
+  retreatPixels: 0
+  knockbackPixels: 15
+  shakePixels: 4
+  hitStop: 0.075
+  criticalHitStop: 0.12
+  killHitStop: 0.15
+  flashTime: 0.08
+  knockbackTime: 0.18
+  shakeTime: 0.15
+  approach: 0
+  squash: {x: 1.1, y: 0.88}
+  stretch: {x: 1.15, y: 0.9}
+  afterimages: 0
+  afterimageLife: 0.2
+  projectileArcPixels: 65
+  visualHits: 1
+  visualHitInterval: 0.08
+  popupLife: 0.6
+  cardFlight: 0.2
+  hpDelay: 0.4
+  hpCatchup: 0.2
+  mediumDamageRatio: 0.15
+  largeDamageRatio: 0.35
+  deathSlowDuration: 0.25
+  victorySlowDuration: 0.5
+  deathPresentationSpeed: 0.3
+  smallHit: {fileID: 0}
+  mediumHit: {fileID: 0}
+  largeHit: {fileID: 0}
+  critical: {fileID: 0}
+  kill: {fileID: 0}
+  heal: {fileID: 0}
+  volume: 0.7
+  sameClipCooldown: 0.05

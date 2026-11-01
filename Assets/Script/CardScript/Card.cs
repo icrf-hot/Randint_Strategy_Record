@@ -92,6 +92,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         ownerManager =
             selected ? manager : null;
+        GetComponent<CardPresentation>()?.SetSelected(selected);
 
         // 이미 사라진 카드는 선택 상태만 해제하고
         // 위치 애니메이션은 실행하지 않는다.
@@ -150,6 +151,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (BattleExecuteManager.IsExecuting) return;
         if (TransitionManager.IsBusy) return;
         if (TransitionManager.IsBusy) return;
         if (TransitionManager.IsBusy) return;

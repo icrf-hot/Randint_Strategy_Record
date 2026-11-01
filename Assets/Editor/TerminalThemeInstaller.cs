@@ -18,7 +18,7 @@ public static class TerminalThemeInstaller
         if (EditorApplication.isPlayingOrWillChangePlaymode) throw new InvalidOperationException("Edit Mode required.");
         foreach (var scene in Enumerable.Range(0, SceneManager.sceneCount).Select(SceneManager.GetSceneAt))
             if (scene.isDirty) throw new InvalidOperationException("Unsaved scene changes: " + scene.path + ". Save them before migration.");
-        CreateTheme(); CreateComponents(); StyleCardPrefabs();
+        CreateTheme(); CreateComponents(); StyleCardPrefabs(); CardPrefabRendering.Apply();
         Scene previous = SceneManager.GetActiveScene();
         foreach (string name in new[] { "Title", "Lobby", "Preparation", "Playing_Scene", "Map_1F", "Shop" }) {
             string path = "Assets/Scenes/" + name + ".unity";
@@ -27,6 +27,7 @@ public static class TerminalThemeInstaller
             try {
                 SceneManager.SetActiveScene(scene);
                 StyleExisting(scene);
+                if (name == "Playing_Scene") BattleSelectionPresentationInstaller.Apply(scene);
                 var systems = Find(scene, "TerminalSystems");
                 if (systems == null) systems = new GameObject("TerminalSystems").transform;
                 Ensure<TerminalSettings>(systems.gameObject);

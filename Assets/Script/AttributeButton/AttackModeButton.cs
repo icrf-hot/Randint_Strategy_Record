@@ -13,6 +13,7 @@ public class AttackModeButton : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (BattleExecuteManager.IsExecuting) return;
         if (TransitionManager.IsBusy) return;
         if (TransitionManager.IsBusy) return;
         if (TransitionManager.IsBusy) return;

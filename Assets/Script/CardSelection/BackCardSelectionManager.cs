@@ -13,6 +13,7 @@ public class BackCardSelectionManager : CardSelectionManagerBase
 
     private Card firstCard;
     private Card secondCard;
+    public override Card[] FeedbackCards => new[] { firstCard, secondCard };
 
     private int firstNumber;
     private int secondNumber;
@@ -37,6 +38,8 @@ public class BackCardSelectionManager : CardSelectionManagerBase
         }
 
         Instance = this;
+        if (firstNumberText != null) firstNumberText.text = "";
+        if (secondNumberText != null) secondNumberText.text = "";
     }
 
     private void OnDestroy()

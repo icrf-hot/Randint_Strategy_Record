@@ -39,7 +39,6 @@ public class Enemy : MonoBehaviour
         int finalDamage = Mathf.Max(1, damage - defense);
 
         currentHP -= finalDamage;
-        TerminalWorld.Hit(transform.position, currentHP <= 0);
         currentHP = Mathf.Max(currentHP, 0);
 
         Debug.Log($"{gameObject.name} 물리 피해 : {finalDamage}");
@@ -53,7 +52,6 @@ public class Enemy : MonoBehaviour
         int finalDamage = Mathf.Max(1, damage - artsResistance);
 
         currentHP -= finalDamage;
-        TerminalWorld.Hit(transform.position, currentHP <= 0);
         currentHP = Mathf.Max(currentHP, 0);
 
         Debug.Log($"{gameObject.name} 아츠 피해 : {finalDamage}");

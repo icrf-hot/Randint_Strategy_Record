@@ -158,7 +158,7 @@ public class OperatorFocusManager : MonoBehaviour
 
         currentOperator = handler;
 
-        Time.timeScale = focusTimeScale;
+        if (showInfoUI) Time.timeScale = focusTimeScale;
 
         Operator op =
             handler.GetComponent<Operator>();

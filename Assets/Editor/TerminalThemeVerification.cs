@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 [InitializeOnLoad]
 public static class TerminalThemeVerification
 {
+    private static Card renderNormal, renderJoker;
     private static Vector3 orbitPosition;
     private static Quaternion orbitRotation;
     private const string Key = "TerminalTheme.Verification.";
@@ -41,6 +42,19 @@ public static class TerminalThemeVerification
     private static void Require(bool value, string message) { if (!value) throw new InvalidOperationException(message); }
     private static void Next(int stage, float delay = .25f) { SessionState.SetInt(Key + "Stage", stage); SessionState.SetFloat(Key + "Wait", Time.realtimeSinceStartup + delay); }
     private static void Capture(string name) { ScreenCapture.CaptureScreenshot(Output + "/" + name + ".png"); Debug.Log("[Terminal verification] " + name); }
+    private static Card SpawnRenderCard(string path, float x, float y, int index, bool joker)
+    {
+        var go = UnityEngine.Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(path));
+        var cam = Camera.main;
+        const float depth = 8;
+        go.transform.position = cam.ViewportToWorldPoint(new Vector3(x, y, depth));
+        var body = go.GetComponent<SpriteRenderer>();
+        go.transform.localScale *= Vector3.Distance(cam.ViewportToWorldPoint(new Vector3(.5f, .18f, depth)), cam.ViewportToWorldPoint(new Vector3(.5f, 0, depth))) / body.bounds.size.y;
+        var card = go.GetComponent<Card>();
+        if (joker) card.SetSpecialCard("T"); else card.SetNumber(10);
+        go.GetComponent<CardPresentation>().SetHandIndex(index);
+        return card;
+    }
     private static void Tick()
     {
         if (!SessionState.GetBool(Key + "Running", false)) return;
@@ -95,7 +109,7 @@ public static class TerminalThemeVerification
                 orbit.transform.SetPositionAndRotation(orbitPosition, orbitRotation); orbit.enabled = true; Next(9);
             } else if (stage == 9) { Require(TransitionManager.TryLoad(RunSaveBindings.Instance.BattleScenePath), "Battle route rejected."); Next(10); }
             else if (stage == 10 && scene == "Playing_Scene" && !TransitionManager.IsBusy && Find<BattleSceneFadeIn>().IsFadeComplete) {
-                Require(GameObject.Find("RecordHealthPanel") != null, "Battle integrity HUD missing."); Next(100, 3.2f);
+                Require(GameObject.Find("RecordHealthPanel") == null, "Record health HUD covers battle selection panel."); Next(100, 3.2f);
             } else if (stage == 100) {
                 foreach (var card in UnityEngine.Object.FindObjectsByType<Card>(FindObjectsSortMode.None)) {
                     var sprite = card.GetComponentInChildren<SpriteRenderer>(); if (sprite == null) continue;
@@ -105,7 +119,32 @@ public static class TerminalThemeVerification
                 var surfaces = UnityEngine.Object.FindObjectsByType<SpriteRenderer>(FindObjectsSortMode.None);
                 Require(surfaces.First(x => x.name == "Ground").color == UITheme.BattleFloor, "Original battlefield floor not restored.");
                 Require(Mathf.Abs(surfaces.First(x => x.name == "OperUI_info").color.a - UITheme.InfoPanelOpacity) < .001f, "Information panel is opaque.");
-                Capture("06-battle"); Next(210);
+                Capture("06-battle"); Next(300);
+            } else if (stage == 300) {
+                renderNormal = SpawnRenderCard("Assets/Prefab/Card.prefab", .49f, .27f, 20, false);
+                renderJoker = SpawnRenderCard("Assets/Prefab/Card_Joker.prefab", .55f, .30f, 21, true); Next(301);
+            } else if (stage == 301) {
+                var ng = renderNormal.GetComponent<CardPresentation>();
+                var jg = renderJoker.GetComponent<CardPresentation>();
+                Require(ng.RenderOrder >= UITheme.CardSortBase && jg.RenderOrder > ng.RenderOrder, "Cards do not have independent front ordering.");
+                var photo = renderJoker.GetComponentsInChildren<TerminalCardSurface>().Single(x => x.preserveTextureColor).GetComponent<SpriteRenderer>();
+                Require(photo.sharedMaterial.GetFloat("_PreserveColor") == 1 && photo.color == UITheme.TextureTint, "Joker photo is being recoloured.");
+                Require(renderJoker.GetComponentsInChildren<SpriteRenderer>().Length == 2, "Joker still contains overlapping logo artwork.");
+                foreach (var card in new[] { renderNormal, renderJoker }) {
+                    var canvas = card.GetComponentInChildren<Canvas>();
+                    Require((canvas.isRootCanvas || canvas.overrideSorting) && canvas.sortingOrder > card.GetComponent<CardPresentation>().RenderOrder, "Card numbers are behind their face.");
+                    Require(card.GetComponentsInChildren<TMP_Text>().All(t => t.fontSharedMaterial.shader.name.Contains("Overlay")), "Number shader still depth-tests against the battlefield.");
+                }
+                Capture("08-card-overlap"); Next(302);
+            } else if (stage == 302) {
+                UnityEngine.EventSystems.ExecuteEvents.Execute(renderNormal.gameObject,
+                    new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current),
+                    UnityEngine.EventSystems.ExecuteEvents.pointerEnterHandler); Next(303, .3f);
+            } else if (stage == 303) {
+                Require(renderNormal.GetComponent<CardPresentation>().RenderOrder > renderJoker.GetComponent<CardPresentation>().RenderOrder, "Hovered normal card did not move to the front.");
+                Capture("09-card-hover"); Next(304);
+            } else if (stage == 304) {
+                UnityEngine.Object.Destroy(renderNormal.gameObject); UnityEngine.Object.Destroy(renderJoker.gameObject); Next(210);
             } else if (stage == 210) {
                 var op = UnityEngine.Object.FindObjectsByType<OperatorClickHandler>(FindObjectsSortMode.None).First(x => x.Position == OperatorPosition.Back);
                 Find<OperatorFocusManager>().EnterFocus(op); Next(211, 1.5f);
@@ -121,7 +160,7 @@ public static class TerminalThemeVerification
                 TerminalWorld.Hit(Vector3.zero, true); Next(102);
             } else if (stage == 102) {
                 Require(MapRunState.RecordHealth.Integrity == 25, "Critical integrity is wrong.");
-                Require(UnityEngine.Object.FindObjectsByType<TMP_Text>(FindObjectsSortMode.None).Any(t => t.text == "위험"), "Critical state label missing.");
+                Require(GameObject.Find("RecordHealthPanel") == null, "Record health HUD returned in battle.");
                 Require(Find<ParticleSystem>().particleCount <= UITheme.ParticleLimit, "Particle count exceeded cap.");
                 Capture("06b-battle-critical"); Next(103);
             } else if (stage == 103) {

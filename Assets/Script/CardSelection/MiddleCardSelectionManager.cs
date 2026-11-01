@@ -53,6 +53,7 @@ public class MiddleCardSelectionManager : CardSelectionManagerBase
     private Card attributeCard;
     private Card secondCard;
     private Card thirdCard;
+    public override Card[] FeedbackCards => new[] { specialCard, attributeCard, secondCard, thirdCard };
 
     private int secondNumber;
     private int thirdNumber;

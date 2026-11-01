@@ -72,7 +72,7 @@ MonoBehaviour:
 '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03902aa1606b99b409a36dc630b9c9af, type: 2}
-  m_sharedMaterial: {fileID: 3455912542776658475, guid: 03902aa1606b99b409a36dc630b9c9af, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 71d7c56a445f097408c5d61409fa343c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -181,6 +181,7 @@ GameObject:
   - component: {fileID: 7054048346343633130}
   - component: {fileID: -8301149721080816474}
   - component: {fileID: 347751992243555503}
+  - component: {fileID: 711325718937141913}
   m_Layer: 0
   m_Name: Card
   m_TagString: Untagged
@@ -252,7 +253,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 5000
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -364,6 +365,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34a108f0e91b8c04e8b35acf26071bd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerminalCardSurface
+  preserveTextureColor: 0
+--- !u!114 &711325718937141913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000617769598188295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1320662c53abee428e1bd84fe535dcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardPresentation
 --- !u!1 &4322233276855101578
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,7 +405,7 @@ Transform:
   m_GameObject: {fileID: 4322233276855101578}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.01}
   m_LocalScale: {x: 0.3174603, y: 0.22727272, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -444,7 +458,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 5010
   m_MaskInteraction: 0
   m_Sprite: {fileID: -6864057473772233958, guid: 414d5f5f7261cc949b00d28ac31e08d4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -468,6 +482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34a108f0e91b8c04e8b35acf26071bd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerminalCardSurface
+  preserveTextureColor: 0
 --- !u!1 &4371495921749726095
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,7 +510,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4371495921749726095}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.02}
   m_LocalScale: {x: 0.63492066, y: 0.45454544, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -529,7 +544,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 5020
   m_TargetDisplay: 0
 --- !u!114 &8223931894069011788
 MonoBehaviour:
@@ -641,7 +656,7 @@ MonoBehaviour:
   m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03902aa1606b99b409a36dc630b9c9af, type: 2}
-  m_sharedMaterial: {fileID: 3455912542776658475, guid: 03902aa1606b99b409a36dc630b9c9af, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 71d7c56a445f097408c5d61409fa343c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

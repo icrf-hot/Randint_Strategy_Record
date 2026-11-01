@@ -28,11 +28,13 @@ public sealed class UITheme : ScriptableObject
     public static readonly Color BattleUnderfloor = new Color(.2924528f, .2924528f, .2924528f, 1);
     public const float InfoPanelOpacity = .45f;
     public static Color Clear => Alpha(BgBase, 0);
+    public static Color DamageTypeColor(AttackDamageType type) => type == AttackDamageType.HEAL ? Ok : type == AttackDamageType.ARTS ? Accent : TextMain;
     public const float Border = 1, Radius = 0, ButtonTime = .08f, PulseTime = .2f;
     public const float GlitchTime = .6f, TransitionTime = .25f, AudioTime = .3f, ShakeTime = .15f;
     public const float GridAlpha = .04f, ScanAlpha = .03f, FloorAlpha = .15f, GlowAlpha = .25f;
     public const float StatusPeriod = 2f, Gap = 20f, TitleBarHeight = 28f;
     public const int ParticleLimit = 200;
+    public const int CardSortBase = 5000, CardSortStride = 32, CardSortRaise = 10000;
     public enum Tone { Base, Panel, Hover, Line, Accent, Warn, Danger, Ok, Main, Dim, Clear, Texture, BattleFloor, BattleUnderfloor }
     public static Color Resolve(Tone tone) => tone switch {
         Tone.BattleFloor => BattleFloor, Tone.BattleUnderfloor => BattleUnderfloor, Tone.Base => BgBase, Tone.Panel => BgPanel, Tone.Hover => BgPanelHi,

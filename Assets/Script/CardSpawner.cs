@@ -193,9 +193,9 @@ public class CardSpawner : MonoBehaviour
 
         float elapsed = 0f;
 
-        while (elapsed < gatherDuration)
+        while (elapsed < gatherDuration && !(BattleExecuteManager.Instance?.Feedback?.Skipping ?? false))
         {
-            elapsed += Time.unscaledDeltaTime;
+            elapsed += BattleExecuteManager.Instance?.Feedback?.Delta ?? Time.unscaledDeltaTime;
 
             float t =
                 gatherDuration > 0f
@@ -239,9 +239,9 @@ public class CardSpawner : MonoBehaviour
 
         elapsed = 0f;
 
-        while (elapsed < dropDuration)
+        while (elapsed < dropDuration && !(BattleExecuteManager.Instance?.Feedback?.Skipping ?? false))
         {
-            elapsed += Time.unscaledDeltaTime;
+            elapsed += BattleExecuteManager.Instance?.Feedback?.Delta ?? Time.unscaledDeltaTime;
 
             float t =
                 dropDuration > 0f
@@ -331,6 +331,7 @@ public class CardSpawner : MonoBehaviour
                 continue;
             }
 
+            cardObject.GetComponent<CardPresentation>()?.SetHandIndex(i);
             spawnedCards.Add(card);
 
             if (isSpecialCard)

@@ -17,6 +17,8 @@ public class RunProgressionHUD : MonoBehaviour
     private int lastLayer = -1;
     private int lastExperience = -1;
     private int lastRequired = -1;
+    private bool holdReward;
+    public void HoldRewardDisplay(bool hold) { holdReward = hold; }
 
     public TMP_Text StatusText => statusText;
 
@@ -80,6 +82,7 @@ public class RunProgressionHUD : MonoBehaviour
                        (battleLoader == null || !battleLoader.IsLoading) &&
                        (mapLoader == null || !mapLoader.IsLoading);
         canvasObject.SetActive(visible);
+        if (holdReward) return;
         RunProgression run = MapRunState.Progression;
         if (lastPackets == run.Packets.Balance && lastLayer == run.Layer &&
             lastExperience == run.Experience && lastRequired == run.RequiredExperience)

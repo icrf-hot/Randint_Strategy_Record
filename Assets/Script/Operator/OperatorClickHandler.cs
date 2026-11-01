@@ -41,6 +41,7 @@ public class OperatorClickHandler : MonoBehaviour
 
     private void Update()
     {
+        if (BattleExecuteManager.IsExecuting) return;
         if (TransitionManager.IsBusy) return;
         if (TransitionManager.IsBusy) return;
         if (TransitionManager.IsBusy) return;

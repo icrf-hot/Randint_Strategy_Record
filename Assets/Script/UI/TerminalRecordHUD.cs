@@ -9,6 +9,8 @@ public sealed class TerminalRecordHUD : MonoBehaviour
     private GameObject canvas;
     private void Start()
     {
+        // The battle card/stat panel occupies this area; record health is shown on the map.
+        if (gameObject.scene.name == "Playing_Scene") { enabled = false; return; }
         var owner = TerminalUI.Canvas("RecordHealthHUD", 12); canvas = owner.gameObject;
         var panel = TerminalUI.Panel("RecordHealthPanel", owner.transform, new Vector2(20, 20), new Vector2(350, 108));
         var rect = panel.rectTransform; rect.anchorMin = rect.anchorMax = rect.pivot = Vector2.zero;
