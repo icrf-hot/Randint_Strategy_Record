@@ -8,8 +8,8 @@ public class SpriteButtonEffect : MonoBehaviour,
 {
     [SerializeField] private SpriteRenderer targetRenderer;
     [SerializeField] private Collider2D targetCollider;
-    [SerializeField] private Color hoverColor = new Color(0.75f, 0.75f, 0.75f, 1f);
-    [SerializeField] private float colorChangeTime = 0.2f;
+    private readonly Color hoverColor = UITheme.Accent;
+    [SerializeField] private float colorChangeTime = UITheme.ButtonTime;
 
     private Color originalColor;
     private bool isHovering;
@@ -40,6 +40,7 @@ public class SpriteButtonEffect : MonoBehaviour,
 
     private void Update()
     {
+        if (TransitionManager.IsBusy) return;
         if (mainCamera == null || targetCollider == null || Mouse.current == null)
             return;
 
@@ -70,6 +71,7 @@ public class SpriteButtonEffect : MonoBehaviour,
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (TransitionManager.IsBusy) return;
         //StartColorChange(originalColor);
         //ignoreHoverUntilExit = true;
     }

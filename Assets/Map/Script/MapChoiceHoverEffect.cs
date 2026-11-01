@@ -10,8 +10,8 @@ public class MapChoiceHoverEffect :
     [SerializeField] private SpriteRenderer spriteRenderer;
 
     [Header("Color")]
-    [SerializeField] private Color normalColor = Color.white;
-    [SerializeField] private Color hoverColor = Color.gray;
+    private readonly Color normalColor = UITheme.BgPanel;
+    private readonly Color hoverColor = UITheme.BgPanelHi;
 
     [Header("Movement")]
     [SerializeField] private float moveDistance = 0.3f;

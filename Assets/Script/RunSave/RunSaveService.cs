@@ -23,7 +23,7 @@ public static class RunSaveService
         get
         {
             RunSaveBindings bindings = RunSaveBindings.Instance;
-            if (bindings == null || SceneManager.GetActiveScene().path != bindings.MapScenePath ||
+            if (TransitionManager.IsBusy || bindings == null || SceneManager.GetActiveScene().path != bindings.MapScenePath ||
                 !MapRunState.Progression.IsInitialized || !MapRunState.HasCurrentNode || MapRunState.IsEnded ||
                 ShopSceneRouter.IsTransitioning) return false;
             MapSceneFadeIn fade = UnityEngine.Object.FindFirstObjectByType<MapSceneFadeIn>();

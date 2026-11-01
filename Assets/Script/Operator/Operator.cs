@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 
 public class Operator : MonoBehaviour
@@ -291,6 +291,7 @@ public class Operator : MonoBehaviour
                 damage - Defense);
 
         currentHP -= finalDamage;
+        TerminalWorld.Hit(transform.position, currentHP <= 0);
 
         currentHP =
             Mathf.Max(
@@ -318,6 +319,7 @@ public class Operator : MonoBehaviour
                 damage - ArtsResistance);
 
         currentHP -= finalDamage;
+        TerminalWorld.Hit(transform.position, currentHP <= 0);
 
         currentHP =
             Mathf.Max(
@@ -601,12 +603,7 @@ public class Operator : MonoBehaviour
                 continue;
             }
 
-            target.color = new Color(
-                original.r * retreatedBrightness,
-                original.g * retreatedBrightness,
-                original.b * retreatedBrightness,
-                original.a
-            );
+            target.color = UITheme.Alpha(original * retreatedBrightness, original.a);
         }
     }
 

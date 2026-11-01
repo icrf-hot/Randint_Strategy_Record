@@ -22,6 +22,9 @@ public class EnemyTargetClickHandler : MonoBehaviour
 
     private void Update()
     {
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
         if (Mouse.current == null)
             return;
 

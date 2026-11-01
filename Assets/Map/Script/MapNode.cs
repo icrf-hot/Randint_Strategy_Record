@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using Randint.Data;
 
@@ -46,11 +46,18 @@ public class MapNode : MonoBehaviour
     [Header("Visual")]
     [SerializeField] private MeshRenderer meshRenderer;
 
-    [SerializeField] private Color normalColor = Color.white;
-    [SerializeField] private Color currentColor = Color.blue;
-    [SerializeField] private Color unavailableColor = Color.gray;
-    [SerializeField] private Color reachablePreviewColor = Color.green;
+    private Color normalColor {
+        get {
+            string kind = meshRenderer != null ? meshRenderer.name.ToLowerInvariant() : name.ToLowerInvariant();
+            return kind.Contains("queen") ? UITheme.Danger : kind.Contains("king") ? UITheme.Warn :
+                kind.Contains("pawn") ? UITheme.TextDim : UITheme.Accent;
+        }
+    }
+    private readonly Color currentColor = UITheme.Ok;
+    private readonly Color unavailableColor = UITheme.Line;
+    private readonly Color reachablePreviewColor = UITheme.Accent;
 
+    private MaterialPropertyBlock themeProperties;
     private bool isUnavailable;
     private MapNodeVisualState visualState;
 
@@ -133,7 +140,11 @@ public class MapNode : MonoBehaviour
                 break;
         }
 
-        meshRenderer.material.color = color;
+        if (themeProperties == null) themeProperties = new MaterialPropertyBlock();
+        meshRenderer.GetPropertyBlock(themeProperties);
+        themeProperties.SetColor("_BaseColor", color);
+        themeProperties.SetColor("_Color", color);
+        meshRenderer.SetPropertyBlock(themeProperties);
     }
 
     public bool IsConnectedTo(MapNode node)

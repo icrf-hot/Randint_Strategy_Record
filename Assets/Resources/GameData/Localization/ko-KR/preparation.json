@@ -19,11 +19,11 @@
     },
     {
       "key": "preparation.loss_zero",
-      "value": "0단계"
+      "value": "STAGE 00 / 도입 구간"
     },
     {
       "key": "preparation.loss_level",
-      "value": "{0}단계"
+      "value": "STAGE {0:00} / 도입 구간"
     },
     {
       "key": "preparation.back",

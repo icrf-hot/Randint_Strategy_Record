@@ -8,6 +8,9 @@ public class CalculateAttackButton :
     public void OnPointerClick(
         PointerEventData eventData)
     {
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
         if (BattleExecuteManager.Instance == null)
             return;
 

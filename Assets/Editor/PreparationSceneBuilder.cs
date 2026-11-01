@@ -35,7 +35,7 @@ public static class PreparationSceneBuilder
             var camera = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
             camera.tag = "MainCamera";
             camera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
-            camera.GetComponent<Camera>().backgroundColor = new Color(0.94f, 0.95f, 0.97f);
+            camera.GetComponent<Camera>().backgroundColor = UITheme.BgBase;
             var events = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
             events.GetComponent<InputSystemUIInputModule>().AssignDefaultActions();
             var canvas = new GameObject("PreparationCanvas", typeof(RectTransform), typeof(Canvas),
@@ -62,7 +62,7 @@ public static class PreparationSceneBuilder
                 var panel = new GameObject(roster[i].Position + "Operator", typeof(RectTransform), typeof(UnityEngine.UI.Image));
                 panel.transform.SetParent(root, false);
                 SlotUI.Place((RectTransform)panel.transform, new Vector2(x, 38), new Vector2(344, 356));
-                panel.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+                panel.GetComponent<UnityEngine.UI.Image>().color = UITheme.TextMain;
                 panel.GetComponent<UnityEngine.UI.Image>().raycastTarget = false;
                 Text(panel.transform, "Position", positions[i], new Vector2(0, 148), new Vector2(312, 36), 20);
                 var portrait = new GameObject("Portrait", typeof(RectTransform), typeof(UnityEngine.UI.Image));
@@ -78,13 +78,13 @@ public static class PreparationSceneBuilder
                 changes[i] = Button(panel.transform, "ChangeOperator", "preparation.change", new Vector2(0, -145), new Vector2(130, 40));
             }
             TMP_Text warning = SlotUI.Label(root, "Warning", font, new Vector2(0, -176), new Vector2(1120, 52), 18);
-            warning.color = new Color(0.65f, 0.13f, 0.16f);
+            warning.color = UITheme.Danger;
             warning.text = "";
             Text(root, "DataLossHeading", "preparation.loss_title", new Vector2(-370, -240), new Vector2(344, 42), 22);
             TMP_Text level = Text(root, "DataLossLevel", "preparation.loss_zero", new Vector2(0, -240), new Vector2(240, 42), 24);
             var back = Button(root, "ReturnToLobby", "preparation.back", new Vector2(-410, -310), new Vector2(220, 48));
             var start = Button(root, "StartRun", "preparation.start", new Vector2(410, -310), new Vector2(220, 48));
-            start.GetComponent<UnityEngine.UI.Image>().color = new Color(0.64f, 0.86f, 0.75f);
+            start.GetComponent<UnityEngine.UI.Image>().color = UITheme.Ok;
             var owner = new GameObject("PreparationController");
             var loader = owner.AddComponent<MenuSceneLoader>();
             var controller = owner.AddComponent<PreparationSceneController>();
@@ -94,11 +94,11 @@ public static class PreparationSceneBuilder
             var rect = (RectTransform)transition.transform;
             rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.one;
             rect.offsetMin = rect.offsetMax = Vector2.zero;
-            transition.GetComponent<UnityEngine.UI.Image>().color = Color.black;
+            transition.GetComponent<UnityEngine.UI.Image>().color = UITheme.BgBase;
             var group = transition.GetComponent<CanvasGroup>();
             group.alpha = 0; group.blocksRaycasts = false;
             TMP_Text loading = Text(transition.transform, "Loading", "menu.loading", Vector2.zero, new Vector2(1120, 70), 24);
-            loading.color = Color.white;
+            loading.color = UITheme.TextMain;
             Set(loader, "transitionCanvas", group); Set(loader, "transitionText", loading);
             Set(controller, "sceneLoader", loader); Set(controller, "startButton", start); Set(controller, "backButton", back);
             Set(controller, "warningText", warning); Set(controller, "dataLossText", level);

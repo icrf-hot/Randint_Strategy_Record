@@ -13,6 +13,9 @@ public class AttackModeButton : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
         if (MiddleCardSelectionManager.Instance == null)
             return;
 

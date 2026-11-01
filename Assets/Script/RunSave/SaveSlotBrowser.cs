@@ -102,7 +102,7 @@ public sealed class SaveSlotBrowser : MonoBehaviour
                     DateTimeOffset.Parse(data.savedUtc).ToLocalTime().ToString("yyyy-MM-dd HH:mm"));
             else state = GameData.Text(!repository.HasFiles ? "save.slot_empty" : "save.slot_unavailable");
             slots[i].GetComponentInChildren<TMP_Text>().text = string.Format(GameData.Text("save.slot"), id) + "\n" + state;
-            slots[i].GetComponent<Image>().color = id == SelectedSlot ? new Color(0.72f, 0.91f, 0.84f) : new Color(0.94f, 0.95f, 0.97f);
+            slots[i].GetComponent<Image>().color = id == SelectedSlot ? UITheme.BgPanelHi : UITheme.BgPanel;
         }
         SetInteractable(unlocked);
         selected?.Invoke(SelectedSlot);
@@ -129,7 +129,7 @@ public static class SlotUI
         text.enableAutoSizing = true;
         text.fontSizeMin = 12;
         text.fontSizeMax = fontSize;
-        text.color = new Color(0.1f, 0.12f, 0.15f);
+        TerminalUI.Bind(go, UITheme.Tone.Main);
         text.alignment = TextAlignmentOptions.Center;
         text.raycastTarget = false;
         return text;
@@ -140,9 +140,11 @@ public static class SlotUI
         var go = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Button));
         go.transform.SetParent(parent, false);
         Place((RectTransform)go.transform, position, size);
-        go.GetComponent<Image>().color = new Color(0.85f, 0.88f, 0.91f);
+        go.GetComponent<Image>().color = UITheme.Clear;
         TMP_Text text = Label(go.transform, "Label", font, Vector2.zero, size - new Vector2(16, 6));
         text.text = label;
+        go.GetComponent<Image>().raycastTarget = true;
+        go.AddComponent<TerminalButton>();
         return go.GetComponent<Button>();
     }
 

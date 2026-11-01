@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -39,9 +39,8 @@ public class BattleResultPresenter : MonoBehaviour
     [SerializeField]
     [GameTextKey] private string successTitleKey;
 
-    [SerializeField]
-    private Color successTitleColor =
-        new Color(0.4f, 1f, 0.5f, 1f);
+    private readonly Color successTitleColor =
+        UITheme.Ok;
 
     [SerializeField]
     private BattleResultTextSet successText;
@@ -50,9 +49,8 @@ public class BattleResultPresenter : MonoBehaviour
     [SerializeField]
     [GameTextKey] private string failureTitleKey;
 
-    [SerializeField]
-    private Color failureTitleColor =
-        new Color(1f, 0.3f, 0.3f, 1f);
+    private readonly Color failureTitleColor =
+        UITheme.Danger;
 
     [SerializeField]
     private BattleResultTextSet failureText;

@@ -15,23 +15,16 @@ public class EnemyTargetable : MonoBehaviour
     private SpriteRenderer targetRenderer;
 
     [Header("Target Colors")]
-    [SerializeField]
-    private Color normalColor = Color.white;
+    private readonly Color normalColor = UITheme.TextDim;
 
     // 선택 가능하지만 아직 선택되지 않음
-    [SerializeField]
-    private Color targetableColor =
-        new Color(0.55f, 0.55f, 0.55f, 1f);
+    private readonly Color targetableColor = UITheme.TextMain;
 
     // 선택 불가능
-    [SerializeField]
-    private Color untargetableColor =
-        new Color(0.25f, 0.25f, 0.25f, 1f);
+    private readonly Color untargetableColor = UITheme.TextDim;
 
     // 선택된 적
-    [SerializeField]
-    private Color selectedColor =
-        Color.white;
+    private readonly Color selectedColor = UITheme.Accent;
 
     [Header("Position")]
     private EnemyPosition position;

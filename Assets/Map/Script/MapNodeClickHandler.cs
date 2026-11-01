@@ -23,6 +23,9 @@ public class MapNodeClickHandler : MonoBehaviour
 
     private void Update()
     {
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
         Mouse mouse = Mouse.current;
 
         if (mouse == null)

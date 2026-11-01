@@ -38,14 +38,14 @@ public class ShopSceneUI : MonoBehaviour
         scaler.matchWidthOrHeight = 0.5f;
         root.gameObject.AddComponent<GraphicRaycaster>();
         Image background = root.gameObject.AddComponent<Image>();
-        background.color = new Color(0.075f, 0.08f, 0.09f);
+        background.color = UITheme.BgBase;
         Text(root, "ShopTitle", L("title"), new Vector2(0, 1), Vector2.one,
             new Vector2(28, -72), new Vector2(-28, -20), 28);
         balanceText = Text(root, "Balance", "", new Vector2(0, 1), Vector2.one,
             new Vector2(28, -110), new Vector2(-28, -76), 20);
         RectTransform viewport = Rect("Viewport", root);
         Layout(viewport, Vector2.zero, Vector2.one, new Vector2(28, 100), new Vector2(-28, -124));
-        viewport.gameObject.AddComponent<Image>().color = new Color(0.11f, 0.12f, 0.13f);
+        viewport.gameObject.AddComponent<Image>().color = UITheme.BgPanel;
         viewport.gameObject.AddComponent<RectMask2D>();
         ScrollRect scroll = viewport.gameObject.AddComponent<ScrollRect>();
         scroll.viewport = viewport;
@@ -140,10 +140,11 @@ public class ShopSceneUI : MonoBehaviour
     {
         RectTransform rect = Rect(name, parent);
         Layout(rect, min, max, start, end);
-        rect.gameObject.AddComponent<Image>().color = new Color(0.16f, 0.42f, 0.35f);
+        rect.gameObject.AddComponent<Image>().color = UITheme.Clear;
         Button button = rect.gameObject.AddComponent<Button>();
         TMP_Text label = Text(rect, "Label", caption, Vector2.zero, Vector2.one, new Vector2(8, 4), new Vector2(-8, -4), 20);
         label.alignment = TextAlignmentOptions.Center;
+        rect.gameObject.AddComponent<TerminalButton>();
         return button;
     }
 
@@ -158,7 +159,7 @@ public class ShopSceneUI : MonoBehaviour
         label.enableAutoSizing = true;
         label.fontSizeMin = 14;
         label.fontSizeMax = size;
-        label.color = Color.white;
+        TerminalUI.Bind(rect.gameObject, UITheme.Tone.Main);
         label.raycastTarget = false;
         label.alignment = TextAlignmentOptions.MidlineLeft;
         return label;

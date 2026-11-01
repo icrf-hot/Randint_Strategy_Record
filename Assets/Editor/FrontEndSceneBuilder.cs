@@ -15,9 +15,9 @@ public static class FrontEndSceneBuilder
 {
     private const string TitlePath = "Assets/Scenes/Title.unity";
     private const string LobbyPath = "Assets/Scenes/Lobby.unity";
-    private static readonly Color Blue = new Color32(22, 72, 177, 255);
-    private static readonly Color Paper = new Color32(236, 233, 216, 255);
-    private static readonly Color Ink = new Color32(29, 36, 52, 255);
+    private static readonly Color Blue = UITheme.Accent;
+    private static readonly Color Paper = UITheme.BgPanel;
+    private static readonly Color Ink = UITheme.BgPanel;
     private static readonly List<LocalizedSceneTexts.Binding> Bindings = new();
     private static TMP_FontAsset font;
 
@@ -90,11 +90,11 @@ public static class FrontEndSceneBuilder
             SetReferences(loader, ("progressionSettings", AssetDatabase.LoadAssetAtPath<RunProgressionSettings>("Assets/Shop/Data/RunProgression.asset")));
             if (isTitle) BuildTitle(root, controller, loader);
             else BuildLobby(root, controller, loader);
-            GameObject transition = Panel("TransitionCanvas", root, Vector2.zero, Vector2.zero, Color.black, true);
+            GameObject transition = Panel("TransitionCanvas", root, Vector2.zero, Vector2.zero, UITheme.BgBase, true);
             CanvasGroup group = transition.AddComponent<CanvasGroup>();
             group.alpha = 0;
             group.blocksRaycasts = false;
-            TMP_Text loading = Text("LoadingText", transition.transform, "menu.loading", Vector2.zero, new Vector2(950, 100), 30, Color.white);
+            TMP_Text loading = Text("LoadingText", transition.transform, "menu.loading", Vector2.zero, new Vector2(950, 100), 30, UITheme.TextMain);
             SetReferences(loader, ("transitionCanvas", group), ("transitionText", loading));
             transition.SetActive(false);
             LocalizedSceneTexts localizer = controller.AddComponent<LocalizedSceneTexts>();
@@ -114,12 +114,12 @@ public static class FrontEndSceneBuilder
 
     private static void BuildTitle(Transform root, GameObject owner, MenuSceneLoader loader)
     {
-        Panel("Background", root, Vector2.zero, Vector2.zero, new Color32(10, 19, 33, 255), true);
-        Panel("AccentLine", root, new Vector2(0, 212), new Vector2(920, 3), new Color32(72, 204, 207, 255));
-        Text("AccessTag", root, "menu.title.tag", new Vector2(0, 250), new Vector2(1050, 45), 20, new Color32(72, 204, 207, 255));
-        Text("Title", root, "menu.title.name", new Vector2(0, 130), new Vector2(1120, 95), 60, Color.white);
-        Text("Subtitle", root, "menu.title.subtitle", new Vector2(0, 55), new Vector2(950, 55), 32, Color.white);
-        Text("Context", root, "menu.title.context", new Vector2(0, -70), new Vector2(1020, 120), 24, new Color32(184, 199, 216, 255));
+        Panel("Background", root, Vector2.zero, Vector2.zero, UITheme.BgBase, true);
+        Panel("AccentLine", root, new Vector2(0, 212), new Vector2(920, 3), UITheme.Accent);
+        Text("AccessTag", root, "menu.title.tag", new Vector2(0, 250), new Vector2(1050, 45), 20, UITheme.Accent);
+        Text("Title", root, "menu.title.name", new Vector2(0, 130), new Vector2(1120, 95), 60, UITheme.TextMain);
+        Text("Subtitle", root, "menu.title.subtitle", new Vector2(0, 55), new Vector2(950, 55), 32, UITheme.TextMain);
+        Text("Context", root, "menu.title.context", new Vector2(0, -70), new Vector2(1020, 120), 24, UITheme.TextDim);
         Button enter = Button("EnterLobbyButton", root, "menu.title.enter", new Vector2(0, -225), new Vector2(350, 65));
         TitleSceneController controller = owner.AddComponent<TitleSceneController>();
         SetReferences(controller, ("sceneLoader", loader), ("enterButton", enter));
@@ -127,10 +127,10 @@ public static class FrontEndSceneBuilder
 
     private static void BuildLobby(Transform root, GameObject owner, MenuSceneLoader loader)
     {
-        Panel("Desktop", root, Vector2.zero, Vector2.zero, new Color32(57, 116, 181, 255), true);
+        Panel("Desktop", root, Vector2.zero, Vector2.zero, UITheme.BgBase, true);
         GameObject taskbar = Panel("Taskbar", root, new Vector2(0, -336), new Vector2(1280, 48), Blue);
-        Text("TaskbarLabel", taskbar.transform, "menu.lobby.taskbar", new Vector2(-430, 0), new Vector2(350, 40), 20, Color.white);
-        Text("Status", taskbar.transform, "menu.lobby.status", new Vector2(440, 0), new Vector2(320, 40), 18, Color.white);
+        Text("TaskbarLabel", taskbar.transform, "menu.lobby.taskbar", new Vector2(-430, 0), new Vector2(350, 40), 20, UITheme.TextMain);
+        Text("Status", taskbar.transform, "menu.lobby.status", new Vector2(440, 0), new Vector2(320, 40), 18, UITheme.TextMain);
         GameObject window = Window("MainWindow", root, "menu.lobby.window", new Vector2(860, 480));
         CanvasGroup mainGroup = window.AddComponent<CanvasGroup>();
         Text("Path", window.transform, "menu.lobby.path", new Vector2(0, 163), new Vector2(780, 40), 22, Ink);
@@ -168,7 +168,7 @@ public static class FrontEndSceneBuilder
 
     private static GameObject Modal(Transform root, string name, string titleKey, string bodyKey, out Button close)
     {
-        GameObject backdrop = Panel(name, root, Vector2.zero, Vector2.zero, new Color(0, 0, 0, 0.35f), true);
+        GameObject backdrop = Panel(name, root, Vector2.zero, Vector2.zero, UITheme.Alpha(UITheme.BgBase, .92f), true);
         GameObject window = Window("Dialog", backdrop.transform, titleKey, new Vector2(650, 330));
         Text("Message", window.transform, bodyKey, new Vector2(0, 0), new Vector2(590, 190), 23, Ink);
         close = Button("CloseButton", window.transform, "menu.window.close", new Vector2(0, -116), new Vector2(145, 44));
@@ -183,23 +183,23 @@ public static class FrontEndSceneBuilder
         outline.effectColor = Blue;
         outline.effectDistance = new Vector2(3, -3);
         GameObject bar = Panel("TitleBar", frame.transform, new Vector2(0, size.y / 2 - 23), new Vector2(size.x - 6, 42), Blue);
-        TMP_Text title = Text("WindowTitle", bar.transform, titleKey, Vector2.zero, new Vector2(size.x - 34, 40), 24, Color.white);
+        TMP_Text title = Text("WindowTitle", bar.transform, titleKey, Vector2.zero, new Vector2(size.x - 34, 40), 24, UITheme.TextMain);
         title.alignment = TextAlignmentOptions.MidlineLeft;
         return frame;
     }
 
     private static Button Button(string name, Transform parent, string key, Vector2 position, Vector2 size)
     {
-        GameObject go = Panel(name, parent, position, size, new Color32(246, 244, 235, 255));
+        GameObject go = Panel(name, parent, position, size, UITheme.BgPanel);
         Outline bevel = go.AddComponent<Outline>();
-        bevel.effectColor = new Color32(130, 132, 126, 255);
+        bevel.effectColor = UITheme.BgPanel;
         bevel.effectDistance = new Vector2(1, -2);
         Button button = go.AddComponent<Button>();
         button.targetGraphic = go.GetComponent<Image>();
         ColorBlock colors = button.colors;
-        colors.highlightedColor = new Color32(206, 226, 255, 255);
+        colors.highlightedColor = UITheme.BgPanel;
         colors.selectedColor = colors.highlightedColor;
-        colors.pressedColor = new Color32(154, 188, 231, 255);
+        colors.pressedColor = UITheme.BgPanel;
         button.colors = colors;
         Text("Label", go.transform, key, Vector2.zero, new Vector2(size.x - 14, 50), 25, Ink);
         return button;

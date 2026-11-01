@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Randint.Data;
@@ -354,6 +354,19 @@ public class CardSpawner : MonoBehaviour
                     0f,
                     0f);
 
+            // Keep the entire hand inside the camera, reserving the lower-left integrity HUD.
+            Camera view = Camera.main;
+            if (view != null)
+            {
+                float depth = Mathf.Max(view.nearClipPlane + 1f, Vector3.Dot(spawnPoint.position - view.transform.position, view.transform.forward));
+                float x = cardCount <= 1 ? .65f : Mathf.Lerp(.35f, .94f, i / (float)(cardCount - 1));
+                targetPosition = view.ViewportToWorldPoint(new Vector3(x, .12f, depth));
+                SpriteRenderer body = cardObject.GetComponentInChildren<SpriteRenderer>();
+                if (body != null && body.bounds.size.y > 0)
+                    cardObject.transform.localScale *= Vector3.Distance(
+                        view.ViewportToWorldPoint(new Vector3(.5f, .18f, depth)),
+                        view.ViewportToWorldPoint(new Vector3(.5f, 0, depth))) / body.bounds.size.y;
+            }
             card.MoveTo(targetPosition);
 
             if (spawnDelay > 0f)

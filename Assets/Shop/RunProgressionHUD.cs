@@ -7,6 +7,7 @@ public class RunProgressionHUD : MonoBehaviour
     [SerializeField] private TMP_FontAsset font;
     private GameObject canvasObject;
     private TMP_Text statusText;
+    private TerminalProgressBar experienceBar;
     private BattleSceneFadeIn battleEntry;
     private MapSceneFadeIn mapEntry;
     private BattleResultPresenter result;
@@ -46,12 +47,19 @@ public class RunProgressionHUD : MonoBehaviour
         statusText.enableAutoSizing = true;
         statusText.fontSizeMin = 14f;
         statusText.fontSizeMax = 20f;
-        statusText.color = Color.white;
+        TerminalUI.Bind(textObject, UITheme.Tone.Main, true);
+        textObject.AddComponent<TerminalPulse>();
         RectTransform rect = textObject.GetComponent<RectTransform>();
         rect.anchorMin = rect.anchorMax = new Vector2(1f, 1f);
         rect.pivot = new Vector2(1f, 1f);
         rect.anchoredPosition = new Vector2(-20f, -20f);
         rect.sizeDelta = new Vector2(280f, 90f);
+        var panel = TerminalUI.Panel("ProgressionPanel", canvasObject.transform, new Vector2(-20, -20), new Vector2(250, 115));
+        panel.rectTransform.anchorMin = panel.rectTransform.anchorMax = panel.rectTransform.pivot = Vector2.one;
+        textObject.transform.SetParent(panel.transform, false);
+        rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.one;
+        rect.offsetMin = new Vector2(14, 20); rect.offsetMax = new Vector2(-14, -10);
+        experienceBar = TerminalUI.Progress("Experience", panel.transform, new Vector2(0, -45), new Vector2(220, 5));
         Refresh();
     }
 
@@ -65,7 +73,7 @@ public class RunProgressionHUD : MonoBehaviour
         if (canvasObject == null || statusText == null)
             return;
 
-        bool visible = MapRunState.Progression.IsInitialized &&
+        bool visible = !TransitionManager.IsBusy && MapRunState.Progression.IsInitialized &&
                        (battleEntry == null || battleEntry.IsFadeComplete) &&
                        (mapEntry == null || mapEntry.IsFadeComplete) &&
                        (result == null || !result.IsShowing) &&
@@ -83,6 +91,7 @@ public class RunProgressionHUD : MonoBehaviour
         lastRequired = run.RequiredExperience;
         statusText.text = string.Format(Randint.Data.GameData.Text("run.ui.status"),
             lastPackets, lastLayer, lastExperience, lastRequired);
+        if (experienceBar != null) experienceBar.SetValue(lastRequired > 0 ? lastExperience / (float)lastRequired : 0);
     }
 
     private void OnDisable()

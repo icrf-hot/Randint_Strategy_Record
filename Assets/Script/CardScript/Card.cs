@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using Randint.Data;
@@ -150,6 +150,9 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
         CardSelectionManagerBase currentManager =
             CardPositionManager.Instance.CurrentSelectionManager;
 

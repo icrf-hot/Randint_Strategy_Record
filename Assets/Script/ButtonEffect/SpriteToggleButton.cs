@@ -12,14 +12,14 @@ public class SpriteToggleButton : MonoBehaviour
     [SerializeField] private SpriteRenderer targetRenderer;
     [SerializeField] private Collider2D targetCollider;
 
-    [SerializeField] private Color normalColor = Color.white;
-    [SerializeField] private Color selectedColor = new Color(0.75f, 0.75f, 0.75f);
+    private readonly Color normalColor = UITheme.TextureTint;
+    private readonly Color selectedColor = UITheme.Accent;
 
     [Header("TMP")]
     [SerializeField] private TMP_Text targetText;
 
-    [SerializeField] private Color normalTextColor = Color.white;
-    [SerializeField] private Color selectedTextColor = Color.gray;
+    private readonly Color normalTextColor = UITheme.TextMain;
+    private readonly Color selectedTextColor = UITheme.Accent;
 
     [Header("Event")]
     [SerializeField] private UnityEvent onSelected;
@@ -39,6 +39,7 @@ public class SpriteToggleButton : MonoBehaviour
 
     private void Update()
     {
+        if (TransitionManager.IsBusy) return;
         if (mainCamera == null || targetCollider == null || Mouse.current == null)
             return;
 

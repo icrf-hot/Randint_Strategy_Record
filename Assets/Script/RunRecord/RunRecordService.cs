@@ -42,6 +42,6 @@ public static class RunRecordService
         }
         Time.timeScale = 1f;
         if (SceneManager.GetActiveScene().path != LobbyScenePath)
-            SceneManager.LoadSceneAsync(LobbyScenePath);
+            TransitionManager.TryLoad(LobbyScenePath, message: "> 기록 열람 종료 중");
     }
 }

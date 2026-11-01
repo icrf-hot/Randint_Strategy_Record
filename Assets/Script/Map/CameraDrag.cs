@@ -13,6 +13,9 @@ public class CameraDrag : MonoBehaviour
 
     private void Update()
     {
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             lastMouseScreenPos = Mouse.current.position.ReadValue();

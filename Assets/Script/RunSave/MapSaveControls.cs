@@ -39,16 +39,18 @@ public sealed class MapSaveControls : MonoBehaviour
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1280, 720);
         scaler.matchWidthOrHeight = 0.5f;
-        settingsButton = Button("Settings", "menu.settings.label", new Vector2(24, -24), new Vector2(104, 44));
+        settingsButton = Button("Settings", "menu.settings.label", new Vector2(24, -24), new Vector2(40, 36));
         RectTransform settingsRect = (RectTransform)settingsButton.transform;
         settingsRect.anchorMin = settingsRect.anchorMax = settingsRect.pivot = new Vector2(0, 1);
+        settingsButton.GetComponentInChildren<TMP_Text>().text = "";
+        TerminalGraphic.Create("Gear", settingsButton.transform, TerminalGraphic.Shape.Gear, Vector2.zero, new Vector2(28, 28));
         settingsButton.onClick.AddListener(OpenSettings);
         settingsOverlay = new GameObject("MapSettingsOverlay", typeof(RectTransform), typeof(Image));
         settingsOverlay.transform.SetParent(canvasObject.transform, false);
         RectTransform overlayRect = (RectTransform)settingsOverlay.transform;
         overlayRect.anchorMin = Vector2.zero; overlayRect.anchorMax = Vector2.one;
         overlayRect.offsetMin = overlayRect.offsetMax = Vector2.zero;
-        settingsOverlay.GetComponent<Image>().color = new Color(0, 0, 0, 0.5f);
+        settingsOverlay.GetComponent<Image>().color = UITheme.Alpha(UITheme.BgBase, .92f);
         saveButton = Button("Save", "save.save", new Vector2(0, 40), new Vector2(240, 48), settingsOverlay.transform);
         lobbyButton = Button("SaveAndLobby", "save.save_exit", new Vector2(0, -24), new Vector2(240, 48), settingsOverlay.transform);
         Button closeSettings = Button("CloseSettings", "menu.window.close", new Vector2(0, -100), new Vector2(160, 44), settingsOverlay.transform);
@@ -118,11 +120,11 @@ public sealed class MapSaveControls : MonoBehaviour
         var rect = (RectTransform)picker.transform;
         rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.one;
         rect.offsetMin = rect.offsetMax = Vector2.zero;
-        picker.GetComponent<Image>().color = new Color(0, 0, 0, 0.5f);
+        picker.GetComponent<Image>().color = UITheme.Alpha(UITheme.BgBase, .92f);
         var panel = new GameObject("Dialog", typeof(RectTransform), typeof(Image));
         panel.transform.SetParent(picker.transform, false);
         SlotUI.Place((RectTransform)panel.transform, Vector2.zero, new Vector2(960, 640));
-        panel.GetComponent<Image>().color = new Color(0.98f, 0.98f, 0.99f);
+        panel.GetComponent<Image>().color = UITheme.BgPanel;
         var title = SlotUI.Label(panel.transform, "Title", font, new Vector2(0, 290), new Vector2(900, 40), 24);
         title.text = GameData.Text("save.choose_slot");
         pickerSummary = SlotUI.Label(panel.transform, "Summary", font, new Vector2(0, -211), new Vector2(900, 72));
@@ -168,9 +170,7 @@ public sealed class MapSaveControls : MonoBehaviour
         statusText.text = GameData.Text("save.saved");
         if (returnAfterSave)
         {
-            isLeaving = true;
-            Time.timeScale = 1;
-            SceneManager.LoadSceneAsync("Assets/Scenes/Lobby.unity");
+            isLeaving = TransitionManager.TryLoad("Assets/Scenes/Lobby.unity", failed: () => isLeaving = false);
         }
     }
 
@@ -182,7 +182,7 @@ public sealed class MapSaveControls : MonoBehaviour
         rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0.5f, 0.5f);
         rect.anchoredPosition = position;
         rect.sizeDelta = size;
-        go.GetComponent<Image>().color = new Color(0.12f, 0.35f, 0.29f);
+        go.GetComponent<Image>().color = UITheme.Clear;
         TMP_Text label = Label("Label", go.transform);
         label.text = GameData.Text(key);
         label.alignment = TextAlignmentOptions.Center;
@@ -190,6 +190,7 @@ public sealed class MapSaveControls : MonoBehaviour
         label.rectTransform.anchorMax = Vector2.one;
         label.rectTransform.offsetMin = new Vector2(6, 4);
         label.rectTransform.offsetMax = new Vector2(-6, -4);
+        go.AddComponent<TerminalButton>();
         return go.GetComponent<Button>();
     }
 
@@ -204,7 +205,7 @@ public sealed class MapSaveControls : MonoBehaviour
         text.fontSizeMin = 14;
         text.fontSizeMax = 20;
         text.raycastTarget = false;
-        text.color = Color.white;
+        TerminalUI.Bind(go, UITheme.Tone.Main);
         return text;
     }
 }

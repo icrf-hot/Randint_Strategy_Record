@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class OperatorFocusManager : MonoBehaviour
@@ -82,6 +82,9 @@ public class OperatorFocusManager : MonoBehaviour
 
     private void Update()
     {
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
         mainCamera.transform.position = Vector3.Lerp(
             mainCamera.transform.position,
             targetCameraPosition,

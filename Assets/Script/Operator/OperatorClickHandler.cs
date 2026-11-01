@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class OperatorClickHandler : MonoBehaviour
@@ -41,6 +41,9 @@ public class OperatorClickHandler : MonoBehaviour
 
     private void Update()
     {
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
         if (Mouse.current == null)
             return;
 

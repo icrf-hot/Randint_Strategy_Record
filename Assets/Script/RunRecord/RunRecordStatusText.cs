@@ -16,6 +16,7 @@ public sealed class RunRecordStatusText : MonoBehaviour
         targetText.fontSizeMin = 14;
         targetText.fontSizeMax = targetText.fontSize;
         targetText.raycastTarget = false;
+        targetText.enabled = false;
     }
 
     private void LateUpdate()

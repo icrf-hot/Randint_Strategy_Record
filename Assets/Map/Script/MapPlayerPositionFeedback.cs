@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MapPlayerPositionFeedback : MonoBehaviour
@@ -46,6 +46,9 @@ public class MapPlayerPositionFeedback : MonoBehaviour
 
     private void Update()
     {
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
+        if (TransitionManager.IsBusy) return;
         UpdateReachablePreview();
     }
 

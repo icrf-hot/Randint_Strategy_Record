@@ -1,7 +1,10 @@
 {
   "schemaVersion": 1,
   "entries": [
-    { "key": "run.ui.status", "value": "Packet {0}\nLayer {1}\nEXP {2} / {3}" },
+    {
+      "key": "run.ui.status",
+      "value": "패킷 {0:000}\n레이어 {1:00}\n경험치 {2:000}/{3:000}"
+    },
     {
       "key": "shop.hp.name",
       "value": "생명력 Cache"

@@ -47,7 +47,7 @@
     },
     {
       "key": "ui.position.front",
-      "value": "'FRONT"
+      "value": "FRONT"
     },
     {
       "key": "ui.position.back",
@@ -99,11 +99,11 @@
     },
     {
       "key": "ui.map.integrity_value",
-      "value": "Integrity {0}%"
+      "value": "무결성 {0:000}%"
     },
     {
       "key": "ui.map.consistency_value",
-      "value": "Consistency {0}%"
+      "value": "일관성 {0:000}%"
     },
     {
       "key": "ui.map.enter_battle",

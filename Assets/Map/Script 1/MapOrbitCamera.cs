@@ -53,14 +53,14 @@ public class MapOrbitCamera : MonoBehaviour
 
     private bool dragging;
 
-    // ÇöÀç FocusµÈ ³ëµå
+    // í˜„ì¬ Focusëœ ë…¸ë“œ
     private MapNode focusedNode;
 
-    // Focus ÀÌÀü Ä«¸Ş¶ó »óÅÂ
+    // Focus ì´ì „ ì¹´ë©”ë¼ ìƒíƒœ
     private Vector3 previousPosition;
     private Quaternion previousRotation;
 
-    // Focus ¾Ö´Ï¸ŞÀÌ¼Ç
+    // Focus ì• ë‹ˆë©”ì´ì…˜
     private bool isFocusing;
     private bool returningFromFocus;
 
@@ -78,7 +78,7 @@ public class MapOrbitCamera : MonoBehaviour
         if (target == null)
         {
             Debug.LogError(
-                "MapOrbitCamera: TargetÀÌ ÁöÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù."
+                "MapOrbitCamera: Targetì´ ì§€ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤."
             );
 
             enabled = false;
@@ -135,10 +135,11 @@ public class MapOrbitCamera : MonoBehaviour
 
     private void Update()
     {
+        if (TransitionManager.IsBusy) return;
         if (target == null)
             return;
 
-        // ESC´Â Focus »óÅÂ¿¡¼­µµ Ç×»ó Ã³¸®
+        // ESCëŠ” Focus ìƒíƒœì—ì„œë„ í•­ìƒ ì²˜ë¦¬
         if (Keyboard.current != null &&
             Keyboard.current.escapeKey.wasPressedThisFrame)
         {
@@ -148,15 +149,15 @@ public class MapOrbitCamera : MonoBehaviour
             }
         }
 
-        // Focus ÀÌµ¿ Áß
+        // Focus ì´ë™ ì¤‘
         if (isFocusing)
         {
             UpdateFocus();
             return;
         }
 
-        // Focus°¡ ¿Ï·áµÈ »óÅÂ
-        // Ä«¸Ş¶ó¸¦ ¿ÏÀüÈ÷ Á¤Áö½ÃÅ²´Ù.
+        // Focusê°€ ì™„ë£Œëœ ìƒíƒœ
+        // ì¹´ë©”ë¼ë¥¼ ì™„ì „íˆ ì •ì§€ì‹œí‚¨ë‹¤.
         if (focusedNode != null)
         {
             return;
@@ -169,7 +170,7 @@ public class MapOrbitCamera : MonoBehaviour
 
         HandleInput(mouse);
 
-        // ºÎµå·¯¿î È¸Àü
+        // ë¶€ë“œëŸ¬ìš´ íšŒì „
         currentYaw =
             Mathf.SmoothDampAngle(
                 currentYaw,
@@ -219,7 +220,7 @@ public class MapOrbitCamera : MonoBehaviour
         Vector2 movement =
             currentMousePosition - mouseDownPosition;
 
-        // ÀÏÁ¤ °Å¸® ÀÌ»ó ¿òÁ÷¿´À» ¶§¸¸ µå·¡±× ½ÃÀÛ
+        // ì¼ì • ê±°ë¦¬ ì´ìƒ ì›€ì§ì˜€ì„ ë•Œë§Œ ë“œë˜ê·¸ ì‹œì‘
         if (!dragging)
         {
             if (movement.sqrMagnitude <
@@ -319,18 +320,18 @@ public class MapOrbitCamera : MonoBehaviour
         if (node == null)
             return;
 
-        // °°Àº ³ëµå¸¦ ´Ù½Ã Å¬¸¯ÇÏ¸é Ãë¼Ò
+        // ê°™ì€ ë…¸ë“œë¥¼ ë‹¤ì‹œ í´ë¦­í•˜ë©´ ì·¨ì†Œ
         if (focusedNode == node)
         {
             CancelFocus();
             return;
         }
 
-        // ÀÌ¹Ì ´Ù¸¥ ³ëµå°¡ FocusµÇ¾î ÀÖ´Ù¸é ¹«½Ã
+        // ì´ë¯¸ ë‹¤ë¥¸ ë…¸ë“œê°€ Focusë˜ì–´ ìˆë‹¤ë©´ ë¬´ì‹œ
         if (focusedNode != null)
             return;
 
-        // ÇöÀç Ä«¸Ş¶ó »óÅÂ ÀúÀå
+        // í˜„ì¬ ì¹´ë©”ë¼ ìƒíƒœ ì €ì¥
         previousPosition =
             transform.position;
 

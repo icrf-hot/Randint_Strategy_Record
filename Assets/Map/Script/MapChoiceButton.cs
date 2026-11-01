@@ -30,7 +30,7 @@ public class MapChoiceButton : MonoBehaviour, IPointerClickHandler
         if (raycastImage == null)
         {
             raycastImage = gameObject.AddComponent<Image>();
-            raycastImage.color = Color.clear;
+            raycastImage.color = UITheme.Clear;
         }
 
         raycastImage.raycastTarget = true;
@@ -38,6 +38,7 @@ public class MapChoiceButton : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (TransitionManager.IsBusy) return;
         if (eventData.button != PointerEventData.InputButton.Left)
             return;
 

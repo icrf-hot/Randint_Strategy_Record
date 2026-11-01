@@ -18,7 +18,7 @@ public sealed class PreparationSceneController : MonoBehaviour
 
     private void Start()
     {
-        dataLossText.text = string.Format(GameData.Text("preparation.loss_level"), DataLossLevel);
+        dataLossText.text = "STAGE 00 / 도입 구간";
         warningText.text = "";
         bool valid = TryGetRoster(out OperatorData[] roster);
         startButton.interactable = valid;
