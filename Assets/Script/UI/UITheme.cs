@@ -35,6 +35,8 @@ public sealed class UITheme : ScriptableObject
     public const float StatusPeriod = 2f, Gap = 20f, TitleBarHeight = 28f;
     public const int ParticleLimit = 200;
     public const int CardSortBase = 5000, CardSortStride = 32, CardSortRaise = 10000;
+    // 카드의 최대 인덱스(100)·호버 상승·숫자(+20)보다 높고, 전환 오버레이보다 낮습니다.
+    public const int BattlePanelSortBase = 20000, BattlePanelTextOrder = BattlePanelSortBase + 6;
     public enum Tone { Base, Panel, Hover, Line, Accent, Warn, Danger, Ok, Main, Dim, Clear, Texture, BattleFloor, BattleUnderfloor }
     public static Color Resolve(Tone tone) => tone switch {
         Tone.BattleFloor => BattleFloor, Tone.BattleUnderfloor => BattleUnderfloor, Tone.Base => BgBase, Tone.Panel => BgPanel, Tone.Hover => BgPanelHi,

@@ -151,6 +151,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (eventData != null && BattleSelectionPresentation.BlocksCardPointer(eventData.position)) return;
         if (BattleExecuteManager.IsExecuting) return;
         if (TransitionManager.IsBusy) return;
         if (TransitionManager.IsBusy) return;

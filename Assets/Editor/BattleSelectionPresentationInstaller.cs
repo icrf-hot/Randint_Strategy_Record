@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering;
 
 /// <summary>Repairs the existing card/stat panel in place, preserving all selection references.</summary>
 public static class BattleSelectionPresentationInstaller
@@ -58,8 +59,42 @@ public static class BattleSelectionPresentationInstaller
                 binding.Apply();
             }
         }
-        // Text is in the existing screen-space camera Canvas, above the sprite layers (2..5).
-        var canvas = root.GetComponentInParent<Canvas>(); canvas.sortingOrder = 6;
+        var canvas = root.GetComponentInParent<Canvas>();
+        Transform position = canvas.transform.Find("Position");
+        if (position == null) throw new System.InvalidOperationException("Battle position selector is missing.");
+        Material panelMaterial = GetPanelMaterial();
+        // 2D Light의 대상 레이어와 무관하게 UI 팔레트를 유지합니다.
+        foreach (Transform panel in new[] { root, position })
+        {
+            foreach (var sprite in panel.GetComponentsInChildren<SpriteRenderer>(true)) sprite.sharedMaterial = panelMaterial;
+            var sorting = panel.GetComponent<SortingGroup>();
+            if (sorting == null) sorting = panel.gameObject.AddComponent<SortingGroup>();
+            sorting.sortingOrder = UITheme.BattlePanelSortBase;
+        }
+        var presentation = canvas.GetComponent<BattleSelectionPresentation>();
+        if (presentation == null) presentation = canvas.gameObject.AddComponent<BattleSelectionPresentation>();
+        var data = new SerializedObject(presentation);
+        data.FindProperty("textCanvas").objectReferenceValue = canvas;
+        var panels = data.FindProperty("panels"); panels.arraySize = 2;
+        panels.GetArrayElementAtIndex(0).objectReferenceValue = root;
+        panels.GetArrayElementAtIndex(1).objectReferenceValue = position;
+        var surfaces = data.FindProperty("cardBlockingSurfaces"); surfaces.arraySize = 2;
+        surfaces.GetArrayElementAtIndex(0).objectReferenceValue = root.GetComponent<SpriteRenderer>();
+        surfaces.GetArrayElementAtIndex(1).objectReferenceValue = position.Find("Square").GetComponent<SpriteRenderer>();
+        data.ApplyModifiedPropertiesWithoutUndo();
+        presentation.ApplyOrdering();
+        foreach (var toggle in root.GetComponentsInChildren<SpriteToggleButton>(true)) toggle.Deselect();
+    }
+    private static Material GetPanelMaterial()
+    {
+        const string path = "Assets/UI/Terminal/BattleSelectionUnlit.mat";
+        var material = AssetDatabase.LoadAssetAtPath<Material>(path);
+        if (material != null) return material;
+        Shader shader = Shader.Find("Universal Render Pipeline/2D/Sprite-Unlit-Default");
+        if (shader == null) throw new System.InvalidOperationException("Battle selection UI unlit shader is missing.");
+        material = new Material(shader) { name = "BattleSelectionUnlit" };
+        AssetDatabase.CreateAsset(material, path);
+        return material;
     }
     private static void Style(Transform target, UITheme.Tone tone, int order)
     {
