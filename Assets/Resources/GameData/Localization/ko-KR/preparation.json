@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "key": "preparation.title",
+      "value": "작전 준비"
+    },
+    {
+      "key": "preparation.formation",
+      "value": "편성"
+    },
+    {
+      "key": "preparation.change",
+      "value": "변경"
+    },
+    {
+      "key": "preparation.loss_title",
+      "value": "데이터 손실률"
+    },
+    {
+      "key": "preparation.loss_zero",
+      "value": "0단계"
+    },
+    {
+      "key": "preparation.loss_level",
+      "value": "{0}단계"
+    },
+    {
+      "key": "preparation.back",
+      "value": "로비로 돌아가기"
+    },
+    {
+      "key": "preparation.start",
+      "value": "작전 시작"
+    },
+    {
+      "key": "preparation.roster_locked",
+      "value": "현재는 사리아, 도로시, 조이스 무어만 사용할 수 있어 편성을 변경할 수 없습니다."
+    },
+    {
+      "key": "preparation.invalid_roster",
+      "value": "기본 편성 데이터를 불러올 수 없습니다. 대원 설정을 확인해 주십시오."
+    }
+  ]
+}

@@ -76,7 +76,13 @@ public static class GameDataValidationMenu
             {
                 CheckReferences(component, path, errors, "sceneLoader", "mainWindow", "settingsWindow", "continueWindow",
                     "settingsButton", "continueButton", "newGameButton", "settingsCloseButton", "continueCloseButton");
+                CheckScenePath(component, "preparationScenePath", path, errors);
+            }
+            if (component is PreparationSceneController)
+            {
+                CheckReferences(component, path, errors, "sceneLoader", "startButton", "backButton", "warningText", "dataLossText");
                 CheckScenePath(component, "mapScenePath", path, errors);
+                CheckScenePath(component, "lobbyScenePath", path, errors);
             }
             if (component is Operator op && op.Data == null)
                 errors.Add($"{path}/{component.name}: OperatorData Asset 참조 누락");

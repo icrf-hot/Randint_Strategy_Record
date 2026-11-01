@@ -75,7 +75,7 @@ public class FrontEndSceneTests
     }
 
     [UnityTest]
-    public IEnumerator NewGameResetsMapPositionAndRestoresTime()
+    public IEnumerator PreparationStartResetsMapPositionAndRestoresTime()
     {
         yield return new EnterPlayMode();
         yield return SceneManager.LoadSceneAsync("Lobby");
@@ -85,6 +85,14 @@ public class FrontEndSceneTests
         state.GetMethod("BeginMapEntry").Invoke(null, null);
         Time.timeScale = 0f;
         Click(Controller("LobbySceneController"), "newGameButton");
+        yield return WaitForScene("Preparation");
+        Assert.That(state.GetProperty("CurrentNodeID").GetValue(null), Is.EqualTo(1234));
+        Click(Controller("PreparationSceneController"), "backButton");
+        yield return WaitForScene("Lobby");
+        Assert.That(state.GetProperty("CurrentNodeID").GetValue(null), Is.EqualTo(1234));
+        Click(Controller("LobbySceneController"), "newGameButton");
+        yield return WaitForScene("Preparation");
+        Click(Controller("PreparationSceneController"), "startButton");
         yield return WaitForScene("Map_1F");
         yield return null;
         MonoBehaviour map = Controller("MapPlayerPositionFeedback");

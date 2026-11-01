@@ -21,7 +21,7 @@
     { "key": "menu.continue.empty", "value": "저장된 작전기록 없음\n\n디스크 저장·이어하기는 아직 구현되지 않았습니다.\n현재 메모리의 맵 위치는 저장 파일이 아닙니다." },
     { "key": "menu.new_game.label", "value": "새 작전기록.exe" },
     { "key": "menu.new_game.symbol", "value": "[.exe]" },
-    { "key": "menu.new_game.description", "value": "새 게임 시작" },
+    { "key": "menu.new_game.description", "value": "작전 준비" },
     { "key": "menu.window.close", "value": "닫기" },
     { "key": "menu.loading", "value": "내부 데이터 접근중..." },
     { "key": "menu.load_error", "value": "화면을 열 수 없습니다. Scene 등록을 확인하십시오." }

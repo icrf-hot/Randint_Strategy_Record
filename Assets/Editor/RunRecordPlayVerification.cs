@@ -59,12 +59,12 @@ public static class RunRecordPlayVerification
             Require(SessionState.GetString(Key + "Error", "") == "", SessionState.GetString(Key + "Error", ""));
             int stage = SessionState.GetInt(Key + "Stage", 0);
             string scene = SceneManager.GetActiveScene().name;
-            if ((stage == 0 || stage == 2 || stage == 5) && scene == "Map_1F")
+            if ((stage == 0 || stage == 2 || stage == 6) && scene == "Map_1F")
             {
                 if (!RunSaveService.CanSave) return;
                 var feedback = UnityEngine.Object.FindFirstObjectByType<MapPlayerPositionFeedback>();
                 if (feedback == null || feedback.CurrentNode == null) return;
-                if (stage == 5)
+                if (stage == 6)
                 {
                     Require(MapRunState.RecordHealth.Integrity == 100 && MapRunState.RecordHealth.Consistency == 100 &&
                         !MapRunState.IsEnded, "New game retained ejected health.");
@@ -123,6 +123,13 @@ public static class RunRecordPlayVerification
                 lobby.CloseWindows();
                 ((Button)Field(lobby, "newGameButton")).onClick.Invoke();
                 SessionState.SetInt(Key + "Stage", 5);
+            }
+            else if (stage == 5 && scene == "Preparation")
+            {
+                var preparation = UnityEngine.Object.FindFirstObjectByType<PreparationSceneController>();
+                if (preparation == null) return;
+                preparation.StartRun();
+                SessionState.SetInt(Key + "Stage", 6);
             }
         }
         catch (Exception error) { Finish(false, error.ToString()); }

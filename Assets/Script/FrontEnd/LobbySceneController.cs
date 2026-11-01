@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public sealed class LobbySceneController : MonoBehaviour
 {
     [SerializeField] private MenuSceneLoader sceneLoader;
-    [SerializeField] private string mapScenePath = "Assets/Scenes/Map_1F.unity";
+    [SerializeField] private string preparationScenePath = "Assets/Scenes/Preparation.unity";
     [SerializeField] private CanvasGroup mainWindow;
     [SerializeField] private GameObject settingsWindow;
     [SerializeField] private GameObject continueWindow;
@@ -67,8 +67,8 @@ public sealed class LobbySceneController : MonoBehaviour
     public void StartNewGame()
     {
         if (IsModalOpen) return;
-        // Only explicit New Game resets Packet, Layer, Cache ownership and map state.
-        if (sceneLoader.TryLoadScene(mapScenePath, resetMapRun: true))
+        // A run is reset only after the player confirms Start in Preparation.
+        if (sceneLoader.TryLoadScene(preparationScenePath))
         {
             mainWindow.interactable = false;
             if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null);
