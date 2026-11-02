@@ -57,6 +57,7 @@ public class MapPlayerPositionFeedback : MonoBehaviour
         if (MapRunState.IsEnded || CampaignMapFlow.ModalOpen || TransitionManager.IsBusy) return;
         if (nextNode == null)
             return;
+        if (EncounterService.HasUnclaimedVerification && currentNode != nextNode) return;
 
         if (nextNode.IsUnavailable)
             return;
@@ -234,6 +235,7 @@ public class MapPlayerPositionFeedback : MonoBehaviour
 
         if (currentNode == null)
             return node == startNode;
+        if (EncounterService.HasUnclaimedVerification && currentNode != node) return false;
         if (currentNode == node) return node.NodeType == MapNodeType.Shop ||
             (node.NodeType != MapNodeType.Start && !MapRunState.IsCompleted(node.NodeID));
         return currentNode.IsConnectedTo(node);

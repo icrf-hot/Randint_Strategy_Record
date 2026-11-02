@@ -28,7 +28,7 @@ public sealed class PreparedRunRestore
     {
         prepared = null;
         error = RunSaveError.InvalidData;
-        if (source == null || source.schemaVersion < 1 || source.schemaVersion > 3 || !Guid.TryParseExact(source.runId, "N", out _) ||
+        if (source == null || source.schemaVersion < 1 || source.schemaVersion > 4 || !Guid.TryParseExact(source.runId, "N", out _) ||
             !DateTimeOffset.TryParseExact(source.savedUtc, "O", CultureInfo.InvariantCulture, DateTimeStyles.None, out _) ||
             (source.state != "Active" && source.state != "Ended") || source.operatorIds == null ||
             source.ownedCacheIds == null || source.purchasedCacheIds == null || source.visitedNodeIds == null ||
@@ -76,7 +76,9 @@ public sealed class PreparedRunRestore
         // Detach from the caller before the asynchronous scene transition begins.
         var copy = JsonUtility.FromJson<RunSaveSnapshot>(JsonUtility.ToJson(source));
         if (copy.schemaVersion == 1) { copy.integrity = 100; copy.consistency = 100; }
-        copy.schemaVersion = 3; copy.mapFloor = mapFloor;
+        if (copy.schemaVersion < 4) copy.encounters = Array.Empty<EncounterRecord>();
+        if (!EncounterJournal.Validate(copy.encounters, copy, bindings)) return false;
+        copy.schemaVersion = 4; copy.mapFloor = mapFloor;
         prepared = new PreparedRunRestore(copy, run, caches);
         error = RunSaveError.None;
         return true;

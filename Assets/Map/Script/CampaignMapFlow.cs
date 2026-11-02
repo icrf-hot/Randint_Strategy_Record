@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 public sealed class CampaignMapFlow : MonoBehaviour
 {
     private static CampaignMapFlow current;
-    public static bool ModalOpen => current != null && current.modal != null;
+    public static bool ModalOpen => EncounterWindow.IsOpen || (current != null && current.modal != null);
     private Canvas canvas;
     private GameObject modal;
     private UnityEngine.UI.Button advance;
@@ -35,6 +35,10 @@ public sealed class CampaignMapFlow : MonoBehaviour
     {
         current = this;
         if (MapRunState.MapFloor > 1) BuildFloor();
+        else foreach(var node in FindObjectsByType<MapNode>(FindObjectsSortMode.None).Where(n=>n.NodeType==MapNodeType.Event)) {
+            var choice=node.Choices[0];choice.Configure("encounter.enter");
+            node.Configure(node.NodeID,node.FloorIndex,node.NodeType,node.DisplayName,node.Description,new[]{choice});
+        }
     }
     private void Start()
     {
@@ -45,6 +49,17 @@ public sealed class CampaignMapFlow : MonoBehaviour
         advanceText = advance.GetComponentInChildren<TMP_Text>(); advanceText.text = L("advance",MapRunState.MapFloor+1);
         var rect=(RectTransform)advance.transform; rect.anchorMin=rect.anchorMax=new Vector2(.5f,0);
         advance.onClick.AddListener(AdvanceFloor); advance.gameObject.SetActive(false);
+        StartCoroutine(ResumeEncounter());
+    }
+    private System.Collections.IEnumerator ResumeEncounter()
+    {
+        while(TransitionManager.IsBusy)yield return null;
+        yield return null;
+        var record=MapRunState.Encounters.Find(MapRunState.CurrentNodeID);
+        if(record!=null && record.stage!=EncounterStage.Resolved) {
+            var node=FindObjectsByType<MapNode>(FindObjectsSortMode.None).FirstOrDefault(n=>n.NodeID==record.nodeId);
+            EncounterWindow.Open(node);
+        }
     }
     private void Update()
     {
@@ -86,17 +101,9 @@ public sealed class CampaignMapFlow : MonoBehaviour
     public static void ResolveEncounter(MapNode node,int choice)
     {
         if(current==null || node==null || MapRunState.IsEnded || MapRunState.CurrentNodeID!=node.NodeID || MapRunState.IsCompleted(node.NodeID))return;
-        var rules=CampaignDefinition.Active;string result;
-        if(choice==0) {
-            if(!MapRunState.Packets.TryAdd(rules.encounterPackets))return;
-            result=L("supply_result",rules.encounterPackets);
-        } else if(choice==1) {
-            int beforeI=MapRunState.RecordHealth.Integrity,beforeC=MapRunState.RecordHealth.Consistency;
-            MapRunState.RecordHealth.Restore(Mathf.Min(100,beforeI+rules.encounterRepair),Mathf.Min(100,beforeC+rules.encounterRepair));
-            result=L("repair_result",MapRunState.RecordHealth.Integrity-beforeI,MapRunState.RecordHealth.Consistency-beforeC);
-        } else result=L("leave_result");
-        MapRunState.CompleteNode(node.NodeID);current.Message(L("event"),result);
+        EncounterWindow.Open(node);
     }
+
     private void Message(string title,string text,Action close=null)
     {
         FindFirstObjectByType<MapOrbitCamera>()?.CancelFocus();
@@ -133,9 +140,9 @@ public sealed class CampaignMapFlow : MonoBehaviour
             go.transform.localPosition=center+new Vector3(i%nSide-(nSide-1)*.5f,i/nSide%nSide-(nSide-1)*.5f,i/(nSide*nSide)-(nSide-1)*.5f)*definition.spacing;
             go.transform.localScale=template.transform.localScale*.65f;
             var node=go.GetComponent<MapNode>();var choices=go.GetComponents<MapChoice>();
-            int count=type==MapNodeType.Event?3:1;
+            int count=1;
             if(choices.Length<count)throw new InvalidOperationException("Map template has too few choices.");
-            for(int c=0;c<count;c++)choices[c].Configure(type==MapNodeType.Event?new[]{"campaign.supply","campaign.repair","campaign.leave"}[c]:"campaign.enter");
+            for(int c=0;c<count;c++)choices[c].Configure(type==MapNodeType.Event?"encounter.enter":"campaign.enter");
             string kind=L(TypeKey(type));
             node.Configure(CampaignDefinition.NodeId(definition.floor,i),i%nSide+i/nSide%nSide+i/(nSide*nSide),type,
                 L("node",definition.floor,i+1,kind),L("description",kind),choices.Take(count).ToArray());

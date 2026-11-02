@@ -52,6 +52,7 @@
       "path": "GameData/Definitions/skills"
     },
     { "kind": "text", "path": "GameData/Localization/ko-KR/campaign" },
+    { "kind": "text", "path": "GameData/Localization/ko-KR/encounters" },
     { "kind": "cache", "path": "GameData/Definitions/campaign_rewards" },
     { "kind": "cache", "path": "GameData/Definitions/caches" },
     { "kind": "run_rules", "path": "GameData/Definitions/run_rules" },

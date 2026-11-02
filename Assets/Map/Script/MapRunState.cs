@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +6,7 @@ using System.Linq;
 public static class MapRunState
 {
     public static RunProgression Progression { get; private set; } = new RunProgression();
+    public static EncounterJournal Encounters { get; } = new EncounterJournal();
     public static PacketWallet Packets => Progression.Packets;
     public static RunCacheInventory Caches { get; private set; } = new RunCacheInventory();
     public static RunRecordHealth RecordHealth { get; } = new RunRecordHealth();
@@ -44,7 +45,7 @@ public static class MapRunState
     {
         return new RunSaveSnapshot
         {
-            schemaVersion = 3, mapFloor = MapFloor, runId = RunId, savedUtc = DateTimeOffset.UtcNow.ToString("O"),
+            schemaVersion = 4, mapFloor = MapFloor, runId = RunId, savedUtc = DateTimeOffset.UtcNow.ToString("O"),
             state = IsEnded ? "Ended" : "Active", endReason = EndReason,
             mapScenePath = bindings.MapScenePath, currentNodeId = CurrentNodeID,
             packets = Packets.Balance, layer = Progression.Layer, experience = Progression.Experience,
@@ -54,6 +55,7 @@ public static class MapRunState
             purchasedCacheIds = Caches.PurchasedIds.OrderBy(id => id, StringComparer.Ordinal).ToArray(),
             visitedNodeIds = visitedNodes.OrderBy(id => id).ToArray(),
             completedNodeIds = completedNodes.OrderBy(id => id).ToArray(),
+            encounters = Encounters.Export(),
             lastBattleNodeId = LastBattleNodeId, lastBattleResult = LastBattleResult
         };
     }
@@ -61,6 +63,7 @@ public static class MapRunState
     public static void ApplyRestored(RunSaveSnapshot snapshot, RunProgression run, RunCacheInventory inventory)
     {
         Progression = run;
+        Encounters.Restore(snapshot.encounters);
         MapFloor = snapshot.mapFloor;
         Caches = inventory;
         RecordHealth.Restore(snapshot.integrity, snapshot.consistency);
@@ -163,6 +166,7 @@ public static class MapRunState
     public static void Reset()
     {
         Progression.Clear();
+        Encounters.Clear();
         Caches.Clear();
         RecordHealth.Reset();
         CurrentNodeID = 0;

@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "tiers": [
+    {
+      "floor": 1,
+      "requiredCards": 2,
+      "parity": false,
+      "modulus": 0,
+      "verifyCost": 0,
+      "forgeCost": 0,
+      "signaturePackets": 4,
+      "signatureHeal": 3,
+      "jokerChance": 0,
+      "supplyPackets": 3,
+      "repairCost": 0,
+      "repairAmount": 4,
+      "riskCost": 0,
+      "riskPackets": 4
+    },
+    {
+      "floor": 2,
+      "requiredCards": 3,
+      "parity": false,
+      "modulus": 0,
+      "verifyCost": 2,
+      "forgeCost": 2,
+      "signaturePackets": 8,
+      "signatureHeal": 5,
+      "jokerChance": 0.05,
+      "supplyPackets": 4,
+      "repairCost": 3,
+      "repairAmount": 6,
+      "riskCost": 2,
+      "riskPackets": 7
+    },
+    {
+      "floor": 3,
+      "requiredCards": 3,
+      "parity": true,
+      "modulus": 0,
+      "verifyCost": 4,
+      "forgeCost": 4,
+      "signaturePackets": 12,
+      "signatureHeal": 7,
+      "jokerChance": 0.1,
+      "supplyPackets": 4,
+      "repairCost": 5,
+      "repairAmount": 8,
+      "riskCost": 4,
+      "riskPackets": 10
+    },
+    {
+      "floor": 4,
+      "requiredCards": 4,
+      "parity": true,
+      "modulus": 3,
+      "verifyCost": 6,
+      "forgeCost": 6,
+      "signaturePackets": 18,
+      "signatureHeal": 10,
+      "jokerChance": 0.12,
+      "supplyPackets": 5,
+      "repairCost": 8,
+      "repairAmount": 10,
+      "riskCost": 6,
+      "riskPackets": 14
+    },
+    {
+      "floor": 5,
+      "requiredCards": 4,
+      "parity": true,
+      "modulus": 5,
+      "verifyCost": 8,
+      "forgeCost": 8,
+      "signaturePackets": 24,
+      "signatureHeal": 14,
+      "jokerChance": 0.15,
+      "supplyPackets": 6,
+      "repairCost": 10,
+      "repairAmount": 14,
+      "riskCost": 8,
+      "riskPackets": 18
+    }
+  ],
+  "events": [
+    {
+      "id": "signature_request",
+      "titleKey": "encounter.signature_request.title",
+      "bodyKey": "encounter.signature_request.body",
+      "minFloor": 1,
+      "maxFloor": 5,
+      "weight": 1,
+      "repeatable": false,
+      "actions": [
+        "Verify",
+        "Claim",
+        "Forge",
+        "Leave"
+      ]
+    },
+    {
+      "id": "supply_cache",
+      "titleKey": "encounter.supply_cache.title",
+      "bodyKey": "encounter.supply_cache.body",
+      "minFloor": 1,
+      "maxFloor": 5,
+      "weight": 3,
+      "repeatable": true,
+      "actions": [
+        "Supply",
+        "Repair",
+        "Leave"
+      ]
+    },
+    {
+      "id": "maintenance_terminal",
+      "titleKey": "encounter.maintenance_terminal.title",
+      "bodyKey": "encounter.maintenance_terminal.body",
+      "minFloor": 1,
+      "maxFloor": 5,
+      "weight": 2,
+      "repeatable": false,
+      "actions": [
+        "Repair",
+        "Supply",
+        "Leave"
+      ]
+    },
+    {
+      "id": "corrupted_backup",
+      "titleKey": "encounter.corrupted_backup.title",
+      "bodyKey": "encounter.corrupted_backup.body",
+      "minFloor": 1,
+      "maxFloor": 5,
+      "weight": 2,
+      "repeatable": false,
+      "actions": [
+        "RiskyPackets",
+        "Supply",
+        "Leave"
+      ]
+    }
+  ]
+}

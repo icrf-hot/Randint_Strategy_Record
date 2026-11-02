@@ -81,7 +81,10 @@ public sealed class CampaignRuntimeProbe : MonoBehaviour
             var ev=nodes.First(n=>n.NodeType==MapNodeType.Event);
             MapRunState.SaveCurrentNode(ev.NodeID,ev.DisplayName);before=MapRunState.Packets.Balance;
             CampaignMapFlow.ResolveEncounter(ev,0);CampaignMapFlow.ResolveEncounter(ev,0);
-            Require(MapRunState.Packets.Balance==before+CampaignDefinition.Active.encounterPackets,"Encounter reward repeated");Button("Confirm").onClick.Invoke();yield return null;
+            Require(EncounterWindow.IsOpen && MapRunState.Packets.Balance==before,"Opening encounter spent resources");
+            Button("Leave").onClick.Invoke();
+            Require(MapRunState.IsCompleted(ev.NodeID) && MapRunState.Packets.Balance==before,"Encounter leave did not complete safely");
+            Button("Close").onClick.Invoke();yield return null;
             // Traverse graph connections with the existing movement API; mark fixtures complete, without simulating those fights.
             var feedback=Find<MapPlayerPositionFeedback>();var path=Path(nodes.First(n=>n.NodeID==CampaignDefinition.NodeId(floor,0)),nodes.First(n=>CampaignMapFlow.IsTerminal(n.NodeID)));
             for(int i=1;i<path.Count-1;i++){feedback.MoveToNode(path[i]);Require(feedback.CurrentNode==path[i],"Axis/diagonal move rejected");MapRunState.CompleteNode(path[i].NodeID);}
