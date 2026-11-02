@@ -17,7 +17,8 @@ public sealed class RunSaveBindings : ScriptableObject
     public string MapScenePath => mapScenePath;
     public string BattleScenePath => battleScenePath;
     public string[] DefaultPartyIds => (string[])defaultPartyIds.Clone();
-    public bool HasNode(int id) => mapNodeIds != null && Array.IndexOf(mapNodeIds, id) >= 0;
+    public bool HasNode(int id) => (mapNodeIds != null && Array.IndexOf(mapNodeIds, id) >= 0) || (id >= 2001 && CampaignDefinition.HasNode(id));
     public OperatorData Operator(string id) => operators?.FirstOrDefault(op => op != null && op.DataId == id);
-    public CacheData Cache(string id) => shop?.Items?.FirstOrDefault(cache => cache != null && cache.CacheId == id);
+    public CacheData Cache(string id) => shop?.Items?.FirstOrDefault(cache => cache != null && cache.CacheId == id) ??
+        Resources.LoadAll<CacheData>("Campaign").FirstOrDefault(cache => cache.CacheId == id);
 }

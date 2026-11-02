@@ -22,6 +22,13 @@ public class Enemy : MonoBehaviour
     public int Defense => defense;
     public int ArtsResistance => artsResistance;
     public float AttackSpeed => attackSpeed;
+    public bool UsesArtsDamage { get; private set; }
+    public void ConfigureEncounter(int hp, int power, int armor, int resistance, float speed, bool arts = false)
+    {
+        maxHP = Mathf.Max(1,hp); currentHP = maxHP; attack = Mathf.Max(1,power);
+        defense = Mathf.Max(0,armor); artsResistance = Mathf.Max(0,resistance); attackSpeed = Mathf.Max(.01f,speed);
+        UsesArtsDamage = arts;
+    }
 
     private void Awake()
     {

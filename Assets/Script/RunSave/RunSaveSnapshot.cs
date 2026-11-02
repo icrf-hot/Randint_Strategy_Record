@@ -4,6 +4,7 @@ using System;
 public sealed class RunSaveSnapshot
 {
     public int schemaVersion;
+    public int mapFloor = 1;
     public string runId;
     public string savedUtc;
     public string state;

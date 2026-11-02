@@ -16,6 +16,8 @@ public class ShopSceneUI : MonoBehaviour
     private TMP_Text balanceText;
     private TMP_Text messageText;
     private int lastBalance = -1;
+    private bool lastTransition;
+    private int lastOwnedCount = -1;
     public int ItemCount => buttons.Count;
     public Button ReturnButton { get; private set; }
     public TMP_Text BalanceText => balanceText;
@@ -78,7 +80,8 @@ public class ShopSceneUI : MonoBehaviour
 
     private void Update()
     {
-        if (balanceText != null && lastBalance != MapRunState.Packets.Balance) Refresh();
+        if (balanceText != null && (lastBalance != MapRunState.Packets.Balance ||
+            lastTransition != ShopSceneRouter.IsTransitioning || lastOwnedCount != MapRunState.Caches.Owned.Count)) Refresh();
     }
 
     private void AddItem(RectTransform content, CacheData item)
@@ -110,6 +113,8 @@ public class ShopSceneUI : MonoBehaviour
     private void Refresh()
     {
         lastBalance = MapRunState.Packets.Balance;
+        lastTransition = ShopSceneRouter.IsTransitioning;
+        lastOwnedCount = MapRunState.Caches.Owned.Count;
         balanceText.text = L("balance", lastBalance, MapRunState.Progression.Layer);
         if (catalog == null) return;
         foreach (CacheData item in catalog.Items)
@@ -140,8 +145,9 @@ public class ShopSceneUI : MonoBehaviour
     {
         RectTransform rect = Rect(name, parent);
         Layout(rect, min, max, start, end);
-        rect.gameObject.AddComponent<Image>().color = UITheme.Clear;
+        var image = rect.gameObject.AddComponent<Image>(); image.color = UITheme.Clear;
         Button button = rect.gameObject.AddComponent<Button>();
+        button.targetGraphic = image;
         TMP_Text label = Text(rect, "Label", caption, Vector2.zero, Vector2.one, new Vector2(8, 4), new Vector2(-8, -4), 20);
         label.alignment = TextAlignmentOptions.Center;
         rect.gameObject.AddComponent<TerminalButton>();

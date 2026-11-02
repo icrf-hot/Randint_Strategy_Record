@@ -14,7 +14,8 @@ public class MapBattleSceneLoader : MonoBehaviour
     public bool IsLoading => TransitionManager.IsBusy;
     public void LoadBattle(MapNode node)
     {
-        if (IsLoading || MapRunState.IsEnded || node == null || node.NodeType != MapNodeType.Battle) return;
+        if (IsLoading || MapRunState.IsEnded || node == null || !node.IsBattle) return;
+        MapRunState.SetBattleNodeType(node.NodeType);
         if (!TransitionManager.TryLoad(battleScenePath, message: "> 전투 데이터 연결 중"))
             Debug.LogError("[Map Battle] Battle scene unavailable: " + battleScenePath, this);
     }

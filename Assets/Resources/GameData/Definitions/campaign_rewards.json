@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    { "id": "defender_relic", "nameKey": "campaign.relic_name", "descriptionKey": "campaign.relic_description", "effectKind": "GlobalOperatorStats", "packetPrice": 0, "maxHPBonus": 200, "attackBonus": 0, "defenseBonus": 30, "artsResistanceBonus": 30, "attackSpeedBonus": 0, "packetGainPercent": 0, "experienceGainPercent": 0 }
+  ]
+}

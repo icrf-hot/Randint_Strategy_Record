@@ -8,11 +8,13 @@ public class MapChoice : MonoBehaviour
     [SerializeField, GameTextKey] private string choiceTextKey;
 
     public string ChoiceText => GameData.Text(choiceTextKey);
+    public void Configure(string key) => choiceTextKey = key;
 
     public void Select(MapNode targetNode)
     {
         if (targetNode == null)
             return;
+        if (TransitionManager.IsBusy || MapRunState.IsEnded || CampaignMapFlow.ModalOpen) return;
 
         MapPlayerPositionFeedback feedback =
             FindFirstObjectByType<MapPlayerPositionFeedback>();
@@ -26,6 +28,7 @@ public class MapChoice : MonoBehaviour
             return;
         }
 
+        if (!feedback.CanOpenChoicesFor(targetNode)) return;
         feedback.MoveToNode(targetNode);
 
         if (feedback.CurrentNode != targetNode)
@@ -43,7 +46,7 @@ public class MapChoice : MonoBehaviour
             targetNode
         );
 
-        if (targetNode.NodeType == MapNodeType.Battle)
+        if (targetNode.IsBattle)
         {
             EnterBattle(targetNode);
         }
@@ -52,6 +55,9 @@ public class MapChoice : MonoBehaviour
             if (!ShopSceneRouter.EnterShop(targetNode))
                 Debug.LogWarning("[Shop] Shop Scene could not be opened.", this);
         }
+        else if (targetNode.NodeType == MapNodeType.Event)
+            CampaignMapFlow.ResolveEncounter(targetNode, System.Array.IndexOf(targetNode.Choices, this));
+        else CampaignMapFlow.ResolveNode(targetNode);
     }
 
     private void EnterBattle(MapNode battleNode)

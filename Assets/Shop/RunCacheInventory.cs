@@ -30,6 +30,11 @@ public sealed class RunCacheInventory
     }
 
     public string[] PurchasedIds => new List<string>(purchasedIds).ToArray();
+    public bool Grant(CacheData item)
+    {
+        if (item == null || !item.IsConfigured || owned.Exists(cache => cache.CacheId == item.CacheId)) return false;
+        owned.Add(item); return true;
+    }
 
     public void RestoreValidated(IReadOnlyList<CacheData> ownedCaches, IReadOnlyList<string> purchased)
     {

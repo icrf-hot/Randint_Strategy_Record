@@ -54,14 +54,14 @@ public class MapPlayerPositionFeedback : MonoBehaviour
 
     public void MoveToNode(MapNode nextNode)
     {
+        if (MapRunState.IsEnded || CampaignMapFlow.ModalOpen || TransitionManager.IsBusy) return;
         if (nextNode == null)
             return;
 
         if (nextNode.IsUnavailable)
             return;
 
-        if (currentNode != null &&
-            !currentNode.IsConnectedTo(nextNode))
+        if (currentNode != null && currentNode != nextNode && !currentNode.IsConnectedTo(nextNode))
         {
             return;
         }
@@ -225,6 +225,7 @@ public class MapPlayerPositionFeedback : MonoBehaviour
 
     public bool CanOpenChoicesFor(MapNode node)
     {
+        if (MapRunState.IsEnded || CampaignMapFlow.ModalOpen) return false;
         if (node == null)
             return false;
 
@@ -233,7 +234,8 @@ public class MapPlayerPositionFeedback : MonoBehaviour
 
         if (currentNode == null)
             return node == startNode;
-
+        if (currentNode == node) return node.NodeType == MapNodeType.Shop ||
+            (node.NodeType != MapNodeType.Start && !MapRunState.IsCompleted(node.NodeID));
         return currentNode.IsConnectedTo(node);
     }
 

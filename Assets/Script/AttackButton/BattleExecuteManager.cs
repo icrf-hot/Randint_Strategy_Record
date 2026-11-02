@@ -645,8 +645,8 @@ public class BattleExecuteManager : MonoBehaviour
             $"| 물리 공격력: {enemy.Attack}");
 
         QueueAction(enemy.gameObject, target.gameObject, OperatorPosition.Front, () => {
-            var hit = CaptureHit(enemy.gameObject, target.gameObject, enemy.Attack, AttackDamageType.PHYS, OperatorPosition.Front,
-                () => target.TakePhysicalDamage(enemy.Attack));
+            var hit = CaptureHit(enemy.gameObject, target.gameObject, enemy.Attack, enemy.UsesArtsDamage ? AttackDamageType.ARTS : AttackDamageType.PHYS, OperatorPosition.Front,
+                () => { if (enemy.UsesArtsDamage) target.TakeArtsDamage(enemy.Attack); else target.TakePhysicalDamage(enemy.Attack); });
             NotifyAttackPerformed();
             return new[] { hit };
         });
@@ -681,7 +681,8 @@ public class BattleExecuteManager : MonoBehaviour
             cards = attacker.GetComponent<Operator>() != null && cardSnapshots.TryGetValue(slot, out var cards) ? cards : Array.Empty<AttackCardSnapshot>(),
             inputValue = displayValue ?? (attacker.GetComponent<Operator>() != null ? attacker.GetComponent<Operator>().Attack : attacker.GetComponent<Enemy>().Attack),
             damageType = target.GetComponent<Operator>() != null && attacker.GetComponent<Operator>() != null ? AttackDamageType.HEAL :
-                slot == OperatorPosition.Middle && attacker.GetComponent<Operator>() != null && !MiddleCardSelectionManager.Instance.IsPhysicalMode ? AttackDamageType.ARTS : AttackDamageType.PHYS,
+                (slot == OperatorPosition.Middle && attacker.GetComponent<Operator>() != null && !MiddleCardSelectionManager.Instance.IsPhysicalMode) ||
+                (attacker.GetComponent<Enemy>() != null && attacker.GetComponent<Enemy>().UsesArtsDamage) ? AttackDamageType.ARTS : AttackDamageType.PHYS,
             commit = commit };
     }
 

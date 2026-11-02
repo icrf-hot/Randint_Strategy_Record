@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b83e714e7a5a43b48843a5d28c2f16f1, type: 3}
+  m_Name: DefenderRelic
+  m_EditorClassIdentifier: Assembly-CSharp::CacheData
+  definitionId: defender_relic
+  cacheId: 
+  displayName: 
+  description: 
+  icon: {fileID: 0}
+  effectKind: 0
+  configurationPending: 0
+  packetPrice: 0
+  maxHPBonus: 0
+  attackBonus: 0
+  defenseBonus: 0
+  artsResistanceBonus: 0
+  attackSpeedBonus: 0
+  packetGainPercent: 0
+  experienceGainPercent: 0

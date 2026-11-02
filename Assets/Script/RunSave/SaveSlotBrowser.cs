@@ -98,7 +98,7 @@ public sealed class SaveSlotBrowser : MonoBehaviour
             RunSaveRepository repository = RunSaveService.Slots.At(id);
             string state;
             if (repository.TryRead(out RunSaveSnapshot data, out RunSaveError error))
-                state = string.Format(GameData.Text("save.slot_brief"), data.layer, data.packets,
+                state = data.mapFloor + "F / " + string.Format(GameData.Text("save.slot_brief"), data.layer, data.packets,
                     DateTimeOffset.Parse(data.savedUtc).ToLocalTime().ToString("yyyy-MM-dd HH:mm"));
             else state = GameData.Text(!repository.HasFiles ? "save.slot_empty" : "save.slot_unavailable");
             slots[i].GetComponentInChildren<TMP_Text>().text = string.Format(GameData.Text("save.slot"), id) + "\n" + state;

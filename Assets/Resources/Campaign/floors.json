@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "encounterPackets": 6,
+  "encounterRepair": 8,
+  "artsAttackScale": 0.65,
+  "floors": [
+    { "floor": 2, "size": 3, "seed": 23, "spacing": 10, "eventPercent": 40, "shopIndices": [13], "terminalType": "Defender", "enemyCount": 3, "enemyHP": 1200, "enemyAttack": 700, "enemyDefense": 35, "enemyResistance": 30, "enemySpeed": 12, "bossHP": 4500, "bossAttack": 1000 },
+    { "floor": 3, "size": 3, "seed": 37, "spacing": 10, "eventPercent": 40, "shopIndices": [15], "terminalType": "FirstBoss", "enemyCount": 4, "enemyHP": 1600, "enemyAttack": 800, "enemyDefense": 45, "enemyResistance": 40, "enemySpeed": 16, "bossHP": 6500, "bossAttack": 1250 },
+    { "floor": 4, "size": 4, "seed": 43, "spacing": 7, "eventPercent": 38, "shopIndices": [21, 42], "terminalType": "FloorExit", "enemyCount": 4, "enemyHP": 2100, "enemyAttack": 900, "enemyDefense": 60, "enemyResistance": 50, "enemySpeed": 20, "bossHP": 8500, "bossAttack": 1400 },
+    { "floor": 5, "size": 4, "seed": 59, "spacing": 7, "eventPercent": 35, "shopIndices": [22, 41], "terminalType": "Boss", "enemyCount": 4, "enemyHP": 2600, "enemyAttack": 1000, "enemyDefense": 75, "enemyResistance": 65, "enemySpeed": 24, "bossHP": 12000, "bossAttack": 1600 }
+  ]
+}

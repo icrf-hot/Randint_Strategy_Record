@@ -135,6 +135,7 @@ public class MapOrbitCamera : MonoBehaviour
 
     private void Update()
     {
+        if (CampaignMapFlow.ModalOpen) return;
         if (TransitionManager.IsBusy) return;
         if (target == null)
             return;

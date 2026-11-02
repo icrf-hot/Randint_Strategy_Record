@@ -13,7 +13,9 @@ public enum MapNodeType
     FirstBoss = 6,
     SecondBoss = 7,
     ThirdBoss = 8,
-    Boss = 9
+    Boss = 9,
+    Defender = 10,
+    FloorExit = 11
 }
 
 public enum MapNodeVisualState
@@ -48,6 +50,9 @@ public class MapNode : MonoBehaviour
 
     private Color normalColor {
         get {
+            if (IsGenerated) return nodeType == MapNodeType.Defender ? UITheme.Ok :
+                nodeType == MapNodeType.Shop || nodeType == MapNodeType.FirstBoss ? UITheme.Warn :
+                nodeType == MapNodeType.Boss ? UITheme.Danger : nodeType == MapNodeType.Event ? UITheme.TextDim : UITheme.Accent;
             string kind = meshRenderer != null ? meshRenderer.name.ToLowerInvariant() : name.ToLowerInvariant();
             return kind.Contains("queen") ? UITheme.Danger : kind.Contains("king") ? UITheme.Warn :
                 kind.Contains("pawn") ? UITheme.TextDim : UITheme.Accent;
@@ -60,14 +65,21 @@ public class MapNode : MonoBehaviour
     private MaterialPropertyBlock themeProperties;
     private bool isUnavailable;
     private MapNodeVisualState visualState;
+    private string runtimeName, runtimeDescription;
+    public bool IsGenerated => runtimeName != null;
+    public bool IsBattle => nodeType == MapNodeType.Battle || nodeType == MapNodeType.EliteBattle ||
+        nodeType == MapNodeType.FirstBoss || nodeType == MapNodeType.SecondBoss || nodeType == MapNodeType.ThirdBoss || nodeType == MapNodeType.Boss;
+    public void Configure(int id, int stage, MapNodeType type, string title, string description, MapChoice[] options)
+    { nodeID=id;floorIndex=stage;nodeType=type;runtimeName=title;runtimeDescription=description;choices=options; }
+    public void Connect(MapNode[] nodes) => connectedNodes = nodes;
 
     public int NodeID => nodeID;
     public int FloorIndex => floorIndex;
     public MapNodeType NodeType => nodeType;
     public MapNode[] ConnectedNodes => connectedNodes;
-    public string Description => GameData.Text(descriptionKey);
+    public string Description => runtimeDescription ?? GameData.Text(descriptionKey);
     public MapChoice[] Choices => choices;
-    public string DisplayName => GameData.Text(displayNameKey);
+    public string DisplayName => runtimeName ?? GameData.Text(displayNameKey);
 
     public bool IsUnavailable => isUnavailable;
 

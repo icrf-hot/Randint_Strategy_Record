@@ -18,6 +18,19 @@ public static class MapRunState
     public static int LastBattleNodeId { get; private set; }
     public static string LastBattleResult { get; private set; } = "None";
     public static IReadOnlyList<string> PartyIds => Array.AsReadOnly(partyIds);
+    public static int MapFloor { get; private set; } = 1;
+    public static MapNodeType BattleNodeType { get; private set; } = MapNodeType.Battle;
+    public static void SetBattleNodeType(MapNodeType type) => BattleNodeType = type;
+    public static bool IsCompleted(int nodeId) => completedNodes.Contains(nodeId);
+    public static void CompleteNode(int nodeId) { if (visitedNodes.Contains(nodeId)) completedNodes.Add(nodeId); }
+    public static bool TryAdvanceMapFloor()
+    {
+        int terminal = MapFloor == 1 ? 8 : CampaignDefinition.NodeId(MapFloor, (int)Math.Pow(CampaignDefinition.Active.Floor(MapFloor).size, 3)-1);
+        if (IsEnded || MapFloor >= 5 || CurrentNodeID != terminal || !IsCompleted(terminal)) return false;
+        MapFloor++; CurrentNodeID = CampaignDefinition.NodeId(MapFloor, 0); HasCurrentNode = true;
+        CurrentNodeDisplayName = ""; visitedNodes.Add(CurrentNodeID); BattleNodeType = MapNodeType.Battle;
+        return true;
+    }
 
     public static void RecordBattleResult(bool victory)
     {
@@ -31,7 +44,7 @@ public static class MapRunState
     {
         return new RunSaveSnapshot
         {
-            schemaVersion = 2, runId = RunId, savedUtc = DateTimeOffset.UtcNow.ToString("O"),
+            schemaVersion = 3, mapFloor = MapFloor, runId = RunId, savedUtc = DateTimeOffset.UtcNow.ToString("O"),
             state = IsEnded ? "Ended" : "Active", endReason = EndReason,
             mapScenePath = bindings.MapScenePath, currentNodeId = CurrentNodeID,
             packets = Packets.Balance, layer = Progression.Layer, experience = Progression.Experience,
@@ -48,6 +61,7 @@ public static class MapRunState
     public static void ApplyRestored(RunSaveSnapshot snapshot, RunProgression run, RunCacheInventory inventory)
     {
         Progression = run;
+        MapFloor = snapshot.mapFloor;
         Caches = inventory;
         RecordHealth.Restore(snapshot.integrity, snapshot.consistency);
         RunId = snapshot.runId;
@@ -163,5 +177,6 @@ public static class MapRunState
         completedNodes.Clear();
         LastBattleNodeId = 0;
         LastBattleResult = "None";
+        MapFloor = 1; BattleNodeType = MapNodeType.Battle;
     }
 }

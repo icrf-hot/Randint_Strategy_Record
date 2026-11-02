@@ -59,7 +59,7 @@ public static class RunSaveService
             if (saved.runId != MapRunState.RunId) continue;
             saved.state = "Ended";
             saved.endReason = reason;
-            saved.schemaVersion = 2;
+            saved.schemaVersion = 3;
             saved.integrity = MapRunState.RecordHealth.Integrity;
             saved.consistency = MapRunState.RecordHealth.Consistency;
             saved.savedUtc = DateTimeOffset.UtcNow.ToString("O");

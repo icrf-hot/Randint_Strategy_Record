@@ -23,6 +23,7 @@ public class MapNodeClickHandler : MonoBehaviour
 
     private void Update()
     {
+        if (CampaignMapFlow.ModalOpen) return;
         if (TransitionManager.IsBusy) return;
         if (TransitionManager.IsBusy) return;
         if (TransitionManager.IsBusy) return;
