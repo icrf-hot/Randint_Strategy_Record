@@ -17,6 +17,8 @@ public sealed class PreparedRunRestore
         this.inventory = inventory;
     }
 
+    public string MapScenePath => snapshot.mapScenePath;
+
     public void Apply()
     {
         if (snapshot.state != "Active") throw new InvalidOperationException("An ended run cannot be restored.");
@@ -28,7 +30,7 @@ public sealed class PreparedRunRestore
     {
         prepared = null;
         error = RunSaveError.InvalidData;
-        if (source == null || source.schemaVersion < 1 || source.schemaVersion > 4 || !Guid.TryParseExact(source.runId, "N", out _) ||
+        if (source == null || source.schemaVersion < 1 || source.schemaVersion > 5 || !Guid.TryParseExact(source.runId, "N", out _) ||
             !DateTimeOffset.TryParseExact(source.savedUtc, "O", CultureInfo.InvariantCulture, DateTimeStyles.None, out _) ||
             (source.state != "Active" && source.state != "Ended") || source.operatorIds == null ||
             source.ownedCacheIds == null || source.purchasedCacheIds == null || source.visitedNodeIds == null ||
@@ -43,9 +45,11 @@ public sealed class PreparedRunRestore
              (source.state == "Active" && source.integrity == 0) ||
              (source.endReason == "Ejected" && source.integrity != 0))) return false;
         error = RunSaveError.IncompatibleData;
-        if (bindings == null || source.mapScenePath != bindings.MapScenePath || !bindings.HasNode(source.currentNodeId)) return false;
+        if (bindings == null || !bindings.HasNode(source.currentNodeId)) return false;
         int mapFloor = source.schemaVersion >= 3 ? source.mapFloor : 1;
         if (mapFloor < 1 || mapFloor > 5 || CampaignDefinition.FloorOf(source.currentNodeId) != mapFloor) return false;
+        string destination=CampaignScenes.PathFor(mapFloor);
+        if(source.mapScenePath!=destination && !(source.schemaVersion<=4 && source.mapScenePath==CampaignScenes.LegacyMapPath))return false;
         var positions = new HashSet<OperatorPosition>();
         foreach (string id in source.operatorIds)
         {
@@ -78,7 +82,7 @@ public sealed class PreparedRunRestore
         if (copy.schemaVersion == 1) { copy.integrity = 100; copy.consistency = 100; }
         if (copy.schemaVersion < 4) copy.encounters = Array.Empty<EncounterRecord>();
         if (!EncounterJournal.Validate(copy.encounters, copy, bindings)) return false;
-        copy.schemaVersion = 4; copy.mapFloor = mapFloor;
+        copy.schemaVersion = 5; copy.mapFloor = mapFloor; copy.mapScenePath=destination;
         prepared = new PreparedRunRestore(copy, run, caches);
         error = RunSaveError.None;
         return true;

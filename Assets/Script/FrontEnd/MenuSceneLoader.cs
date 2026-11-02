@@ -37,6 +37,6 @@ public sealed class MenuSceneLoader : MonoBehaviour
         var bindings = RunSaveBindings.Instance;
         if (IsLoading || SceneManager.GetActiveScene().name != "Lobby" || bindings == null ||
             !PreparedRunRestore.TryPrepare(snapshot, bindings, out var prepared, out _)) return false;
-        return TransitionManager.TryLoad(bindings.MapScenePath, prepared.Apply, message: "> 작전 데이터 복원 중");
+        return TransitionManager.TryLoad(prepared.MapScenePath, prepared.Apply, message: "> 작전 데이터 복원 중");
     }
 }

@@ -33,3 +33,6 @@ Map은 좌측 상단 설정 버튼만 상시 표시합니다. 클릭하면 화�
 EditMode의 `FrontEndSceneTests`는 실제 PlayMode로 진입해 Button.onClick으로 Title→Lobby, 두 모달의 입력 차단/닫기, 새 게임 초기화 및 Map 시작 노드 복원을 확인합니다. 기존 `GameDataCatalogTests`와 `GameDataSceneTests`도 함께 실행할 수 있습니다.
 
 2026-11-01부터 일반 작업 검증은 컴파일을 기본으로 합니다. 이번 준비 씬 작업에서는 기존 테스트 경로만 갱신했으며 Play/런타임 테스트를 실행하지 않았습니다. MCP/Pipeline로 컴파일 완료/실패 없음/오류 없음과 Play 중지 상태를 확인합니다. `PreparationSceneBuilder.Create`는 Editor API로 새 씬을 생성하고 기존 씬은 덮어쓰지 않습니다. 준비 문구는 `preparation.json`, 기존 캐릭터 이미지/이름은 기존 Asset/JSON을 사용합니다.
+
+
+2026-11-02: 맵은 Map_1F~Map_5F 독립 Scene입니다. 기존 빌드 인덱스는 유지하고 2~5층은 6~9에 추가했습니다. CampaignScenes/Resources/Campaign/scenes.json이 층 이동·전투/상점 복귀·이어하기 경로를 결정합니다. 저장 v5는 이전 v1~v4 공용 맵 경로를 해당 층 Scene으로 복원합니다. 층별 노드와 연결은 Scene에 저장하며 런타임 생성은 하지 않습니다.

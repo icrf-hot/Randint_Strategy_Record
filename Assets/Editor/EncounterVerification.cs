@@ -14,7 +14,7 @@ public static class EncounterVerification
     {
         var bindings=RunSaveBindings.Instance;
         MapRunState.StartNewRun(bindings.Progression);MapRunState.SaveCurrentNode(EventNode(floor),"Encounter fixture");
-        var snapshot=MapRunState.Capture(bindings);snapshot.mapFloor=floor;
+        var snapshot=MapRunState.Capture(bindings);snapshot.mapFloor=floor;snapshot.mapScenePath=CampaignScenes.PathFor(floor);
         if(runId!=null)snapshot.runId=runId;
         Require(PreparedRunRestore.TryPrepare(snapshot,bindings,out var ready,out _),"Fixture restore");ready.Apply();
         return MapRunState.Encounters.Assign(MapRunState.RunId,snapshot.currentNodeId,bindings);
@@ -73,7 +73,7 @@ public static class EncounterVerification
             for(int version=1;version<=3;version++) {
                 var legacy=MapRunState.Capture(bindings);legacy.schemaVersion=version;legacy.encounters=null;
                 Require(PreparedRunRestore.TryPrepare(legacy,bindings,out var migrated,out _),"Legacy migration");migrated.Apply();
-                Require(MapRunState.Encounters.Export().Length==0 && MapRunState.Capture(bindings).schemaVersion==4,"Legacy defaults");
+                Require(MapRunState.Encounters.Export().Length==0 && MapRunState.Capture(bindings).schemaVersion==5,"Legacy defaults");
             }
             EncounterRecord joker=null;
             for(int seed=0;seed<500 && joker==null;seed++) {

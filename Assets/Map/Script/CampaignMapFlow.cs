@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>One map scene, distinct persisted campaign floors; existing node/camera interaction is reused.</summary>
+/// <summary>Progression and encounter UI for one independently authored floor scene.</summary>
 [DefaultExecutionOrder(-400)]
 public sealed class CampaignMapFlow : MonoBehaviour
 {
@@ -18,26 +18,14 @@ public sealed class CampaignMapFlow : MonoBehaviour
     private TMP_Text floorLabel;
     private TMP_Text advanceText;
     private bool endingPresented;
-    private Mesh edgeMesh;
-    private Material edgeMaterial;
+    [SerializeField, Min(1)] private int floorNumber=1;
+    public int FloorNumber => floorNumber;
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void Install()
-    {
-        current = null; SceneManager.sceneLoaded -= Loaded; SceneManager.sceneLoaded += Loaded;
-    }
-    private static void Loaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == "Map_1F" && FindFirstObjectByType<CampaignMapFlow>() == null)
-            new GameObject("CampaignMapFlow").AddComponent<CampaignMapFlow>();
-    }
     private void Awake()
     {
         current = this;
-        if (MapRunState.MapFloor > 1) BuildFloor();
-        else foreach(var node in FindObjectsByType<MapNode>(FindObjectsSortMode.None).Where(n=>n.NodeType==MapNodeType.Event)) {
-            var choice=node.Choices[0];choice.Configure("encounter.enter");
-            node.Configure(node.NodeID,node.FloorIndex,node.NodeType,node.DisplayName,node.Description,new[]{choice});
+        if(!MapRunState.EnsureStarted(RunSaveBindings.Instance.Progression) || !MapRunState.EnterMapScene(floorNumber)) {
+            Debug.LogError("[Campaign] Map scene does not match the active run floor.",this);enabled=false;
         }
     }
     private void Start()
@@ -79,7 +67,7 @@ public sealed class CampaignMapFlow : MonoBehaviour
     {
         if(TransitionManager.IsBusy || ModalOpen || MapRunState.MapFloor>=5 || !IsTerminal(MapRunState.CurrentNodeID) || !MapRunState.IsCompleted(MapRunState.CurrentNodeID))return;
         // Update state only after the scene request has been accepted. It is installed before the new map is built.
-        if(TransitionManager.TryLoad(RunSaveBindings.Instance.MapScenePath,()=> {
+        if(TransitionManager.TryLoad(CampaignScenes.PathFor(MapRunState.MapFloor+1),()=> {
             if(!MapRunState.TryAdvanceMapFloor())throw new InvalidOperationException("Campaign advance rejected.");
         },message:L("transition"))) Debug.Log("[Campaign] Advancing from floor "+MapRunState.MapFloor);
     }
@@ -123,47 +111,6 @@ public sealed class CampaignMapFlow : MonoBehaviour
         if(!RunSaveService.MarkRunEnded("Ending",out var error))Debug.LogWarning("[Campaign] Ending save status: "+error);
         Message(L("normal_ending"),L("ending_unnamed"),()=>TransitionManager.TryLoad(RunRecordService.LobbyScenePath,message:L("ending_exit")));
     }
-    private void BuildFloor()
-    {
-        var definition=CampaignDefinition.Active.Floor(MapRunState.MapFloor);
-        if(definition==null)throw new InvalidOperationException("Unsupported campaign floor.");
-        var originals=FindObjectsByType<MapNode>(FindObjectsSortMode.None);
-        if(originals.Length!=8)throw new InvalidOperationException("Expected the original eight-node map template.");
-        var parent=originals[0].transform.parent;
-        Vector3 center=Vector3.zero;foreach(var n in originals)center+=n.transform.localPosition;center/=originals.Length;
-        foreach(var node in originals)node.gameObject.SetActive(false);
-        var generated=new List<MapNode>();int nSide=definition.size;
-        for(int i=0;i<nSide*nSide*nSide;i++) {
-            var type=CampaignDefinition.TypeAt(definition,i);
-            var template=originals.FirstOrDefault(o=>o.NodeType==type) ?? originals.First(o=>o.NodeType==(type==MapNodeType.Start?MapNodeType.Start:type==MapNodeType.Event?MapNodeType.Event:MapNodeType.Battle));
-            var go=Instantiate(template.gameObject,parent);go.name=$"Floor{definition.floor}_Node{i+1}_{type}";
-            go.transform.localPosition=center+new Vector3(i%nSide-(nSide-1)*.5f,i/nSide%nSide-(nSide-1)*.5f,i/(nSide*nSide)-(nSide-1)*.5f)*definition.spacing;
-            go.transform.localScale=template.transform.localScale*.65f;
-            var node=go.GetComponent<MapNode>();var choices=go.GetComponents<MapChoice>();
-            int count=1;
-            if(choices.Length<count)throw new InvalidOperationException("Map template has too few choices.");
-            for(int c=0;c<count;c++)choices[c].Configure(type==MapNodeType.Event?"encounter.enter":"campaign.enter");
-            string kind=L(TypeKey(type));
-            node.Configure(CampaignDefinition.NodeId(definition.floor,i),i%nSide+i/nSide%nSide+i/(nSide*nSide),type,
-                L("node",definition.floor,i+1,kind),L("description",kind),choices.Take(count).ToArray());
-            generated.Add(node);
-        }
-        for(int i=0;i<generated.Count;i++) {
-            generated[i].Connect(CampaignDefinition.Connections(definition,i).Select(index=>generated[index]).ToArray());
-            generated[i].gameObject.SetActive(true);
-        }
-        BuildEdges(parent,generated);
-        Debug.Log($"[Campaign] Floor {definition.floor}: {nSide}x{nSide}x{nSide}, {generated.Count} nodes.");
-    }
-    private void BuildEdges(Transform parent,List<MapNode> nodes)
-    {
-        var vertices=new List<Vector3>();foreach(var node in nodes)foreach(var next in node.ConnectedNodes){vertices.Add(node.transform.localPosition);vertices.Add(next.transform.localPosition);}
-        edgeMesh=new Mesh{name="CampaignConnections"};edgeMesh.SetVertices(vertices);edgeMesh.SetIndices(Enumerable.Range(0,vertices.Count).ToArray(),MeshTopology.Lines,0);
-        var go=new GameObject("CampaignConnections",typeof(MeshFilter),typeof(MeshRenderer));go.transform.SetParent(parent,false);go.GetComponent<MeshFilter>().sharedMesh=edgeMesh;
-        edgeMaterial=new Material(Resources.Load<Shader>("CampaignLines"));edgeMaterial.SetColor("_BaseColor",UITheme.Alpha(UITheme.Line,.55f));
-        go.GetComponent<MeshRenderer>().sharedMaterial=edgeMaterial;
-    }
-    private static string TypeKey(MapNodeType type)=>type==MapNodeType.FirstBoss?"midboss":type==MapNodeType.Boss?"finalboss":type==MapNodeType.Defender?"defender":type==MapNodeType.FloorExit?"exit":type==MapNodeType.Shop?"shop":type==MapNodeType.Event?"event":type==MapNodeType.Start?"start":"battle";
     private static string L(string key,params object[] args)=>string.Format(GameData.Text("campaign."+key),args);
-    private void OnDestroy(){if(current==this)current=null;if(edgeMesh!=null)Destroy(edgeMesh);if(edgeMaterial!=null)Destroy(edgeMaterial);}
+    private void OnDestroy(){if(current==this)current=null;}
 }

@@ -24,6 +24,14 @@ public static class MapRunState
     public static void SetBattleNodeType(MapNodeType type) => BattleNodeType = type;
     public static bool IsCompleted(int nodeId) => completedNodes.Contains(nodeId);
     public static void CompleteNode(int nodeId) { if (visitedNodes.Contains(nodeId)) completedNodes.Add(nodeId); }
+    // A fresh run may be previewed by playing a floor scene directly in the Editor.
+    // Existing runs must arrive at the scene matching their persisted floor.
+    public static bool EnterMapScene(int floor)
+    {
+        if(IsEnded || floor<1 || floor>5)return false;
+        if(HasCurrentNode)return MapFloor==floor && CampaignDefinition.FloorOf(CurrentNodeID)==floor;
+        MapFloor=floor;SaveCurrentNode(CampaignDefinition.NodeId(floor,0),"");return true;
+    }
     public static bool TryAdvanceMapFloor()
     {
         int terminal = MapFloor == 1 ? 8 : CampaignDefinition.NodeId(MapFloor, (int)Math.Pow(CampaignDefinition.Active.Floor(MapFloor).size, 3)-1);
@@ -45,7 +53,7 @@ public static class MapRunState
     {
         return new RunSaveSnapshot
         {
-            schemaVersion = 4, mapFloor = MapFloor, runId = RunId, savedUtc = DateTimeOffset.UtcNow.ToString("O"),
+            schemaVersion = 5, mapFloor = MapFloor, runId = RunId, savedUtc = DateTimeOffset.UtcNow.ToString("O"),
             state = IsEnded ? "Ended" : "Active", endReason = EndReason,
             mapScenePath = bindings.MapScenePath, currentNodeId = CurrentNodeID,
             packets = Packets.Balance, layer = Progression.Layer, experience = Progression.Experience,

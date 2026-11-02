@@ -40,7 +40,7 @@ public static class RunRecordVerification
                 "Three survivors must cost 30 integrity only.");
             RunRecordService.ReduceConsistency(15);
             var snapshot = MapRunState.Capture(bindings);
-            Require(snapshot.schemaVersion == 4 && repository.TryWrite(snapshot, out _), "Health save failed.");
+            Require(snapshot.schemaVersion == 5 && repository.TryWrite(snapshot, out _), "Health save failed.");
             MapRunState.Reset();
             Require(repository.TryRead(out var loaded, out _), "Health read failed.");
             Require(PreparedRunRestore.TryPrepare(loaded, bindings, out var restored, out _), "Health restore failed.");
@@ -70,7 +70,7 @@ public static class RunRecordVerification
                 MapRunState.EndReason == "Ejected", "Zero integrity did not end the run.");
             Require(!repository.TryRead(out _, out RunSaveError error) && error == RunSaveError.RunEnded,
                 "Ejected run can continue from an older save.");
-            Require(repository.TryRead(out var ended, out _, true) && ended.schemaVersion == 4 && ended.integrity == 0,
+            Require(repository.TryRead(out var ended, out _, true) && ended.schemaVersion == 5 && ended.integrity == 0,
                 "Terminal file lost actual health.");
             Require(!RunRecordService.ApplyBattleDefeat(1) && !RunRecordService.ReduceConsistency(1),
                 "Ended run accepted more damage.");

@@ -1961,9 +1961,10 @@ MonoBehaviour:
   descriptionKey: map.map_1f.node_2.description
   choices:
   - {fileID: 621905972}
-  - {fileID: 621905974}
-  - {fileID: 621905973}
   meshRenderer: {fileID: 651019049}
+  authored: 0
+  runtimeName: 
+  runtimeDescription: 
 --- !u!65 &621905966
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2090,7 +2091,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceTextKey: map.map_1f.choice_621905972
+  choiceTextKey: encounter.enter
 --- !u!114 &621905973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2396,6 +2397,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TerminalSpriteBinding
   tone: 1
   opacity: 1
+--- !u!1 &720570859
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 720570861}
+  - component: {fileID: 720570860}
+  m_Layer: 0
+  m_Name: CampaignMapFlow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &720570860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 720570859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a88a480621448304f80bb796075edd73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CampaignMapFlow
+  floorNumber: 1
+--- !u!4 &720570861
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 720570859}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &766637530
 GameObject:
   m_ObjectHideFlags: 0
@@ -2537,6 +2583,9 @@ MonoBehaviour:
   descriptionKey: map.map_1f.node_1.description
   choices: []
   meshRenderer: {fileID: 766637532}
+  authored: 0
+  runtimeName: 
+  runtimeDescription: 
 --- !u!114 &766637537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4401,9 +4450,10 @@ MonoBehaviour:
   descriptionKey: map.map_1f.node_4.description
   choices:
   - {fileID: 1148619776}
-  - {fileID: 1148619778}
-  - {fileID: 1148619777}
   meshRenderer: {fileID: 953118917}
+  authored: 0
+  runtimeName: 
+  runtimeDescription: 
 --- !u!65 &1148619770
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4530,7 +4580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceTextKey: map.map_1f.choice_1148619776
+  choiceTextKey: encounter.enter
 --- !u!114 &1148619777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5374,6 +5424,9 @@ MonoBehaviour:
   choices:
   - {fileID: 1475734772}
   meshRenderer: {fileID: 1292259482}
+  authored: 0
+  runtimeName: 
+  runtimeDescription: 
 --- !u!65 &1475734766
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5814,9 +5867,10 @@ MonoBehaviour:
   descriptionKey: map.map_1f.node_3.description
   choices:
   - {fileID: 1568378347}
-  - {fileID: 1568378349}
-  - {fileID: 1568378348}
   meshRenderer: {fileID: 531466801}
+  authored: 0
+  runtimeName: 
+  runtimeDescription: 
 --- !u!65 &1568378341
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5943,7 +5997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f71ad45007bc5245b4f889066b1e716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapChoice
-  choiceTextKey: map.map_1f.choice_1568378347
+  choiceTextKey: encounter.enter
 --- !u!114 &1568378348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6286,6 +6340,9 @@ MonoBehaviour:
   choices:
   - {fileID: 1670722697}
   meshRenderer: {fileID: 1370315270}
+  authored: 0
+  runtimeName: 
+  runtimeDescription: 
 --- !u!65 &1670722691
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6899,6 +6956,9 @@ MonoBehaviour:
   choices:
   - {fileID: 1903569412}
   meshRenderer: {fileID: 614868084}
+  authored: 0
+  runtimeName: 
+  runtimeDescription: 
 --- !u!65 &1903569406
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7113,6 +7173,9 @@ MonoBehaviour:
   choices:
   - {fileID: 1907453448}
   meshRenderer: {fileID: 1217805764}
+  authored: 0
+  runtimeName: 
+  runtimeDescription: 
 --- !u!65 &1907453442
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7666,3 +7729,4 @@ SceneRoots:
   - {fileID: 1912619405}
   - {fileID: 1585740298}
   - {fileID: 1074867746}
+  - {fileID: 720570861}

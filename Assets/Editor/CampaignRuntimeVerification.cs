@@ -70,7 +70,7 @@ public sealed class CampaignRuntimeProbe : MonoBehaviour
         ScreenCapture.CaptureScreenshot(CampaignRuntimeVerification.Output+"/shop-purchased.png");
         yield return new WaitForSecondsRealtime(.15f);
         ui.ReturnButton.onClick.Invoke();yield return Ready("Map_1F");yield return null;
-        Require(Button("NextFloor").gameObject.activeSelf,"Floor 1 exit missing");Button("NextFloor").onClick.Invoke();yield return Ready("Map_1F",2);
+        Require(Button("NextFloor").gameObject.activeSelf,"Floor 1 exit missing");Button("NextFloor").onClick.Invoke();yield return Ready("Map_2F",2);
         for(int floor=2;floor<=5;floor++) {
             var f=CampaignDefinition.Active.Floor(floor);var nodes=FindObjectsByType<MapNode>(FindObjectsSortMode.None);
             Require(nodes.Length==f.size*f.size*f.size,"Wrong node count on floor "+floor);
@@ -115,7 +115,7 @@ public sealed class CampaignRuntimeProbe : MonoBehaviour
                 var request=(AttackPresentationRequest)typeof(BattleExecuteManager).GetField("pendingPresentation",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(manager);
                 manager.Feedback.BeginTurn();yield return manager.Feedback.Play(request);manager.Feedback.EndTurn();
                 Require(front.CurrentHP==hp-expected,"Enemy arts damage used the wrong defense pipeline");
-                Find<BattleToMapSceneLoader>().LoadMap();yield return Ready("Map_1F",2);
+                Find<BattleToMapSceneLoader>().LoadMap();yield return Ready("Map_2F",2);
                 report.Add("PASS: normal encounter mixes physical/arts; arts uses resistance through confirmed Impact.");
             } else if(floor==3 || floor==5) {
                 terminal.Choices[0].Select(terminal);yield return Ready("Playing_Scene");yield return new WaitForSecondsRealtime(3);
@@ -123,7 +123,7 @@ public sealed class CampaignRuntimeProbe : MonoBehaviour
                 ScreenCapture.CaptureScreenshot(CampaignRuntimeVerification.Output+$"/boss-{floor}.png");
                 typeof(Enemy).GetField("currentHP",BindingFlags.NonPublic|BindingFlags.Instance).SetValue(enemies[0],1);
                 PrepareBattle(enemies[0]);Find<BattleExecuteManager>().ExecuteBattle();
-                yield return Ready("Map_1F",floor);yield return new WaitForSecondsRealtime(.2f);
+                yield return Ready("Map_"+floor+"F",floor);yield return new WaitForSecondsRealtime(.2f);
                 Require(MapRunState.IsCompleted(terminalId),"Boss victory not recorded");
                 if(floor==5) {
                     Require(MapRunState.IsEnded && MapRunState.EndReason=="Ending" && CampaignMapFlow.ModalOpen,"Normal ending missing");
@@ -134,7 +134,7 @@ public sealed class CampaignRuntimeProbe : MonoBehaviour
                 }
             } else {terminal.Choices[0].Select(terminal);yield return null;Button("Confirm").onClick.Invoke();yield return null;}
             report.Add($"PASS floor {floor}: generated geometry, encounter and endpoint.");
-            if(floor<5){yield return null;Button("NextFloor").onClick.Invoke();yield return Ready("Map_1F",floor+1);}
+            if(floor<5){yield return null;Button("NextFloor").onClick.Invoke();yield return Ready("Map_"+(floor+1)+"F",floor+1);}
         }
         CampaignRuntimeVerification.Finish("PASS\nPointer shop purchase after transition\n"+string.Join("\n",report)+"\nSingle relic, saved floor, mid/final boss victory, normal ending and ended-slot rejection. Test fights used HP=1; full balance not tested.");
     }

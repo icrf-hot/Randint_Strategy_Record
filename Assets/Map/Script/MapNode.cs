@@ -65,21 +65,23 @@ public class MapNode : MonoBehaviour
     private MaterialPropertyBlock themeProperties;
     private bool isUnavailable;
     private MapNodeVisualState visualState;
-    private string runtimeName, runtimeDescription;
-    public bool IsGenerated => runtimeName != null;
+    [SerializeField] private bool authored;
+    [SerializeField] private string runtimeName;
+    [SerializeField, TextArea] private string runtimeDescription;
+    public bool IsGenerated => authored;
     public bool IsBattle => nodeType == MapNodeType.Battle || nodeType == MapNodeType.EliteBattle ||
         nodeType == MapNodeType.FirstBoss || nodeType == MapNodeType.SecondBoss || nodeType == MapNodeType.ThirdBoss || nodeType == MapNodeType.Boss;
     public void Configure(int id, int stage, MapNodeType type, string title, string description, MapChoice[] options)
-    { nodeID=id;floorIndex=stage;nodeType=type;runtimeName=title;runtimeDescription=description;choices=options; }
+    { nodeID=id;floorIndex=stage;nodeType=type;authored=true;runtimeName=title;runtimeDescription=description;choices=options; }
     public void Connect(MapNode[] nodes) => connectedNodes = nodes;
 
     public int NodeID => nodeID;
     public int FloorIndex => floorIndex;
     public MapNodeType NodeType => nodeType;
     public MapNode[] ConnectedNodes => connectedNodes;
-    public string Description => runtimeDescription ?? GameData.Text(descriptionKey);
+    public string Description => authored ? runtimeDescription : GameData.Text(descriptionKey);
     public MapChoice[] Choices => choices;
-    public string DisplayName => runtimeName ?? GameData.Text(displayNameKey);
+    public string DisplayName => authored ? runtimeName : GameData.Text(displayNameKey);
 
     public bool IsUnavailable => isUnavailable;
 

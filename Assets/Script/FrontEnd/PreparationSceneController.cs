@@ -13,7 +13,6 @@ public sealed class PreparationSceneController : MonoBehaviour
     [SerializeField] private TMP_Text[] operatorNames;
     [SerializeField] private TMP_Text dataLossText;
     [SerializeField] private TMP_Text warningText;
-    [SerializeField] private string mapScenePath = "Assets/Scenes/Map_1F.unity";
     [SerializeField] private string lobbyScenePath = "Assets/Scenes/Lobby.unity";
 
     private void Start()
@@ -75,7 +74,7 @@ public sealed class PreparationSceneController : MonoBehaviour
         if (sceneLoader.IsLoading) return;
         if (!TryGetRoster(out _))
         { warningText.text = GameData.Text("preparation.invalid_roster"); return; }
-        if (sceneLoader.TryLoadScene(mapScenePath, resetMapRun: true))
+        if (sceneLoader.TryLoadScene(CampaignScenes.PathFor(1), resetMapRun: true))
         {
             Debug.Log("[Preparation] Start confirmed: default FRONT/MIDDLE/BACK roster, data loss level 0.", this);
             DisableActions();

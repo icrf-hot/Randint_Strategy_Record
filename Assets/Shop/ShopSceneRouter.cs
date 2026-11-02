@@ -1,7 +1,7 @@
 public static class ShopSceneRouter
 {
     public const string ShopPath = "Assets/Scenes/Shop.unity";
-    public const string MapPath = "Assets/Scenes/Map_1F.unity";
+    public static string MapPath => CampaignScenes.CurrentPath;
     public static bool IsTransitioning => TransitionManager.IsBusy;
     public static bool EnterShop(MapNode node)
     {

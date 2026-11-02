@@ -61,7 +61,8 @@ public static class RunSaveService
             saved.endReason = reason;
             if (saved.schemaVersion < 3) saved.mapFloor = 1;
             if (saved.schemaVersion < 4) saved.encounters = System.Array.Empty<EncounterRecord>();
-            saved.schemaVersion = 4;
+            saved.mapScenePath = CampaignScenes.PathFor(saved.mapFloor);
+            saved.schemaVersion = 5;
             saved.integrity = MapRunState.RecordHealth.Integrity;
             saved.consistency = MapRunState.RecordHealth.Consistency;
             saved.savedUtc = DateTimeOffset.UtcNow.ToString("O");

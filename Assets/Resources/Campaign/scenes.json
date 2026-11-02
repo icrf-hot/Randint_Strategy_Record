@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "floors": [
+    { "floor": 1, "scenePath": "Assets/Scenes/Map_1F.unity" },
+    { "floor": 2, "scenePath": "Assets/Scenes/Map_2F.unity" },
+    { "floor": 3, "scenePath": "Assets/Scenes/Map_3F.unity" },
+    { "floor": 4, "scenePath": "Assets/Scenes/Map_4F.unity" },
+    { "floor": 5, "scenePath": "Assets/Scenes/Map_5F.unity" }
+  ]
+}
