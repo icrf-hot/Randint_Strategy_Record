@@ -41,7 +41,7 @@ public static class RunSaveService
 
     public static bool MarkRunEnded(string reason, out RunSaveError error)
     {
-        if (reason != "Ending" && reason != "Ejected") throw new ArgumentException(nameof(reason));
+        if (!MapRunState.IsValidEndReason(reason)) throw new ArgumentException(nameof(reason));
         MapRunState.MarkEnded(reason);
         error = RunSaveError.None;
         int[] ids;
@@ -62,7 +62,8 @@ public static class RunSaveService
             if (saved.schemaVersion < 3) saved.mapFloor = 1;
             if (saved.schemaVersion < 4) saved.encounters = System.Array.Empty<EncounterRecord>();
             saved.mapScenePath = CampaignScenes.PathFor(saved.mapFloor);
-            saved.schemaVersion = 5;
+            if (saved.schemaVersion < 6) saved.hiddenEndingRouteUnlocked = saved.mapFloor > 3;
+            saved.schemaVersion = 6;
             saved.integrity = MapRunState.RecordHealth.Integrity;
             saved.consistency = MapRunState.RecordHealth.Consistency;
             saved.savedUtc = DateTimeOffset.UtcNow.ToString("O");

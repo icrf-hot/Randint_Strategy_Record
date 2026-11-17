@@ -57,6 +57,7 @@ public class MapPlayerPositionFeedback : MonoBehaviour
         if (MapRunState.IsEnded || CampaignMapFlow.ModalOpen || TransitionManager.IsBusy) return;
         if (nextNode == null)
             return;
+        if (nextNode.IsBattle && MapRunState.IsCompleted(nextNode.NodeID)) return;
         if (EncounterService.HasUnclaimedVerification && currentNode != nextNode) return;
 
         if (nextNode.IsUnavailable)
@@ -229,6 +230,7 @@ public class MapPlayerPositionFeedback : MonoBehaviour
         if (MapRunState.IsEnded || CampaignMapFlow.ModalOpen) return false;
         if (node == null)
             return false;
+        if (node.IsBattle && MapRunState.IsCompleted(node.NodeID)) return false;
 
         if (node.IsUnavailable)
             return false;

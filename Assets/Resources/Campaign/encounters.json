@@ -15,7 +15,8 @@
       "repairCost": 0,
       "repairAmount": 4,
       "riskCost": 0,
-      "riskPackets": 4
+      "riskPackets": 4,
+      "temporaryRewardHp": 2
     },
     {
       "floor": 2,
@@ -31,7 +32,8 @@
       "repairCost": 3,
       "repairAmount": 6,
       "riskCost": 2,
-      "riskPackets": 7
+      "riskPackets": 7,
+      "temporaryRewardHp": 2
     },
     {
       "floor": 3,
@@ -47,7 +49,8 @@
       "repairCost": 5,
       "repairAmount": 8,
       "riskCost": 4,
-      "riskPackets": 10
+      "riskPackets": 10,
+      "temporaryRewardHp": 2
     },
     {
       "floor": 4,
@@ -63,7 +66,8 @@
       "repairCost": 8,
       "repairAmount": 10,
       "riskCost": 6,
-      "riskPackets": 14
+      "riskPackets": 14,
+      "temporaryRewardHp": 2
     },
     {
       "floor": 5,
@@ -79,7 +83,8 @@
       "repairCost": 10,
       "repairAmount": 14,
       "riskCost": 8,
-      "riskPackets": 18
+      "riskPackets": 18,
+      "temporaryRewardHp": 2
     }
   ],
   "events": [

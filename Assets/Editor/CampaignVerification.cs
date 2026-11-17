@@ -44,6 +44,7 @@ public static class CampaignVerification
                 Require(PreparedRunRestore.TryPrepare(legacy,bindings,out var restore,out _),"Legacy migration failed");
                 restore.Apply();Require(MapRunState.MapFloor==1 && legacy.mapFloor==0,"Legacy migration mutated source");
             }
+            Require(MapRunState.TryUnlockHiddenEndingRoute(),"Hidden-route fixture unlock");
             MapRunState.SaveCurrentNode(8,"shop");MapRunState.CompleteNode(8);
             for(int floor=2;floor<=5;floor++) {
                 Require(MapRunState.TryAdvanceMapFloor() && MapRunState.MapFloor==floor,"Floor advance");

@@ -30,7 +30,7 @@ public sealed class PreparedRunRestore
     {
         prepared = null;
         error = RunSaveError.InvalidData;
-        if (source == null || source.schemaVersion < 1 || source.schemaVersion > 5 || !Guid.TryParseExact(source.runId, "N", out _) ||
+        if (source == null || source.schemaVersion < 1 || source.schemaVersion > 6 || !Guid.TryParseExact(source.runId, "N", out _) ||
             !DateTimeOffset.TryParseExact(source.savedUtc, "O", CultureInfo.InvariantCulture, DateTimeStyles.None, out _) ||
             (source.state != "Active" && source.state != "Ended") || source.operatorIds == null ||
             source.ownedCacheIds == null || source.purchasedCacheIds == null || source.visitedNodeIds == null ||
@@ -39,7 +39,7 @@ public sealed class PreparedRunRestore
             return false;
         if (source.state == "Active" && !string.IsNullOrEmpty(source.endReason)) return false;
         if (source.state == "Ended" && !allowEnded) { error = RunSaveError.RunEnded; return false; }
-        if (source.state == "Ended" && source.endReason != "Ending" && source.endReason != "Ejected") return false;
+        if (source.state == "Ended" && !MapRunState.IsValidEndReason(source.endReason)) return false;
         if (source.schemaVersion >= 2 &&
             (source.integrity < 0 || source.integrity > 100 || source.consistency < 0 || source.consistency > 100 ||
              (source.state == "Active" && source.integrity == 0) ||
@@ -48,6 +48,7 @@ public sealed class PreparedRunRestore
         if (bindings == null || !bindings.HasNode(source.currentNodeId)) return false;
         int mapFloor = source.schemaVersion >= 3 ? source.mapFloor : 1;
         if (mapFloor < 1 || mapFloor > 5 || CampaignDefinition.FloorOf(source.currentNodeId) != mapFloor) return false;
+        if (source.schemaVersion >= 6 && mapFloor > 3 && !source.hiddenEndingRouteUnlocked) return false;
         string destination=CampaignScenes.PathFor(mapFloor);
         if(source.mapScenePath!=destination && !(source.schemaVersion<=4 && source.mapScenePath==CampaignScenes.LegacyMapPath))return false;
         var positions = new HashSet<OperatorPosition>();
@@ -81,8 +82,12 @@ public sealed class PreparedRunRestore
         var copy = JsonUtility.FromJson<RunSaveSnapshot>(JsonUtility.ToJson(source));
         if (copy.schemaVersion == 1) { copy.integrity = 100; copy.consistency = 100; }
         if (copy.schemaVersion < 4) copy.encounters = Array.Empty<EncounterRecord>();
+        // Older saves left the last defeated battle available for retry.
+        if (copy.lastBattleResult == "Defeat")
+            copy.completedNodeIds = copy.completedNodeIds.Union(new[] { copy.lastBattleNodeId }).OrderBy(id => id).ToArray();
         if (!EncounterJournal.Validate(copy.encounters, copy, bindings)) return false;
-        copy.schemaVersion = 5; copy.mapFloor = mapFloor; copy.mapScenePath=destination;
+        if (copy.schemaVersion < 6) copy.hiddenEndingRouteUnlocked = mapFloor > 3;
+        copy.schemaVersion = 6; copy.mapFloor = mapFloor; copy.mapScenePath=destination;
         prepared = new PreparedRunRestore(copy, run, caches);
         error = RunSaveError.None;
         return true;

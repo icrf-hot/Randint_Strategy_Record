@@ -49,7 +49,7 @@ public static class CampaignSceneVerification
                 Require(nodes.Where(n=>n.NodeType==MapNodeType.Event).All(n=>n.Choices.Length==1 && n.Choices[0].ChoiceText==EncounterService.Text("enter")),"Encounter entry not serialized.");
                 MapRunState.StartNewRun(bindings.Progression);Require(MapRunState.EnterMapScene(entry.floor),"Direct-scene initialization failed.");
                 var save=MapRunState.Capture(bindings);
-                Require(save.schemaVersion==5 && save.mapScenePath==entry.scenePath && SceneManager.GetActiveScene().path==bindings.MapScenePath,"Floor scene is not saveable.");
+                Require(save.schemaVersion==6 && save.mapScenePath==entry.scenePath && SceneManager.GetActiveScene().path==bindings.MapScenePath,"Floor scene is not saveable.");
                 Require(repo.TryWrite(save,out _) && repo.TryRead(out _,out _),"Floor scene save round trip.");
                 foreach(int version in entry.floor==1?new[]{1,2,3,4}:new[]{3,4}) {
                     var legacy=JsonUtility.FromJson<RunSaveSnapshot>(JsonUtility.ToJson(save));legacy.schemaVersion=version;legacy.mapScenePath=CampaignScenes.LegacyMapPath;

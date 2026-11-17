@@ -11,11 +11,13 @@ public enum EncounterAction { Leave, Supply, Repair, RiskyPackets, Verify, Claim
     public bool parity;
     public float jokerChance;
     public int supplyPackets, repairCost, repairAmount, riskCost, riskPackets;
+    public int temporaryRewardHp;
     public EncounterTier Copy() => JsonUtility.FromJson<EncounterTier>(JsonUtility.ToJson(this));
     public bool IsValid => floor>=1 && floor<=5 && requiredCards>=2 && requiredCards<=4 && modulus>=0 && modulus<=7 &&
         verifyCost>=0 && verifyCost<=100 && forgeCost>=0 && forgeCost<=30 && signaturePackets>=0 && signaturePackets<=100 &&
         signatureHeal>=0 && signatureHeal<=100 && jokerChance>=0 && jokerChance<=1 && supplyPackets>=0 && supplyPackets<=100 &&
-        repairCost>=0 && repairCost<=100 && repairAmount>=0 && repairAmount<=100 && riskCost>=0 && riskCost<=30 && riskPackets>=0 && riskPackets<=100;
+        repairCost>=0 && repairCost<=100 && repairAmount>=0 && repairAmount<=100 && riskCost>=0 && riskCost<=30 && riskPackets>=0 && riskPackets<=100 &&
+        temporaryRewardHp>=0 && temporaryRewardHp<=100;
 }
 [Serializable] public sealed class EncounterDefinition
 {

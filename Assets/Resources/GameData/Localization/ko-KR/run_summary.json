@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "key": "run_summary.cleared",
+      "value": "작전 클리어"
+    },
+    {
+      "key": "run_summary.defeated",
+      "value": "작전 패배"
+    },
+    {
+      "key": "run_summary.clear_note",
+      "value": "작전 기록을 정리했습니다. 보유 유물과 대원별 보정치를 확인하십시오."
+    },
+    {
+      "key": "run_summary.terminal_defeat",
+      "value": "마지막 노드의 전투에서 패배하여 작전이 종료되었습니다."
+    },
+    {
+      "key": "run_summary.ejected",
+      "value": "무결성이 0%가 되어 작전 기록을 유지할 수 없습니다."
+    },
+    {
+      "key": "run_summary.route",
+      "value": "{0} / FLOOR {1:00}"
+    },
+    {
+      "key": "run_summary.normal",
+      "value": "일반 루트"
+    },
+    {
+      "key": "run_summary.hidden",
+      "value": "히든 루트"
+    },
+    {
+      "key": "run_summary.health",
+      "value": "무결성 {0}% / 정합성 {1}%"
+    },
+    {
+      "key": "run_summary.purchased",
+      "value": "구매한 유물 ({0})"
+    },
+    {
+      "key": "run_summary.owned",
+      "value": "현재 보유 유물 ({0})"
+    },
+    {
+      "key": "run_summary.none",
+      "value": "없음"
+    },
+    {
+      "key": "run_summary.stats",
+      "value": "대원별 유물 보정"
+    },
+    {
+      "key": "run_summary.sort_note",
+      "value": "기본 → 최종 수치 (가산량 / 기본 대비 보정률), 보정률 내림차순"
+    },
+    {
+      "key": "run_summary.zero_base",
+      "value": "기본값 0 · 비율 산정 불가"
+    },
+    {
+      "key": "run_summary.scroll_hint",
+      "value": "스크롤하여 구매 내역과 대원별 스탯을 확인할 수 있습니다."
+    },
+    {
+      "key": "run_summary.lobby",
+      "value": "확인 · 로비로 돌아가기"
+    },
+    {
+      "key": "run_summary.lobby_error",
+      "value": "로비를 열 수 없습니다. 다시 시도하십시오."
+    }
+  ]
+}

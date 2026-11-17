@@ -6,6 +6,7 @@ public sealed class RunSaveSnapshot
     public int schemaVersion;
     public EncounterRecord[] encounters;
     public int mapFloor = 1;
+    public bool hiddenEndingRouteUnlocked;
     public string runId;
     public string savedUtc;
     public string state;

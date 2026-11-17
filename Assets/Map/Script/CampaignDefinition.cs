@@ -48,6 +48,13 @@ public sealed class CampaignDefinition
         }
     }
     public CampaignFloorDefinition Floor(int floor) => Array.Find(floors, f => f.floor == floor);
+    public static int TerminalNodeId(int floor)
+    {
+        if (floor == 1) return 8;
+        var definition = Active.Floor(floor);
+        if (definition == null) throw new ArgumentOutOfRangeException(nameof(floor));
+        return NodeId(floor, definition.size * definition.size * definition.size - 1);
+    }
     public static int NodeId(int floor, int index) => floor == 1 ? index+1 : floor*1000+index+1;
     public static int FloorOf(int id) => id >= 1 && id <= 8 ? 1 : id/1000;
     public static bool HasNode(int id)

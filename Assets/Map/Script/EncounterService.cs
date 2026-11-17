@@ -32,13 +32,13 @@ public static class EncounterService
     public static bool Execute(EncounterRecord r,EncounterAction action,out string reason)
     {
         if(!CanExecute(r,action,out reason))return false;
-        Quote(r,action,out int cost,out int consistency,out int gain,out int heal,out bool healConsistency);
+        Quote(r,action,out int cost,out _,out int gain,out _,out _);
         int oldI=MapRunState.RecordHealth.Integrity,oldC=MapRunState.RecordHealth.Consistency;
         // No yields/callbacks between validation and publication. Apply cost before restoration.
         if(!MapRunState.Packets.TrySpend(cost))return Fail("no_packet",out reason);
         MapRunState.Packets.TryAdd(gain);
-        int newI=oldI-Math.Max(0,consistency-oldC),newC=Math.Max(0,oldC-consistency);
-        MapRunState.RecordHealth.Restore(Math.Min(100,newI+heal),Math.Min(100,newC+(healConsistency?heal:0)));
+        PreviewHealth(r, action, out int integrity, out int remainingConsistency);
+        MapRunState.RecordHealth.Restore(integrity, remainingConsistency);
         r.packetDelta+=gain-cost;r.integrityDelta+=MapRunState.RecordHealth.Integrity-oldI;
         r.consistencyDelta+=MapRunState.RecordHealth.Consistency-oldC;r.action=action;
         if(action==EncounterAction.Verify)r.stage=EncounterStage.Verified;
@@ -54,6 +54,14 @@ public static class EncounterService
     public static string OutcomeKey(EncounterAction action) => action==EncounterAction.Claim?"normal":action==EncounterAction.Forge?"forged":
         action==EncounterAction.Supply?"supply":action==EncounterAction.Repair?"repair":action==EncounterAction.RiskyPackets?"risk":"leave";
 
+    public static void PreviewHealth(EncounterRecord record, EncounterAction action, out int integrity, out int consistency)
+    {
+        Quote(record, action, out _, out int cost, out _, out int heal, out bool healConsistency);
+        int currentConsistency = MapRunState.RecordHealth.Consistency;
+        integrity = Math.Min(100, Math.Max(0, MapRunState.RecordHealth.Integrity - Math.Max(0, cost - currentConsistency)) + heal);
+        consistency = Math.Min(100, Math.Max(0, currentConsistency - cost) + (healConsistency ? heal : 0));
+    }
+
     public static void Quote(EncounterRecord r,EncounterAction action,out int cost,out int consistency,out int gain,out int heal,out bool healConsistency)
     {
         cost=consistency=gain=heal=0;healConsistency=false;var t=r.tier;
@@ -64,6 +72,12 @@ public static class EncounterService
             case EncounterAction.Supply:gain=t.supplyPackets;break;
             case EncounterAction.Repair:cost=t.repairCost;heal=t.repairAmount;healConsistency=true;break;
             case EncounterAction.RiskyPackets:consistency=t.riskCost;gain=t.riskPackets;break;
+        }
+        if (t.temporaryRewardHp > 0 && action != EncounterAction.Verify && action != EncounterAction.Leave)
+        {
+            gain = 0;
+            heal = t.temporaryRewardHp;
+            healConsistency = true;
         }
     }
     private static bool Fail(string key,out string reason){reason=Text(key);return false;}

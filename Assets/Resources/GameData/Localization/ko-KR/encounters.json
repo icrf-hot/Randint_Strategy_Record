@@ -204,6 +204,18 @@
     {
       "key": "encounter.verify_free",
       "value": "서명 검증 / 무료"
+    },
+    {
+      "key": "encounter.temporary_reward",
+      "value": "임시 확정 보상: 무결성·정합성 각각 +{0}%p (최대 100%)"
+    },
+    {
+      "key": "encounter.temporary_forge",
+      "value": "JK로 검증을 우회합니다. 임시 보상은 무결성·정합성 각각 +{0}%p입니다."
+    },
+    {
+      "key": "encounter.temporary_action",
+      "value": "복구 요청 / Packet −{0} · 정합성 −{1}%p → 두 기록 HP +{2}%p"
     }
   ]
 }

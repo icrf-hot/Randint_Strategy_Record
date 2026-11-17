@@ -15,6 +15,7 @@ public class MapChoice : MonoBehaviour
         if (targetNode == null)
             return;
         if (TransitionManager.IsBusy || MapRunState.IsEnded || CampaignMapFlow.ModalOpen) return;
+        if (targetNode.IsBattle && MapRunState.IsCompleted(targetNode.NodeID)) return;
 
         MapPlayerPositionFeedback feedback =
             FindFirstObjectByType<MapPlayerPositionFeedback>();

@@ -14,9 +14,19 @@ public static class RunRecordService
     {
         if (survivingEnemies < 0) return false;
         int perEnemy = GameData.Catalog.Rules("default_run").defeatIntegrityLossPerEnemy;
-        int damage = (int)Math.Min((long)survivingEnemies * perEnemy, int.MaxValue);
+        bool hiddenThirdFloor = MapRunState.HiddenEndingRouteUnlocked && MapRunState.MapFloor == 3 &&
+            MapRunState.CurrentNodeID == CampaignDefinition.TerminalNodeId(3);
+        int multiplier = hiddenThirdFloor ? 2 : 1;
+        int damage = (int)Math.Min((long)survivingEnemies * perEnemy * multiplier, int.MaxValue);
         // The battle result presentation completes before its loader returns to the lobby.
-        return ApplyLoss(damage, false, true);
+        bool applied = ApplyLoss(damage, false, true);
+        if (applied && !MapRunState.IsEnded && !hiddenThirdFloor && MapRunState.HasCurrentNode &&
+            MapRunState.CurrentNodeID == CampaignDefinition.TerminalNodeId(MapRunState.MapFloor))
+        {
+            if (!RunSaveService.MarkRunEnded("TerminalDefeat", out RunSaveError error))
+                Debug.LogWarning("[Run Record] Could not close the defeated terminal run: " + error);
+        }
+        return applied;
     }
 
     private static bool ApplyLoss(int amount, bool consistency, bool deferLobby)
@@ -29,7 +39,9 @@ public static class RunRecordService
         {
             Debug.LogWarning("[Run Record] Could not mark the saved run ended: " + error);
         }
-        if (!deferLobby) ReturnToLobby();
+        if (!deferLobby)
+            RunSummaryWindow.Show(RunEndSummary.Capture(), () =>
+                TransitionManager.TryLoad(LobbyScenePath, message: "> 기록 열람 종료 중"));
         return true;
     }
 

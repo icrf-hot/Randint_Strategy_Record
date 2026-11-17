@@ -48,7 +48,7 @@ public sealed class EncounterWindow : MonoBehaviour
         }
         if(record.stage==EncounterStage.Verified) {
             Label("Verified",EncounterService.Text("verified",record.signedChannel==0?"A":"B"),65,110,24,UITheme.Tone.Ok);
-            Label("Reward",EncounterService.Text("reward",record.tier.signaturePackets,record.tier.signatureHeal),-35,60);
+            Label("Reward",RewardLabel(),-35,60);
             AddAction(EncounterAction.Claim,EncounterService.Text("claim",record.signedChannel==0?"A":"B"),-160);
             AddClose(EncounterService.Text("back"),-220);return;
         }
@@ -60,9 +60,8 @@ public sealed class EncounterWindow : MonoBehaviour
                 var action=(EncounterAction)Enum.Parse(typeof(EncounterAction),name);
                 AddAction(action,ActionLabel(action),70-i++*82);
             }
-            Label("CostWarning",EncounterService.Text("overflow",MapRunState.RecordHealth.Consistency,
-                Math.Max(0,MapRunState.RecordHealth.Consistency-record.tier.riskCost),MapRunState.RecordHealth.Integrity,
-                Math.Max(0,MapRunState.RecordHealth.Integrity-Math.Max(0,record.tier.riskCost-MapRunState.RecordHealth.Consistency))),-190,50,18,UITheme.Tone.Dim);
+            var previewAction = definition.actions.Contains("RiskyPackets") ? EncounterAction.RiskyPackets : EncounterAction.Repair;
+            Label("CostWarning", HealthPreview(previewAction), -190, 50, 18, UITheme.Tone.Dim);
         }
     }
     private void BuildSignature()
@@ -80,16 +79,32 @@ public sealed class EncounterWindow : MonoBehaviour
         }
         live=Label("LiveProof","",-60,30,19,UITheme.Tone.Main,true);
         hint=Label("Hint","",-91,26,17,UITheme.Tone.Dim);
-        Label("Reward",EncounterService.Text("reward",record.tier.signaturePackets,record.tier.signatureHeal),-123,30,19);
+        Label("Reward",RewardLabel(),-123,30,19);
         bool joker=record.hand.Contains(0);
-        if(joker)Label("ForgeNote",EncounterService.Text("forge_note",record.tier.signaturePackets),-151,27,17,UITheme.Tone.Warn);
+        if(joker)Label("ForgeNote",record.tier.temporaryRewardHp > 0 ? EncounterService.Text("temporary_forge",record.tier.temporaryRewardHp) : EncounterService.Text("forge_note",record.tier.signaturePackets),-151,27,17,UITheme.Tone.Warn);
         AddAction(EncounterAction.Verify,record.tier.verifyCost==0?EncounterService.Text("verify_free"):EncounterService.Text("verify",record.tier.verifyCost),-193,joker?-255:0);
         if(joker)AddAction(EncounterAction.Forge,EncounterService.Text("forge",record.tier.forgeCost),-193,255);
         AddAction(EncounterAction.Leave,EncounterService.Text("leave"),-239);
     }
+    private string RewardLabel() => record.tier.temporaryRewardHp > 0
+        ? EncounterService.Text("temporary_reward", record.tier.temporaryRewardHp)
+        : EncounterService.Text("reward", record.tier.signaturePackets, record.tier.signatureHeal);
+
+    private string HealthPreview(EncounterAction action)
+    {
+        EncounterService.PreviewHealth(record, action, out int integrity, out int consistency);
+        return EncounterService.Text("overflow", MapRunState.RecordHealth.Consistency, consistency,
+            MapRunState.RecordHealth.Integrity, integrity);
+    }
+
     private string ActionLabel(EncounterAction action)
     {
         var t=record.tier;
+        if (t.temporaryRewardHp > 0 && action != EncounterAction.Leave)
+        {
+            EncounterService.Quote(record, action, out int cost, out int consistency, out _, out _, out _);
+            return EncounterService.Text("temporary_action", cost, consistency, t.temporaryRewardHp);
+        }
         switch(action) {
             case EncounterAction.Supply:return EncounterService.Text("supply",t.supplyPackets);
             case EncounterAction.Repair:return EncounterService.Text("repair",t.repairCost,t.repairAmount);
@@ -136,9 +151,8 @@ public sealed class EncounterWindow : MonoBehaviour
         hint.text=MapRunState.RecordHealth.Consistency>=60?EncounterService.Text("hint",index):EncounterService.Text("hint_low");
         if(!EncounterJournal.ValidProof(record,record.selectedMask))message.text=EncounterService.Text("proof_wait");
         if(record.hand.Contains(0) && (record.selectedMask&32)!=0) {
-            int c=MapRunState.RecordHealth.Consistency,i=MapRunState.RecordHealth.Integrity;
             message.text=EncounterService.CanExecute(record,EncounterAction.Forge,out string reason)?
-                EncounterService.Text("overflow",c,Math.Max(0,c-record.tier.forgeCost),i,Math.Max(0,i-Math.Max(0,record.tier.forgeCost-c))):EncounterService.Text("error",reason);
+                HealthPreview(EncounterAction.Forge):EncounterService.Text("error",reason);
         }
     }
     private void OnDestroy(){if(current==this)current=null;}

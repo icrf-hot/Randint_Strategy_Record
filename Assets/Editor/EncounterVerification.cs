@@ -14,7 +14,7 @@ public static class EncounterVerification
     {
         var bindings=RunSaveBindings.Instance;
         MapRunState.StartNewRun(bindings.Progression);MapRunState.SaveCurrentNode(EventNode(floor),"Encounter fixture");
-        var snapshot=MapRunState.Capture(bindings);snapshot.mapFloor=floor;snapshot.mapScenePath=CampaignScenes.PathFor(floor);
+        var snapshot=MapRunState.Capture(bindings);snapshot.mapFloor=floor;snapshot.mapScenePath=CampaignScenes.PathFor(floor);snapshot.hiddenEndingRouteUnlocked=floor>3;
         if(runId!=null)snapshot.runId=runId;
         Require(PreparedRunRestore.TryPrepare(snapshot,bindings,out var ready,out _),"Fixture restore");ready.Apply();
         return MapRunState.Encounters.Assign(MapRunState.RunId,snapshot.currentNodeId,bindings);
@@ -50,7 +50,7 @@ public static class EncounterVerification
                 Require(PreparedRunRestore.TryPrepare(verified,bindings,out var restore,out _),"Verified save rejected");restore.Apply();
                 r=MapRunState.Encounters.Find(r.nodeId);
                 Require(r.stage==EncounterStage.Verified && EncounterService.Execute(r,EncounterAction.Claim,out _),"Verified resume claim");
-                Require(MapRunState.Packets.Balance==before-tier.verifyCost+tier.signaturePackets && MapRunState.IsCompleted(r.nodeId),"Reward amount/completion");
+                Require(MapRunState.Packets.Balance==before-tier.verifyCost+(tier.temporaryRewardHp>0?0:tier.signaturePackets) && MapRunState.IsCompleted(r.nodeId),"Reward amount/completion");
                 Require(!EncounterService.Execute(r,EncounterAction.Claim,out _),"Duplicate claim");
                 Require(PreparedRunRestore.TryPrepare(MapRunState.Capture(bindings),bindings,out _,out _),"Resolved save rejected");
                 foreach(Action<EncounterRecord> corrupt in new Action<EncounterRecord>[] {
@@ -59,7 +59,7 @@ public static class EncounterVerification
                     var invalid=JsonUtility.FromJson<RunSaveSnapshot>(JsonUtility.ToJson(verified));corrupt(invalid.encounters[0]);
                     Require(!PreparedRunRestore.TryPrepare(invalid,bindings,out _,out _),"Corrupt journal accepted");
                 }
-                report.Add($"Floor {floor}: 500 solvable/stable hands, cost {tier.verifyCost}, guaranteed reward {tier.signaturePackets}; verified/resolved save and duplicate guards PASS.");
+                report.Add($"Floor {floor}: 500 solvable/stable hands, cost {tier.verifyCost}, temporary HP reward {tier.temporaryRewardHp} per record; verified/resolved save and duplicate guards PASS.");
             }
             // An encountered node keeps its event, hand and tier even after other nodes are assigned.
             var first=Fixture(1);var journal=MapRunState.Encounters;
@@ -73,7 +73,7 @@ public static class EncounterVerification
             for(int version=1;version<=3;version++) {
                 var legacy=MapRunState.Capture(bindings);legacy.schemaVersion=version;legacy.encounters=null;
                 Require(PreparedRunRestore.TryPrepare(legacy,bindings,out var migrated,out _),"Legacy migration");migrated.Apply();
-                Require(MapRunState.Encounters.Export().Length==0 && MapRunState.Capture(bindings).schemaVersion==5,"Legacy defaults");
+                Require(MapRunState.Encounters.Export().Length==0 && MapRunState.Capture(bindings).schemaVersion==6,"Legacy defaults");
             }
             EncounterRecord joker=null;
             for(int seed=0;seed<500 && joker==null;seed++) {
@@ -83,8 +83,8 @@ public static class EncounterVerification
             MapRunState.RecordHealth.Restore(7,0);
             Require(!EncounterService.Execute(joker,EncounterAction.Forge,out _) && MapRunState.RecordHealth.Integrity==7,"Fatal overflow allowed");
             MapRunState.RecordHealth.Restore(50,3);int packet=MapRunState.Packets.Balance;
-            Require(EncounterService.Execute(joker,EncounterAction.Forge,out _) && MapRunState.RecordHealth.Integrity==45 &&
-                MapRunState.RecordHealth.Consistency==0 && MapRunState.Packets.Balance==packet+24,"JK overflow/reward");
+            Require(EncounterService.Execute(joker,EncounterAction.Forge,out _) && MapRunState.RecordHealth.Integrity==47 &&
+                MapRunState.RecordHealth.Consistency==2 && MapRunState.Packets.Balance==packet,"JK overflow/reward");
             Require(!EncounterService.Execute(joker,EncounterAction.Forge,out _),"JK paid twice");
             var poor=Fixture(5);poor.selectedMask=EncounterJournal.Solution(poor);MapRunState.Packets.TrySpend(MapRunState.Packets.Balance);
             Require(!EncounterService.Execute(poor,EncounterAction.Verify,out _) && poor.stage==EncounterStage.Assigned,"Insufficient funds spent");

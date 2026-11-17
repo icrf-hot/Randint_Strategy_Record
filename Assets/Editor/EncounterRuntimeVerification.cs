@@ -88,7 +88,7 @@ public sealed class EncounterRuntimeProbe : MonoBehaviour
         Require(EncounterWindow.IsOpen,"Saved request did not reopen");
         r=MapRunState.Encounters.Find(2);Require(r.stage==EncounterStage.Verified,"Verified state lost");
         Click(Button("Claim"));yield return null;
-        Require(MapRunState.Packets.Balance==before+4 && MapRunState.IsCompleted(2),"Claim after continue incorrect");
+        Require(MapRunState.Packets.Balance==before && MapRunState.IsCompleted(2),"Claim after continue incorrect");
         Click(Button("Close"));yield return null;
         EncounterVerification.Fixture(5);
         Require(TransitionManager.TryLoad(RunSaveBindings.Instance.MapScenePath),"Floor 5 fixture transition");yield return Ready();
@@ -97,7 +97,7 @@ public sealed class EncounterRuntimeProbe : MonoBehaviour
         yield return null;CheckText();ScreenCapture.CaptureScreenshot(EncounterRuntimeVerification.Output+"/floor-5-cards.png");yield return new WaitForSecondsRealtime(.15f);
         before=MapRunState.Packets.Balance;Click(Button("Verify"));yield return null;
         Require(MapRunState.Packets.Balance==before-8,"Floor 5 verification cost incorrect");
-        Click(Button("Claim"));yield return null;Require(MapRunState.Packets.Balance==before+16,"Floor 5 net guaranteed reward incorrect");
+        Click(Button("Claim"));yield return null;Require(MapRunState.Packets.Balance==before-8,"Floor 5 net guaranteed reward incorrect");
         Click(Button("Close"));yield return null;
         for(int seed=0;seed<500;seed++){r=EncounterVerification.Fixture(5,seed.ToString("x32"));if(r.hand.Contains(0))break;}
         Require(r.hand.Contains(0),"No JK fixture");MapRunState.RecordHealth.Restore(50,3);
@@ -105,7 +105,7 @@ public sealed class EncounterRuntimeProbe : MonoBehaviour
         Click(Button("Card5"));yield return null;Require(!Button("Verify").interactable && Button("Forge").interactable,"JK control state");
         CheckText();ScreenCapture.CaptureScreenshot(EncounterRuntimeVerification.Output+"/floor-5-untrusted-jk.png");yield return new WaitForSecondsRealtime(.15f);
         Click(Button("Forge"));yield return null;
-        Require(MapRunState.RecordHealth.Integrity==45 && MapRunState.RecordHealth.Consistency==0,"JK overflow differs from preview");
+        Require(MapRunState.RecordHealth.Integrity==47 && MapRunState.RecordHealth.Consistency==2,"JK overflow differs from preview");
         Require(repo.TryWrite(MapRunState.Capture(RunSaveBindings.Instance),out _),"JK result save");
         Click(Button("Close"));yield return null;
         Require(!EncounterWindow.IsOpen && !CampaignMapFlow.ModalOpen,"Modal input block leaked");

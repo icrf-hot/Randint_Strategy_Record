@@ -349,6 +349,12 @@ public class BattleExecuteManager : MonoBehaviour
             );
         }
 
+        if (MapRunState.IsEnded)
+        {
+            bool acknowledged = false;
+            RunSummaryWindow.Show(RunEndSummary.Capture(), () => { acknowledged = true; return true; });
+            while (!acknowledged) yield return null;
+        }
         ReturnToMap();
     }
 

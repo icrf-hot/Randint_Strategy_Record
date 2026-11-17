@@ -20,6 +20,15 @@ public static class MapRunState
     public static string LastBattleResult { get; private set; } = "None";
     public static IReadOnlyList<string> PartyIds => Array.AsReadOnly(partyIds);
     public static int MapFloor { get; private set; } = 1;
+    public static bool HiddenEndingRouteUnlocked { get; private set; }
+    public static int EndingFloor => HiddenEndingRouteUnlocked ? 5 : 3;
+
+    public static bool TryUnlockHiddenEndingRoute()
+    {
+        if (!Progression.IsInitialized || IsEnded) return false;
+        HiddenEndingRouteUnlocked = true;
+        return true;
+    }
     public static MapNodeType BattleNodeType { get; private set; } = MapNodeType.Battle;
     public static void SetBattleNodeType(MapNodeType type) => BattleNodeType = type;
     public static bool IsCompleted(int nodeId) => completedNodes.Contains(nodeId);
@@ -30,12 +39,15 @@ public static class MapRunState
     {
         if(IsEnded || floor<1 || floor>5)return false;
         if(HasCurrentNode)return MapFloor==floor && CampaignDefinition.FloorOf(CurrentNodeID)==floor;
+        HiddenEndingRouteUnlocked = floor > 3;
         MapFloor=floor;SaveCurrentNode(CampaignDefinition.NodeId(floor,0),"");return true;
     }
     public static bool TryAdvanceMapFloor()
     {
-        int terminal = MapFloor == 1 ? 8 : CampaignDefinition.NodeId(MapFloor, (int)Math.Pow(CampaignDefinition.Active.Floor(MapFloor).size, 3)-1);
-        if (IsEnded || MapFloor >= 5 || CurrentNodeID != terminal || !IsCompleted(terminal)) return false;
+        int terminal = CampaignDefinition.TerminalNodeId(MapFloor);
+        if (IsEnded || MapFloor >= EndingFloor || CurrentNodeID != terminal || !IsCompleted(terminal)) return false;
+        if (LastBattleNodeId == terminal && LastBattleResult == "Defeat" &&
+            !(HiddenEndingRouteUnlocked && MapFloor == 3)) return false;
         MapFloor++; CurrentNodeID = CampaignDefinition.NodeId(MapFloor, 0); HasCurrentNode = true;
         CurrentNodeDisplayName = ""; visitedNodes.Add(CurrentNodeID); BattleNodeType = MapNodeType.Battle;
         return true;
@@ -43,17 +55,18 @@ public static class MapRunState
 
     public static void RecordBattleResult(bool victory)
     {
-        if (!HasCurrentNode) return;
+        if (!HasCurrentNode || IsCompleted(CurrentNodeID)) return;
         LastBattleNodeId = CurrentNodeID;
         LastBattleResult = victory ? "Victory" : "Defeat";
-        if (victory) completedNodes.Add(CurrentNodeID);
+        completedNodes.Add(CurrentNodeID);
     }
 
     public static RunSaveSnapshot Capture(RunSaveBindings bindings)
     {
         return new RunSaveSnapshot
         {
-            schemaVersion = 5, mapFloor = MapFloor, runId = RunId, savedUtc = DateTimeOffset.UtcNow.ToString("O"),
+            schemaVersion = 6, mapFloor = MapFloor, hiddenEndingRouteUnlocked = HiddenEndingRouteUnlocked,
+            runId = RunId, savedUtc = DateTimeOffset.UtcNow.ToString("O"),
             state = IsEnded ? "Ended" : "Active", endReason = EndReason,
             mapScenePath = bindings.MapScenePath, currentNodeId = CurrentNodeID,
             packets = Packets.Balance, layer = Progression.Layer, experience = Progression.Experience,
@@ -73,6 +86,7 @@ public static class MapRunState
         Progression = run;
         Encounters.Restore(snapshot.encounters);
         MapFloor = snapshot.mapFloor;
+        HiddenEndingRouteUnlocked = snapshot.hiddenEndingRouteUnlocked;
         Caches = inventory;
         RecordHealth.Restore(snapshot.integrity, snapshot.consistency);
         RunId = snapshot.runId;
@@ -93,10 +107,13 @@ public static class MapRunState
 
     public static void MarkEnded(string reason)
     {
-        if (reason != "Ending" && reason != "Ejected") throw new ArgumentException(nameof(reason));
+        if (!IsValidEndReason(reason)) throw new ArgumentException(nameof(reason));
         IsEnded = true;
         EndReason = reason;
     }
+
+    public static bool IsValidEndReason(string reason) =>
+        reason == "Ending" || reason == "Ejected" || reason == "TerminalDefeat";
 
     public static bool TryGrantVictory(out int packetsGained, out int layersGained)
     {
@@ -190,5 +207,6 @@ public static class MapRunState
         LastBattleNodeId = 0;
         LastBattleResult = "None";
         MapFloor = 1; BattleNodeType = MapNodeType.Battle;
+        HiddenEndingRouteUnlocked = false;
     }
 }
