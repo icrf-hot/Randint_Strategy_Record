@@ -12,5 +12,7 @@ public enum OperatorClass
     // Back
     AttackHealer,
     Healer,
-    Supporter
+    Supporter,
+    // Append to preserve existing serialized enum values.
+    Specialist
 }

@@ -16,7 +16,54 @@ MonoBehaviour:
   middle: {fileID: 11400000, guid: 16d8aa8650d0bd845ac217cfb75aeb26, type: 2}
   back: {fileID: 11400000, guid: 4dea9445ba8670c4dbfc0d79fa6e64c8, type: 2}
   enemy: {fileID: 11400000, guid: 50cb04c157248ab428396b4bce06bf09, type: 2}
-  characters: []
+  frontDefense: {fileID: 11400000, guid: 13e1370b26c13a645a578e2c1ec9ad0a, type: 2}
+  supporter: {fileID: 11400000, guid: 3ebac5b08bd2ac74d8c82287573b444e, type: 2}
+  characters:
+  - character: {fileID: 11400000, guid: ad8e671e2b6f1ef41847f198d6b73c64, type: 2}
+    profile: {fileID: 11400000, guid: a55e410b88bba924b81903d25595afbf, type: 2}
+    defense: {fileID: 0}
+  classes:
+  - classId: 0
+    branchId:
+    profile: {fileID: 11400000, guid: a9086291afea4b543bf33896e5078354, type: 2}
+    defense: {fileID: 11400000, guid: 13e1370b26c13a645a578e2c1ec9ad0a, type: 2}
+  - classId: 1
+    branchId:
+    profile: {fileID: 11400000, guid: a9086291afea4b543bf33896e5078354, type: 2}
+    defense: {fileID: 11400000, guid: 13e1370b26c13a645a578e2c1ec9ad0a, type: 2}
+  - classId: 2
+    branchId:
+    profile: {fileID: 11400000, guid: a9086291afea4b543bf33896e5078354, type: 2}
+    defense: {fileID: 11400000, guid: 13e1370b26c13a645a578e2c1ec9ad0a, type: 2}
+  - classId: 4
+    branchId:
+    profile: {fileID: 11400000, guid: 15de76d27bce9df4ca1f51767b1bcf8d, type: 2}
+    defense: {fileID: 0}
+  - classId: 4
+    branchId: heavy_shooter
+    profile: {fileID: 11400000, guid: 01c8ca4aa76cc0e4d8f10045dbcdc7e6, type: 2}
+    defense: {fileID: 0}
+  - classId: 3
+    branchId:
+    profile: {fileID: 11400000, guid: 79610b1e5f207b44eb17fe160952fd11, type: 2}
+    defense: {fileID: 0}
+  - classId: 8
+    branchId:
+    profile: {fileID: 11400000, guid: 79610b1e5f207b44eb17fe160952fd11, type: 2}
+    defense: {fileID: 0}
+  - classId: 6
+    branchId:
+    profile: {fileID: 11400000, guid: 292f9f2fca0d82144bfe56643954fc90, type: 2}
+    defense: {fileID: 0}
+  - classId: 7
+    branchId:
+    profile: {fileID: 11400000, guid: 3ebac5b08bd2ac74d8c82287573b444e, type: 2}
+    defense: {fileID: 0}
+  - classId: 5
+    branchId:
+    profile: {fileID: 11400000, guid: 3ebac5b08bd2ac74d8c82287573b444e, type: 2}
+    defense: {fileID: 0}
+  basePlaybackSpeed: 0.3
   maxFocusDelay: 0.02
-  maxActionGap: 0.02
+  maxActionGap: 0.12
   automaticFocus: 0

@@ -21,6 +21,8 @@ public class BattleAccessManager : MonoBehaviour
     private Operator backOperator;
 
     private bool battleRunning;
+    private bool refreshing;
+    private SpriteObjectToggleButton[] positionButtons;
 
     public bool CanBattle { get; private set; }
 
@@ -41,6 +43,7 @@ public class BattleAccessManager : MonoBehaviour
 
     private void Start()
     {
+        positionButtons = FindObjectsByType<SpriteObjectToggleButton>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         ReloadOperatorsFromParent();
     }
 
@@ -168,6 +171,26 @@ public class BattleAccessManager : MonoBehaviour
 
     public void Refresh()
     {
+        if (refreshing) return;
+        refreshing = true;
+        try { RefreshState(); }
+        finally { refreshing = false; }
+    }
+
+    private void RefreshState()
+    {
+        if (frontOperator != null && middleOperator != null && backOperator != null)
+        {
+            frontManager?.SetSelectionEnabled(frontOperator.IsCombatActive);
+            middleManager?.SetSelectionEnabled(middleOperator.IsCombatActive);
+            backManager?.SetSelectionEnabled(backOperator.IsCombatActive);
+            if (positionButtons != null) foreach (var button in positionButtons)
+            {
+                if (button == null) continue;
+                var op = button.Position == PositionType.Front ? frontOperator : button.Position == PositionType.Middle ? middleOperator : backOperator;
+                button.SetSlotAvailable(op.IsCombatActive);
+            }
+        }
         bool managersReady =
             frontManager != null &&
             middleManager != null &&

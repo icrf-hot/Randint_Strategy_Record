@@ -8,6 +8,7 @@ public sealed class TerminalSettings : MonoBehaviour
     private float previousScale;
     private LobbySceneController lobby;
     private MapSaveControls map;
+    public bool IsSettingsOpen => window != null && window.activeSelf;
     private void Start()
     {
         lobby = FindFirstObjectByType<LobbySceneController>(); map = FindFirstObjectByType<MapSaveControls>();
@@ -64,7 +65,20 @@ public sealed class TerminalSettings : MonoBehaviour
     private void Update()
     {
         if (TransitionManager.IsBusy || Keyboard.current?.escapeKey.wasPressedThisFrame != true) return;
+        HandleEscape();
+    }
+    // The single ESC owner: existing modal -> active selection -> settings. No Update ordering dependency.
+    public void HandleEscape()
+    {
+        if (TransitionManager.IsBusy) return;
         if (combatWindow != null) { Destroy(combatWindow); return; }
+        if (IsSettingsOpen) { Toggle(); return; }
+        if (lobby != null && lobby.IsModalOpen) { lobby.CloseWindows(); return; }
+        if (map != null && map.IsSettingsOpen) { map.CloseSettings(); return; }
+        if (FindFirstObjectByType<TerminalPreparation>()?.TryCancelSelection() == true) return;
+        if (OperatorFocusManager.Instance != null && OperatorFocusManager.Instance.TryCancelSelection()) return;
+        var orbit = FindFirstObjectByType<MapOrbitCamera>();
+        if (orbit != null && orbit.IsFocused) { orbit.CancelFocus(); return; }
         if (lobby != null) { if (lobby.IsModalOpen) lobby.CloseWindows(); else lobby.OpenSettings(); }
         else if (map != null) { if (map.IsSettingsOpen) map.CloseSettings(); else map.OpenSettings(); }
         else Toggle();

@@ -47,7 +47,8 @@ public sealed class CombatSpriteVisual : MonoBehaviour
         Sprite.drawMode = Source.drawMode; Sprite.size = Source.size;
         Sprite.enabled = Source.enabled; Sprite.color = Source.color;
     }
-    private void LateUpdate() { if (!Busy) Sync(); }
+    // Keep Animator sprite-frame changes visible while the sequence owns only the clone's pose.
+    private void LateUpdate() { Sync(); }
     public void ResetVisual()
     {
         Version++;

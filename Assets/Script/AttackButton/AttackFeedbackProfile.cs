@@ -1,11 +1,24 @@
 using UnityEngine;
 
 public enum AttackTravel { Melee, ShortDash, Projectile }
+public enum CombatMotion { Default, Guard, Shooting, Casting, Healing }
+public enum CombatActionKind { Attack, Defense, Heal, SupportAttack }
 
 [CreateAssetMenu(menuName = "Randint/Combat/Attack Feedback Profile")]
 public sealed class AttackFeedbackProfile : ScriptableObject
 {
     public AttackTravel travel;
+    [Header("Role presentation template")]
+    public CombatMotion motion;
+    [Range(.5f, 1)] public float focusZoom = 1;
+    [Range(0, 1)] public float focusTargetBias = .2f;
+    [Min(0)] public float recoilPixels = 14, leanDegrees = 6;
+    [Min(1)] public float projectileLength = 42, projectileWidth = 5;
+    public string animationTrigger;
+    [Tooltip("Disable when a character clip owns the visual child's transform.")]
+    public bool useProceduralMotion = true;
+    [Tooltip("Read the resolved action before allowing the next actor; uses the common combat clock.")]
+    [Min(0)] public float resultHold = .12f;
     public bool animationDrivenImpact;
     [Min(0)] public float anticipation = .15f, dash = .12f, impact = .05f, recovery = .2f;
     [Min(0)] public float retreatPixels = 10, knockbackPixels = 15, shakePixels = 4;

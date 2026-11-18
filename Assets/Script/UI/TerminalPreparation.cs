@@ -78,5 +78,10 @@ public sealed class TerminalPreparation : MonoBehaviour
         while (drawer != null && time < .1f);
     }
     private void Close() { if (drawer != null) Destroy(drawer.parent.gameObject); drawer = null; }
-    private void Update() { if (drawer != null && UnityEngine.InputSystem.Keyboard.current?.escapeKey.wasPressedThisFrame == true) Close(); }
+    public bool TryCancelSelection()
+    {
+        if (drawer == null) return false;
+        Close();
+        return true;
+    }
 }

@@ -35,6 +35,8 @@ public class BattleExecuteManager : MonoBehaviour
     private Coroutine battleRoutine;
     private BattleFeedbackDirector feedback;
     public BattleFeedbackDirector Feedback => feedback;
+    // Future attack-healer/supporter hook. No current party member enables this rule.
+    public event Action<AttackHitInfo, AttackHitInfo[]> OnDamageHealingResolved;
     private AttackPresentationRequest pendingPresentation;
     private readonly Dictionary<OperatorPosition, AttackCardSnapshot[]> cardSnapshots = new Dictionary<OperatorPosition, AttackCardSnapshot[]>();
 
@@ -510,6 +512,10 @@ public class BattleExecuteManager : MonoBehaviour
 
         if (front.ActionType == FrontActionType.Defense)
         {
+            QueueAction(frontOperator.gameObject, frontOperator.gameObject, OperatorPosition.Front,
+                () => Array.Empty<AttackHitInfo>(), front.DefenseBonus, CombatActionKind.Defense, AttackDamageType.PHYS);
+            pendingPresentation.defenseBonus = front.DefenseBonus;
+            pendingPresentation.resistanceBonus = front.ArtsResistanceBonus;
             Debug.Log(
                 $"[Front 방어] {frontOperator.gameObject.name} " +
                 $"| 방어 +{front.DefenseBonus} " +
@@ -591,6 +597,12 @@ public class BattleExecuteManager : MonoBehaviour
         if (backOperator == null)
             return;
 
+        if (backOperator.Class == OperatorClass.Supporter || backOperator.Class == OperatorClass.AttackHealer)
+        {
+            ExecuteSupportAttack();
+            return;
+        }
+
         int healAmount = Randint.Data.GameData.Catalog.Rules("default_run").backFallbackHeal;
         if (backOperator.Class == OperatorClass.Healer)
         {
@@ -626,7 +638,35 @@ public class BattleExecuteManager : MonoBehaviour
                     () => target.Heal(healAmount)));
             }
             return hits.ToArray();
-        }, healAmount);
+        }, healAmount, CombatActionKind.Heal, AttackDamageType.HEAL,
+            targets.ConvertAll(target => target.gameObject).ToArray());
+    }
+
+    private void ExecuteSupportAttack()
+    {
+        // Dormant until a supporter is authored with enemy targeting and an explicit conversion ratio.
+        var cards = BackCardSelectionManager.Instance;
+        Enemy target = GetSelectedEnemy(backOperator);
+        if (cards == null || !cards.IsAccess || target == null) return;
+        QueueAction(backOperator.gameObject, target.gameObject, OperatorPosition.Back, () => {
+            var damage = CaptureHit(backOperator.gameObject, target.gameObject, backOperator.Attack,
+                AttackDamageType.ARTS, OperatorPosition.Back, () => target.TakeArtsDamage(backOperator.Attack));
+            NotifyAttackPerformed();
+            var healing = new List<AttackHitInfo>();
+            int amount = (int)Math.Min(int.MaxValue, Math.Floor(damage.damage * (double)backOperator.Data.DamageHealingRatio));
+            if (amount > 0 && AllyTargetingManager.Instance != null)
+                foreach (var ally in AllyTargetingManager.Instance.GetHealTargets(backOperator))
+                    if (ally != null && ally.IsCombatActive)
+                        healing.Add(CaptureHit(backOperator.gameObject, ally.gameObject, amount, AttackDamageType.HEAL,
+                            OperatorPosition.Back, () => ally.Heal(amount)));
+            var heals = healing.ToArray();
+            if (OnDamageHealingResolved != null)
+                foreach (Action<AttackHitInfo, AttackHitInfo[]> listener in OnDamageHealingResolved.GetInvocationList())
+                    try { listener(damage, heals); } catch (Exception exception) { Debug.LogException(exception); }
+            var results = new List<AttackHitInfo> { damage };
+            results.AddRange(heals);
+            return results.ToArray();
+        }, null, CombatActionKind.SupportAttack, AttackDamageType.ARTS);
     }
 
     private void ExecuteEnemyAction(Enemy enemy)
@@ -681,14 +721,17 @@ public class BattleExecuteManager : MonoBehaviour
         }
     }
 
-    private void QueueAction(GameObject attacker, GameObject target, OperatorPosition slot, Func<AttackHitInfo[]> commit, int? displayValue = null)
+    private void QueueAction(GameObject attacker, GameObject target, OperatorPosition slot, Func<AttackHitInfo[]> commit,
+        int? displayValue = null, CombatActionKind action = CombatActionKind.Attack, AttackDamageType? explicitType = null,
+        GameObject[] targets = null)
     {
         pendingPresentation = new AttackPresentationRequest { attacker = attacker, target = target, slot = slot,
+            action = action, targets = targets ?? Array.Empty<GameObject>(),
             cards = attacker.GetComponent<Operator>() != null && cardSnapshots.TryGetValue(slot, out var cards) ? cards : Array.Empty<AttackCardSnapshot>(),
             inputValue = displayValue ?? (attacker.GetComponent<Operator>() != null ? attacker.GetComponent<Operator>().Attack : attacker.GetComponent<Enemy>().Attack),
-            damageType = target.GetComponent<Operator>() != null && attacker.GetComponent<Operator>() != null ? AttackDamageType.HEAL :
+            damageType = explicitType ?? (target.GetComponent<Operator>() != null && attacker.GetComponent<Operator>() != null ? AttackDamageType.HEAL :
                 (slot == OperatorPosition.Middle && attacker.GetComponent<Operator>() != null && !MiddleCardSelectionManager.Instance.IsPhysicalMode) ||
-                (attacker.GetComponent<Enemy>() != null && attacker.GetComponent<Enemy>().UsesArtsDamage) ? AttackDamageType.ARTS : AttackDamageType.PHYS,
+                (attacker.GetComponent<Enemy>() != null && attacker.GetComponent<Enemy>().UsesArtsDamage) ? AttackDamageType.ARTS : AttackDamageType.PHYS),
             commit = commit };
     }
 

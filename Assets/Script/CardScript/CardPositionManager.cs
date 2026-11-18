@@ -9,7 +9,12 @@ public class CardPositionManager : MonoBehaviour
     [SerializeField] private MiddleCardSelectionManager middleManager;
     [SerializeField] private BackCardSelectionManager backManager;
 
-    public CardSelectionManagerBase CurrentSelectionManager { get; private set; }
+    private CardSelectionManagerBase currentSelectionManager;
+    public CardSelectionManagerBase CurrentSelectionManager
+    {
+        get => currentSelectionManager != null && currentSelectionManager.SelectionEnabled ? currentSelectionManager : null;
+        private set => currentSelectionManager = value;
+    }
 
     private void Awake()
     {
@@ -21,16 +26,19 @@ public class CardPositionManager : MonoBehaviour
 
     public void SetFront()
     {
+        if (frontManager == null || !frontManager.SelectionEnabled) return;
         CurrentSelectionManager = frontManager;
     }
 
     public void SetMiddle()
     {
+        if (middleManager == null || !middleManager.SelectionEnabled) return;
         CurrentSelectionManager = middleManager;
     }
 
     public void SetBack()
     {
+        if (backManager == null || !backManager.SelectionEnabled) return;
         CurrentSelectionManager = backManager;
     }
 }

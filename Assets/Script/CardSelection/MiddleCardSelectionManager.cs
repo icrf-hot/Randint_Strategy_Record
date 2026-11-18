@@ -92,6 +92,7 @@ public class MiddleCardSelectionManager : CardSelectionManagerBase
 
     public override void SelectCard(Card card)
     {
+        if (!SelectionEnabled) return;
         if (card == null)
             return;
 

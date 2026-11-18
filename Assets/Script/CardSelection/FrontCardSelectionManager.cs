@@ -109,6 +109,7 @@ public class FrontCardSelectionManager : CardSelectionManagerBase
 
     public override void SelectCard(Card card)
     {
+        if (!SelectionEnabled) return;
         if (card == null)
             return;
 
@@ -215,6 +216,7 @@ public class FrontCardSelectionManager : CardSelectionManagerBase
 
     public void SetAttack()
     {
+        if (!SelectionEnabled) return;
         if (BattleExecuteManager.IsExecuting) return;
         if (actionType == FrontActionType.Attack)
             return;
@@ -231,6 +233,7 @@ public class FrontCardSelectionManager : CardSelectionManagerBase
 
     public void SetDefense()
     {
+        if (!SelectionEnabled) return;
         if (BattleExecuteManager.IsExecuting) return;
         if (actionType == FrontActionType.Defense)
             return;

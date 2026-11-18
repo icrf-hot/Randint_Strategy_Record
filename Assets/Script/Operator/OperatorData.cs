@@ -15,6 +15,8 @@ public class OperatorData : ScriptableObject
     public string Info => GameData.Text(Definition.infoKey);
     public OperatorPosition Position => (OperatorPosition)Enum.Parse(typeof(OperatorPosition), Definition.position);
     public OperatorClass DetailedClass => (OperatorClass)Enum.Parse(typeof(OperatorClass), Definition.classId);
+    public string BranchId => Definition.branchId ?? "";
+    public float DamageHealingRatio => Definition.damageHealingRatio;
     public bool RequiresEnemyTarget => Definition.requiresEnemyTarget;
     public int MaxHP => Definition.maxHP;
     public int Attack => Definition.attack;

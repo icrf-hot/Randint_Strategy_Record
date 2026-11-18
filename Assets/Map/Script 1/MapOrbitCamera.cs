@@ -140,15 +140,7 @@ public class MapOrbitCamera : MonoBehaviour
         if (target == null)
             return;
 
-        // ESC는 Focus 상태에서도 항상 처리
-        if (Keyboard.current != null &&
-            Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            if (focusedNode != null)
-            {
-                CancelFocus();
-            }
-        }
+        // ESC is routed once by TerminalSettings, before opening the settings window.
 
         // Focus 이동 중
         if (isFocusing)

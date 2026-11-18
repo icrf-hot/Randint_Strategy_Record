@@ -47,6 +47,9 @@ namespace Randint.Data
         public string infoKey;
         public string position;
         public string classId;
+        public string branchId;
+        // Optional supporter rule: actual damage dealt -> existing ally heal targeting.
+        public float damageHealingRatio;
         public bool requiresEnemyTarget;
         public string[] skillIds;
     }

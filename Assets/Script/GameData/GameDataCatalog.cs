@@ -72,10 +72,12 @@ namespace Randint.Data
                 catalog.CheckText(op.nameKey, op.id, errors);
                 catalog.CheckText(op.infoKey, op.id, errors);
                 string allowed = op.position == "Front" ? "Defender|Guard|Vanguard" :
-                    op.position == "Middle" ? "Caster|Sniper" : op.position == "Back" ? "AttackHealer|Healer|Supporter" : "";
+                    op.position == "Middle" ? "Caster|Sniper|Specialist" : op.position == "Back" ? "AttackHealer|Healer|Supporter" : "";
                 if (allowed.Length == 0 || Array.IndexOf(allowed.Split('|'), op.classId) < 0)
                     errors.Add($"operator '{op.id}': position/classId 조합 오류 ({op.position}/{op.classId})");
                 if (op.skillIds == null) errors.Add($"operator '{op.id}': skillIds 누락 (없으면 [] 사용)");
+                if (float.IsNaN(op.damageHealingRatio) || float.IsInfinity(op.damageHealingRatio) || op.damageHealingRatio < 0 || op.damageHealingRatio > 1)
+                    errors.Add($"operator '{op.id}': damageHealingRatio must be between 0 and 1");
                 var seenSkills = new HashSet<string>(StringComparer.Ordinal);
                 foreach (string id in op.skillIds ?? Array.Empty<string>())
                 {

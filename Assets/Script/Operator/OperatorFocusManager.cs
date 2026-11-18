@@ -54,6 +54,7 @@ public class OperatorFocusManager : MonoBehaviour
     private MonoBehaviour operatorInfoUI;
 
     private IOperatorInfoUI infoUI;
+    public bool PresentationCameraActive { get; set; }
 
     private void Awake()
     {
@@ -82,6 +83,7 @@ public class OperatorFocusManager : MonoBehaviour
 
     private void Update()
     {
+        if (PresentationCameraActive) return;
         if (TransitionManager.IsBusy) return;
         if (TransitionManager.IsBusy) return;
         if (TransitionManager.IsBusy) return;
@@ -103,10 +105,13 @@ public class OperatorFocusManager : MonoBehaviour
         if (currentOperator == null)
             return;
 
-        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            ExitFocus();
-        }
+    }
+
+    public bool TryCancelSelection()
+    {
+        if (currentOperator == null || PresentationCameraActive || BattleExecuteManager.IsExecuting) return false;
+        ExitFocus();
+        return true;
     }
 
     public void EnterFocus(OperatorClickHandler handler)

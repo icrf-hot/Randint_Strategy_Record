@@ -18,6 +18,10 @@ public class SpriteObjectToggleButton : MonoBehaviour
     [SerializeField] private PositionType positionType;
 
     private Camera mainCamera;
+    public PositionType Position => positionType;
+    public bool SlotAvailable { get; private set; } = true;
+    private SpriteRenderer buttonVisual;
+    private Color activeColor;
 
     private void Awake()
     {
@@ -25,10 +29,22 @@ public class SpriteObjectToggleButton : MonoBehaviour
             targetCollider = GetComponent<Collider2D>();
 
         mainCamera = Camera.main;
+        buttonVisual = GetComponent<SpriteRenderer>();
+        if (buttonVisual != null) activeColor = buttonVisual.color;
+    }
+
+    public void SetSlotAvailable(bool available)
+    {
+        if (SlotAvailable == available) return;
+        SlotAvailable = available;
+        if (targetCollider != null) targetCollider.enabled = available;
+        if (buttonVisual != null) buttonVisual.color = available ? activeColor : UITheme.TextDim;
+        if (!available) SetObjectsActive(objectsToEnable, false);
     }
 
     private void Update()
     {
+        if (!SlotAvailable || BattleExecuteManager.IsExecuting) return;
         if (TransitionManager.IsBusy) return;
         if (TransitionManager.IsBusy) return;
         if (TransitionManager.IsBusy) return;
@@ -64,6 +80,7 @@ public class SpriteObjectToggleButton : MonoBehaviour
 
     private void ToggleObjects()
     {
+        if (!SlotAvailable || BattleExecuteManager.IsExecuting) return;
         SetObjectsActive(objectsToDisable, false);
         SetObjectsActive(objectsToEnable, true);
 

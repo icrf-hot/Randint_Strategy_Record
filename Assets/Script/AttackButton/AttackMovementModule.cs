@@ -14,6 +14,17 @@ public sealed class SpriteAttackMovement : IAttackMovementModule
     public AttackVisualPose Evaluate(AttackStage stage, float t, Vector3 from, Vector3 origin, Vector3 target,
         Vector3 direction, float worldUnitsPerPixel, AttackFeedbackProfile profile)
     {
+        if (profile.motion != CombatMotion.Default)
+        {
+            float pulse = Mathf.Sin(t * Mathf.PI);
+            float recoil = profile.motion == CombatMotion.Shooting ? profile.recoilPixels * worldUnitsPerPixel : 0;
+            Vector3 position = stage == AttackStage.Dash ? origin - direction * recoil * pulse :
+                stage == AttackStage.Recovery ? Vector3.Lerp(from, origin, 1-(1-t)*(1-t)) : origin;
+            Vector2 rest = profile.motion == CombatMotion.Guard ? profile.squash : Vector2.one;
+            Vector2 shape = stage == AttackStage.Anticipation ? Vector2.Lerp(Vector2.one, rest, t) :
+                stage == AttackStage.Recovery ? Vector2.Lerp(rest, Vector2.one, t) : rest;
+            return new AttackVisualPose { position = position, scale = new Vector3(shape.x, shape.y, 1) };
+        }
         Vector3 to = stage == AttackStage.Anticipation ? origin-direction*profile.retreatPixels*worldUnitsPerPixel :
             stage == AttackStage.Dash ? Vector3.Lerp(origin,target,profile.travel==AttackTravel.Projectile?0:profile.approach) : origin;
         float ease = stage == AttackStage.Dash ? t*t*t : stage == AttackStage.Recovery ? 1-(1-t)*(1-t) : t;

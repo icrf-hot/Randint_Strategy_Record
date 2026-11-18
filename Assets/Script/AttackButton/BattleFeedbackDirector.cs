@@ -13,16 +13,21 @@ public sealed class AttackPresentationRequest
     public Func<AttackHitInfo[]> commit;
     public int inputValue;
     public AttackDamageType damageType;
+    public CombatActionKind action;
+    public GameObject[] targets = Array.Empty<GameObject>();
+    public int defenseBonus, resistanceBonus;
 }
 
 /// <summary>Presentation clock, movement module and subscribers to confirmed impacts. Owns no combat rules.</summary>
-public sealed class BattleFeedbackDirector : MonoBehaviour
+public sealed partial class BattleFeedbackDirector : MonoBehaviour
 {
     public AttackFeedbackLibrary library;
     public IAttackMovementModule Movement { get; set; } = new SpriteAttackMovement();
     public event Action<AttackSequence, AttackStage> StageEntered, StageExited;
     public event Action<GameObject, GameObject, AttackHitInfo> OnImpact;
     public event Action<AttackHitInfo, int> OnPresentationHit;
+    public event Action<AttackPresentationRequest, AttackSequence, AttackStage> ActionStageEntered, ActionStageExited;
+    public event Action<AttackPresentationRequest> OnDefense;
     public AttackSequence ActiveSequence { get; private set; }
     public bool Skipping { get; private set; }
     public bool Running { get; private set; }
@@ -47,7 +52,8 @@ public sealed class BattleFeedbackDirector : MonoBehaviour
     {
         public RectTransform root, front, trail; public float delayed = 1, last = 1, delay; public Vector3 position;
     }
-    public float Delta => Time.timeScale == 0 || TransitionManager.IsBusy ? 0 : Time.unscaledDeltaTime * TerminalPreferences.CombatSpeed;
+    public float Delta => Time.timeScale == 0 || TransitionManager.IsBusy ? 0 : Time.unscaledDeltaTime *
+        TerminalPreferences.CombatSpeed * (library != null ? library.basePlaybackSpeed : .3f);
     private float PresentationDelta => Delta * (slowRemaining > 0 ? slowSpeed : 1);
     private float ActorDelta => stopRemaining > 0 ? 0 : PresentationDelta;
 
@@ -93,7 +99,7 @@ public sealed class BattleFeedbackDirector : MonoBehaviour
     public IEnumerator Play(AttackPresentationRequest request)
     {
         if (library == null) { Debug.LogError("CombatFeedback/Library is missing; applying the original action without feedback.", this); request.commit?.Invoke(); yield break; }
-        profile = library.For(request.attacker, request.slot);
+        profile = library.For(request.attacker, request.slot, request.action);
         if (profile == null) { request.commit?.Invoke(); yield break; }
         var selectedProfile = profile;
         var visual = CombatSpriteVisual.Get(request.attacker);
@@ -104,17 +110,41 @@ public sealed class BattleFeedbackDirector : MonoBehaviour
         Vector3 destination = request.target != null ? request.target.transform.position : worldStart;
         Vector3 direction = (destination - worldStart).normalized;
         if (direction.sqrMagnitude < .001f) direction = Vector3.right;
-        var sequence = new AttackSequence(request.commit); ActiveSequence = sequence;
-        sequence.StageEntered += (s, stage) => StageEntered?.Invoke(s, stage);
-        sequence.StageExited += (s, stage) => StageExited?.Invoke(s, stage);
+        var sequence = new AttackSequence(() => {
+            var hits = request.commit?.Invoke();
+            if (request.action == CombatActionKind.Defense) {
+                GuardFeedback(request, selectedProfile);
+                if (OnDefense != null) foreach (Action<AttackPresentationRequest> listener in OnDefense.GetInvocationList())
+                    try { listener(request); } catch (Exception exception) { Debug.LogException(exception); }
+            }
+            return hits;
+        });
+        ActiveSequence = sequence;
+        var template = request.attacker.GetComponentInChildren<CombatAnimationTemplate>();
+        template?.Bind(sequence, selectedProfile);
+        sequence.StageEntered += (s, stage) => {
+            StageEntered?.Invoke(s, stage);
+            ActionStageEntered?.Invoke(request, s, stage);
+            template?.Enter(stage);
+        };
+        sequence.StageExited += (s, stage) => { StageExited?.Invoke(s, stage); ActionStageExited?.Invoke(request, s, stage); };
         sequence.OnImpact += PublishImpact;
         var relay = request.attacker.GetComponent<BattleAnimationImpactRelay>(); if (relay != null) relay.Bind(sequence);
         if (!Skipping) FlyCards(request, selectedProfile);
+        var framing = BeginActionFraming(request, selectedProfile);
+        Debug.Log($"[Combat presentation] {request.attacker.name}: {request.action} / {selectedProfile.name}");
         try {
             yield return sequence.Run(selectedProfile, () => Skipping, () => PresentationDelta, Animate);
+            // Let the confirmed hit and the trailing HP bar finish before the next action can start.
+            float hold = selectedProfile.resultHold;
+            if (selectedProfile.motion == CombatMotion.Shooting)
+                hold = Mathf.Max(hold, selectedProfile.hpDelay + selectedProfile.hpCatchup - selectedProfile.recovery + .03f);
+            if (!Skipping) yield return Wait(hold);
         } finally {
             if (visual != null && visual.Version == visualVersion) visual.ResetVisual();
             if (relay != null) relay.Unbind(sequence);
+            template?.Unbind(sequence);
+            EndActionFraming(framing);
             if (ActiveSequence == sequence) ActiveSequence = null;
         }
 
@@ -123,21 +153,23 @@ public sealed class BattleFeedbackDirector : MonoBehaviour
             float elapsed = 0; int ghosts = 0; bool projectile = selectedProfile.travel == AttackTravel.Projectile;
             Vector3 from = pivot != null ? pivot.position : worldStart;
             if (stage == AttackStage.Anticipation && !Skipping) {
-                Ring(pool.Project(destination), 30, UITheme.Accent, duration);
-                if (projectile) Ring(pool.Project(worldStart), 75, UITheme.Ok, duration + selectedProfile.dash);
+                RoleAnticipation(request, selectedProfile, worldStart, destination, duration);
             }
             if (stage == AttackStage.Dash && !Skipping) {
-                Spark(pool.Project(worldStart), UITheme.TextDim, 3, .15f);
-                if (projectile && TerminalPreferences.Motion) Projectile(worldStart, destination, selectedProfile);
+                if (selectedProfile.motion == CombatMotion.Default) Spark(pool.Project(worldStart), UITheme.TextDim, 3, .15f);
+                if (projectile && TerminalPreferences.Motion) RoleProjectile(request, worldStart, destination, selectedProfile);
             }
             int cosmeticHits = 0;
             while ((elapsed < duration || stage == AttackStage.Impact && stopRemaining > 0) && !Skipping) {
                 float dt = ActorDelta; elapsed += dt;
                 float t = Mathf.Clamp01(elapsed / Mathf.Max(.001f, duration));
-                if (pivot != null && visual.Version == visualVersion && stage != AttackStage.Impact) {
+                UpdateActionFraming(framing, stage, t);
+                if (pivot != null && visual.Version == visualVersion && stage != AttackStage.Impact && selectedProfile.useProceduralMotion) {
                     var pose = Movement.Evaluate(stage,t,from,worldStart,destination,direction,Pixels(1,worldStart),selectedProfile);
                     pivot.position = TerminalPreferences.Motion ? pose.position : worldStart;
                     pivot.localScale = TerminalPreferences.Motion ? pose.scale : Vector3.one;
+                    if (selectedProfile.motion == CombatMotion.Shooting && TerminalPreferences.Motion)
+                        pivot.localRotation = Quaternion.Euler(0, 0, -Mathf.Sign(direction.x) * selectedProfile.leanDegrees * Mathf.Sin(t * Mathf.PI));
                     if (stage == AttackStage.Anticipation && !TerminalPreferences.ReduceFlash && TerminalPreferences.Motion)
                         visual.SetFlash(Mathf.Sin(t * Mathf.PI) * .7f);
                 }
@@ -173,8 +205,9 @@ public sealed class BattleFeedbackDirector : MonoBehaviour
             pool.Emit(card.label, null, new Vector2(85, 50), UITheme.Accent, flightDuration,
                 (r,t) => { r.anchoredPosition = TerminalPreferences.Motion ? Vector2.Lerp(from, end + Vector2.right * (index-(request.cards.Length-1)*.5f)*22, 1-(1-t)*(1-t)) + Vector2.up*Mathf.Sin(t*Mathf.PI)*30 : end; r.localScale = Vector3.one * Mathf.Lerp(1, .65f, t); });
         }
+        if (request.action == CombatActionKind.Defense) return; // The guard result owns its single DEF/RES label.
         float duration = Mathf.Max(config.cardFlight, config.anticipation + config.dash);
-        string type = request.damageType == AttackDamageType.HEAL ? "HEAL" : request.damageType.ToString();
+        string type = request.action == CombatActionKind.Defense ? "GUARD" : request.damageType == AttackDamageType.HEAL ? "HEAL" : "AT / " + request.damageType;
         var banner = pool.Emit($"{type} {request.inputValue}", null, new Vector2(240, 38), UITheme.DamageTypeColor(request.damageType), duration + .08f,
             (r,t) => { r.anchoredPosition = end + Vector2.up * 35; r.localScale = Vector3.one * (TerminalPreferences.Motion ? 1 + Mathf.Sin(t * Mathf.PI) * .12f : 1); });
     }
@@ -194,7 +227,7 @@ public sealed class BattleFeedbackDirector : MonoBehaviour
             r.localScale = Vector3.one * (hit.isCritical ? Mathf.LerpUnclamped(0, 1, EaseOutBack(Mathf.Min(1,t*5))) : 1);
             if (hit.isCritical && TerminalPreferences.Motion) r.localRotation = Quaternion.Euler(0,0,Mathf.Sin(t*40)*5*(1-t));
         });
-        if (healing) { Ring(point, 65, effectColor, .3f); return; }
+        if (healing) { HealingFeedback(hit, profile); return; }
         if (!hit.targetIsAlly) {
             combo++; if (combo >= 2) { comboText.text = "x" + combo; StartCoroutine(PunchCombo()); }
         }
@@ -352,6 +385,7 @@ public sealed class BattleFeedbackDirector : MonoBehaviour
     private static float EaseOutBack(float t) { const float c=1.70158f;return 1+(c+1)*Mathf.Pow(t-1,3)+c*Mathf.Pow(t-1,2); }
     private void OnDestroy()
     {
+        EndActionFraming(currentFraming);
         RenderPipelineManager.beginCameraRendering-=BeginRender;RenderPipelineManager.endCameraRendering-=EndRender;
         if(view!=null)view.transform.position-=renderOffset;
         if(ring!=null)Destroy(ring);if(ringTexture!=null)Destroy(ringTexture);
